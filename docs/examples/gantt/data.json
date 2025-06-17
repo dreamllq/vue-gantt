@@ -1,0 +1,81 @@
+{
+  "config": {
+    "endDate": "2024-06-14",
+    "startDate": "2024-01-01",
+    "durationUnit": "second"
+  },
+  "groups": [
+    {
+      "id": 1,
+      "parentId": null
+    },
+    {
+      "id": 2,
+      "parentId": null
+    },
+    {
+      "id": 3,
+      "parentId": null
+    },
+    {
+      "id": 4,
+      "parentId": null
+    },
+    {
+      "id": 5,
+      "parentId": null
+    },
+    {
+      "id": 6,
+      "parentId": null
+    },
+    {
+      "id": 7,
+      "parentId": null
+    },
+    {
+      "id": 8,
+      "parentId": null
+    },
+    {
+      "id": 9,
+      "parentId": null
+    },
+    {
+      "id": 10,
+      "parentId": null
+    },
+    {
+      "id": 11,
+      "parentId": null
+    },
+    {
+      "id": 12,
+      "parentId": null
+    }
+  ],
+  "bars": [
+    {
+      "duration": 10,
+      "end": null,
+      "groupId": 1,
+      "id": 1,
+      "start": "2024-01-01 00:00:00"
+    },
+    {
+      "duration": 10,
+      "end": null,
+      "groupId": 1,
+      "id": 2,
+      "start": "2024-01-01 00:00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": 1,
+      "sourceId": 1,
+      "targetId": 2,
+      "linkType": "FINISH_TO_START"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+import { GanttLayoutConfigClassConstructor } from '@/types/gantt-layout-config';
+
+const HEADER_HEIGHT = 70;
+const ROW_HEIGHT = 80;
+const TIME_UNIT_WIDTH = 200;
+const SCROLL_WIDTH = 10;
+const SCROLL_HEIGHT = 10;
+const GRID_HEAD_CELL_WIDTH = 140;
+const BAR_HEIGHT = 30;
+const GRID_CELL_WIDTH = 400;
+const MILESTONE_WIDTH = 20;
+const TASK_CENTER_TOP = 40; // 任务中心高度
+const SHOW_ATTACHED_TASK_TASK_CENTER_TOP = 20; // 显示附属任务时，任务中心的高度
+const ATTACHED_BAR_HEIGHT = 20;
+const ATTACHED_TASK_CENTER_TOP = 60; // 附属任务中心高度
+
+export class GanttLayoutConfig {
+  HEADER_HEIGHT = HEADER_HEIGHT;
+  ROW_HEIGHT = ROW_HEIGHT;
+  TIME_UNIT_WIDTH = TIME_UNIT_WIDTH;
+  SCROLL_WIDTH = SCROLL_WIDTH;
+  SCROLL_HEIGHT = SCROLL_HEIGHT;
+  GRID_HEAD_CELL_WIDTH = GRID_HEAD_CELL_WIDTH;
+  BAR_HEIGHT = BAR_HEIGHT;
+  GRID_CELL_WIDTH = GRID_CELL_WIDTH;
+  MILESTONE_WIDTH = MILESTONE_WIDTH;
+  TASK_CENTER_TOP = TASK_CENTER_TOP;
+  SHOW_ATTACHED_TASK_TASK_CENTER_TOP = SHOW_ATTACHED_TASK_TASK_CENTER_TOP;
+  ATTACHED_BAR_HEIGHT = ATTACHED_BAR_HEIGHT;
+  ATTACHED_TASK_CENTER_TOP = ATTACHED_TASK_CENTER_TOP;
+
+  constructor(data:GanttLayoutConfigClassConstructor) {
+    Object.keys(data).forEach(key => {
+      this[key] = data[key];
+    });
+  }
+}

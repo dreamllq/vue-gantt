@@ -1,0 +1,34 @@
+@media (min-width: 2000px) {
+  :root {
+    --vp-layout-max-width: 2000px;
+  }
+
+
+}
+
+.aside {
+  display: none !important;
+}
+
+.VPDoc.has-aside .content-container {
+  max-width: none !important;
+}
+
+.content {
+  padding: 0 !important;
+}
+
+
+
+
+@media (min-width: 1440px) {
+    .VPDoc:not(.has-sidebar) .content{
+        max-width: 2000px !important;
+    }
+}
+
+@media (min-width: 1440px) {
+    .VPDoc:not(.has-sidebar) .container{
+        max-width: 2000px !important;
+    }
+}
