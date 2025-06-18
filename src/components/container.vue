@@ -10,7 +10,6 @@
 <script setup lang="ts">
 import { useResizeObserver } from '@vueuse/core';
 import { onMounted, ref } from 'vue';
-// import bus from '@/utils/bus';
 import { useStore } from './store';
 
 const containerRef = ref();
@@ -24,13 +23,11 @@ onMounted(() => {
 useResizeObserver(containerRef, (entries) => {
   const entry = entries[0];
   const { width, height } = entry.contentRect;
-  console.log(`width: ${width}, height: ${height}`);
-  container.setContainerSize({
+  console.log(`container ## width: ${width}, height: ${height}`);
+  container.setSize({
     width,
     height 
   });
-
-  
 });
 </script>
 
@@ -39,5 +36,6 @@ useResizeObserver(containerRef, (entries) => {
   position: relative;
   width: 100%;
   height: 100%;
+  border: 1px solid var(--border-color);
 }
 </style>

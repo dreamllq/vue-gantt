@@ -11,9 +11,9 @@ import { useStore } from '../store';
 import ScrollX from './scroll-x.vue';
 import ScrollY from './scroll-y.vue';
 
-
 const { scroll, ganttEntity } = useStore()!;
 const { scrollReady } = scroll;
+
 onMounted(() => {
   scroll.calculate();
 });

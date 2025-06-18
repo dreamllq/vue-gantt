@@ -1,16 +1,18 @@
 import { ref } from 'vue';
-import bus from '@/utils/bus';
 import { Gantt } from '@/models/gantt';
+import { useBus } from './bus';
 
-export const useContainer = (ganttEntity: Gantt) => {
+export const useContainer = (ganttEntity: Gantt, store:{
+  bus: ReturnType<typeof useBus>
+}) => {
   const containerReady = ref(false);
-  const setContainerSize = (data: {width: number, height: number}) => {
+  const setSize = (data: {width: number, height: number}) => {
     ganttEntity.container.width = data.width;
     ganttEntity.container.height = data.height;
 
     containerReady.value = true;
     
-    bus.emit('container-change', {
+    store.bus.emit('container-size-change', {
       width: data.width,
       height: data.height 
     });
@@ -18,6 +20,6 @@ export const useContainer = (ganttEntity: Gantt) => {
 
   return {
     containerReady,
-    setContainerSize
+    setSize
   };
 };

@@ -55,4 +55,8 @@ export class GanttConfig {
   get secondWidth() {
     return this.minuteWidth / 60;
   }
+
+  get dataUnitCount() {
+    return this.endDate.diff(this.startDate, this.dataScaleUnit);
+  }
 }

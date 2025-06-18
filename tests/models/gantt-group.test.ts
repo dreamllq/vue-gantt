@@ -1,10 +1,20 @@
+import { GanttConfig } from '@/models/gantt-config';
 import { GanttGroup } from '@/models/gantt-group';
+import { GanttLayoutConfig } from '@/models/gantt-layout-config';
 
 describe('gantt-group', () => {
+  const layoutConfig = new GanttLayoutConfig({ });
+  const config = new GanttConfig({
+    endDate: '',
+    layoutConfig,
+    startDate: ''
+  });
   test('初始化', () => {
     const gg = new GanttGroup({
       id: 1,
-      parent: null
+      parent: null,
+      layoutConfig,
+      config
     });
 
     expect(gg.id).toBe(1);
@@ -13,10 +23,16 @@ describe('gantt-group', () => {
   });
   
   test('一级 1-2', () => {
-    const gg1 = new GanttGroup({ id: 1 });
+    const gg1 = new GanttGroup({
+      id: 1,
+      layoutConfig,
+      config 
+    });
     const gg2 = new GanttGroup({
       id: 2,
-      parent: gg1 
+      parent: gg1,
+      layoutConfig,
+      config
     });
 
     expect(gg1.children.length).toBe(1);
@@ -25,8 +41,16 @@ describe('gantt-group', () => {
   });
 
   test('parent set null', () => {
-    const gg1 = new GanttGroup({ id: 1 });
-    const gg2 = new GanttGroup({ id: 2 });
+    const gg1 = new GanttGroup({
+      id: 1,
+      layoutConfig,
+      config 
+    });
+    const gg2 = new GanttGroup({
+      id: 2,
+      layoutConfig,
+      config 
+    });
 
     gg2.parent = gg1;
 

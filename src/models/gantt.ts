@@ -52,7 +52,8 @@ export class Gantt {
     this.bars.add({
       ...data,
       config: this.config,
-      layoutConfig: this.layoutConfig
+      layoutConfig: this.layoutConfig,
+      groups: this.groups
     });
   }
 
@@ -62,6 +63,10 @@ export class Gantt {
       config: this.config,
       layoutConfig: this.layoutConfig
     });
+  }
+
+  calculate() {
+    this.bars.calculate();
   }
 
   static fromJson(data: GanttJsonData) {
@@ -103,6 +108,7 @@ export class Gantt {
         workTimes: workTimes
       });
     });
+    gantt.groups.calculateExpandedGroups();
 
     data.bars.forEach(barJson => {
       const group = gantt.groups.getById(barJson.groupId);

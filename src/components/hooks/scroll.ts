@@ -1,7 +1,10 @@
 import { Gantt } from '@/models/gantt';
 import { ref } from 'vue';
+import { useBus } from './bus';
 
-export const useScroll = (ganttEntity:Gantt) => {
+export const useScroll = (ganttEntity:Gantt, store:{
+    bus: ReturnType<typeof useBus>;
+}) => {
   const scrollReady = ref(false);
   const scrollLeft = ref(0);
   const scrollTop = ref(0);
@@ -12,7 +15,8 @@ export const useScroll = (ganttEntity:Gantt) => {
 
 
   const onWheel = (evt) => {
-    // console.log(scrollLeft.value);
+    store.bus.emit('wheel', evt);
+
     if (evt.shiftKey === true) {
       if (evt.deltaY > 0) {
         if (scrollLeft.value + evt.deltaY > ganttEntity.scroll.xScrollBarWidth - ganttEntity.scroll.xScrollWidth) {
