@@ -2,16 +2,22 @@
   <container v-if='entityReady'>
     <layout v-if='scrollReady'>
       <template #aside-header>
-        111
+        <slot name='aside-header'>
+          GANTT
+        </slot>
       </template>
       <template #aside-main>
-        <div>1111111111111333333333334444444444444555555555555111111111111133333333333444444444444455555555555511111111111113333333333344444444444445555555555551111111111111333333333334444444444444555555555555</div>
+        <group />
       </template>
       <template #main-header>
         <time-line />
       </template>
       <template #main-main>
-        <div>1111111111111333333333334444444444444555555555555111111111111133333333333444444444444455555555555511111111111113333333333344444444444445555555555551111111111111333333333334444444444444555555555555</div>
+        <date-grid-bg />
+        <work-time-grid />
+        <date-grid />
+        <bar-grid />
+        <drag-bar-grid />
       </template>
     </layout>
     <scroll />
@@ -24,6 +30,12 @@ import { useStore } from './store';
 import Layout from './layout/index.vue';
 import Scroll from './scroll/index.vue';
 import TimeLine from './time-line/index.vue';
+import DateGridBg from './date-grid/bg.vue';
+import DateGrid from './date-grid/index.vue';
+import Group from './group/index.vue';
+import WorkTimeGrid from './work-time-grid/index.vue';
+import BarGrid from './bar-grid/index.vue';
+import DragBarGrid from './drag-bar-grid/index.vue';
 
 const { entityReady, container, scroll } = useStore()!;
 const { scrollReady } = scroll;

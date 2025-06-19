@@ -2,7 +2,11 @@
   <div
     ref='containerRef'
     class='gantt-container'
-    @wheel.prevent='scroll.onWheel'>
+    @wheel.prevent='scroll.onWheel'
+    @click='drag.onClick'
+    @mousedown='drag.onMouseDown'
+    @mouseup='drag.onMouseUp'
+    @mousemove='drag.onMouseMove'>
     <slot v-if='containerReady' />
   </div>
 </template>
@@ -13,7 +17,7 @@ import { onMounted, ref } from 'vue';
 import { useStore } from './store';
 
 const containerRef = ref();
-const { container, scroll } = useStore()!;
+const { container, scroll, drag } = useStore()!;
 const { containerReady } = container;
 
 onMounted(() => {

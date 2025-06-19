@@ -143,6 +143,7 @@ const mainContainerInnerStyle = ref({
 
   .hidden-container{
     overflow: hidden;
+    position: relative;
   }
 
   .mainHeaderInner{

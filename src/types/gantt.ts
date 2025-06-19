@@ -5,6 +5,7 @@ import { Unit } from './unit';
 import { GanttLayoutConfig } from '@/models/gantt-layout-config';
 import { GanttLayoutConfigClassConstructor } from './gantt-layout-config';
 import { GanttLinkType } from './gantt-link';
+import { SchedulingMode } from './gantt-config';
 
 export type GanttClassConstructor = { config: GanttConfig, layoutConfig: GanttLayoutConfig}
 
@@ -13,7 +14,9 @@ export type GanttJsonDataConfig = {
   endDate: DateString,
   daySplitTime?: SplitTimeString,
   durationUnit?: keyof typeof Unit,
-  dataScaleUnit?: keyof typeof Unit
+  dataScaleUnit?: keyof typeof Unit,
+  lazyDebounceTime?:number,
+  schedulingMode?: keyof typeof SchedulingMode
 };
 
 export type GanttJsonDataLayoutConfig=GanttLayoutConfigClassConstructor;
@@ -36,6 +39,7 @@ export type GanttJsonDataBar = {
   start: DateTimeString | null,
   end: DateTimeString | null,
   duration: number | null
+  schedulingMode?: keyof typeof SchedulingMode
 };
 
 export type GanttJsonDataLink = {

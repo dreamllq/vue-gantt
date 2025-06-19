@@ -7,11 +7,23 @@
   "groups": [
     {
       "id": 1,
-      "parentId": null
+      "parentId": null,
+      "workTimes": [
+        {
+          "start": "2024-01-01 00:00:00",
+          "end": "2024-02-01 12:00:00"
+        }
+      ]
     },
     {
       "id": 2,
-      "parentId": null
+      "parentId": null,
+      "workTimes": [
+        {
+          "start": "2024-01-01 00:00:00",
+          "end": "2024-03-01 12:00:00"
+        }
+      ]
     },
     {
       "id": 3,
@@ -56,14 +68,14 @@
   ],
   "bars": [
     {
-      "duration": 10,
+      "duration": 72000,
       "end": null,
       "groupId": 1,
       "id": 1,
-      "start": "2024-01-01 00:00:00"
+      "start": "2024-01-02 00:00:00"
     },
     {
-      "duration": 10,
+      "duration": 72000,
       "end": null,
       "groupId": 1,
       "id": 2,

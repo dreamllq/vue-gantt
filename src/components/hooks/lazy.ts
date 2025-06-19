@@ -11,7 +11,8 @@ export const useLazy = (ganttEntity: Gantt, store:{
   bus: ReturnType<typeof useBus>;
 }) => {
   const { scrollLeft, scrollTop } = store.scroll;
-  const { mainWidth, mainHeight } = store.layout;
+  const { mainWidth, mainHeight, layoutReady } = store.layout;
+  const lazyReady = ref(false);
 
   const visibleAreaStartX = ref();
   const visibleAreaEndX = ref();
@@ -23,21 +24,20 @@ export const useLazy = (ganttEntity: Gantt, store:{
   const visibleAreaEndGroupIndex = ref();
 
   const calculateVisibleArea = () => {
-    console.log(scrollLeft.value, mainWidth.value);
-    
+    if (layoutReady.value === false) return;
     visibleAreaStartX.value = max([0, scrollLeft.value - mainWidth.value]) || 0;
     visibleAreaEndX.value = min([scrollLeft.value + (mainWidth.value * 2), ganttEntity.config.totalSeconds * ganttEntity.config.secondWidth]) || 0;
     visibleAreaStartY.value = max([0, scrollTop.value - mainHeight.value]) || 0;
-    visibleAreaEndY.value = max([scrollTop.value + (mainHeight.value * 2), ganttEntity.groups.expandedGroups.length * ganttEntity.layoutConfig.ROW_HEIGHT]) || 0;
+    visibleAreaEndY.value = min([scrollTop.value + (mainHeight.value * 2), ganttEntity.groups.expandedGroups.length * ganttEntity.layoutConfig.ROW_HEIGHT]) || 0;
 
     visibleAreaStartDate.value = ganttEntity.config.startDate.clone().add(Math.floor(visibleAreaStartX.value / ganttEntity.config.secondWidth), 'second');
     visibleAreaEndDate.value = ganttEntity.config.startDate.clone().add(Math.floor(visibleAreaEndX.value / ganttEntity.config.secondWidth), 'second');
     visibleAreaStartGroupIndex.value = Math.floor(visibleAreaStartY.value / ganttEntity.layoutConfig.ROW_HEIGHT);
     visibleAreaEndGroupIndex.value = Math.ceil(visibleAreaEndY.value / ganttEntity.layoutConfig.ROW_HEIGHT);
-
+    lazyReady.value = true;
     store.bus.emit('visible-area-change');
   };
-  const calculateVisibleAreaDebounce = debounce(calculateVisibleArea, 50);
+  const calculateVisibleAreaDebounce = debounce(calculateVisibleArea, ganttEntity.config.lazyDebounceTime);
 
   watch(() => [
     scrollLeft.value,
@@ -46,12 +46,10 @@ export const useLazy = (ganttEntity: Gantt, store:{
     mainHeight.value
   ], () => {
     calculateVisibleAreaDebounce();
-  }, {
-    immediate: true,
-    deep: true
-  });
+  }, { deep: true });
 
   return {
+    lazyReady,
     visibleAreaStartX,
     visibleAreaEndX,
     visibleAreaStartY,

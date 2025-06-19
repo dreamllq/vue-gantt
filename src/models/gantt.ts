@@ -1,14 +1,10 @@
-import { Id } from '@/types/id';
-import { GanttBar } from './gantt-bar';
 import { GanttBars } from './gantt-bars';
 import { GanttConfig } from './gantt-config';
 import { GanttContainer } from './gantt-container';
 import { GanttGroup } from './gantt-group';
 import { GanttGroups } from './gantt-groups';
-import { GanttLink } from './gantt-link';
 import { GanttLinks } from './gantt-links';
 import { GanttScroll } from './gantt-scroll';
-import { GanttTime } from './gantt-time';
 import { GanttGroupWorkTimes } from './gantt-group-work-times';
 import { GanttGroupAddParams } from '@/types/gantt-group';
 import { GanttBarAddParams } from '@/types/gantt-bar';
@@ -17,6 +13,7 @@ import { GanttClassConstructor, GanttJsonData } from '@/types/gantt';
 import { GanttGroupWorkTime } from './gantt-group-work-time';
 import { GanttLayoutConfig } from './gantt-layout-config';
 import { Unit } from '@/types/unit';
+import { SchedulingMode } from '@/types/gantt-config';
 
 export class Gantt {
   container: GanttContainer = new GanttContainer();
@@ -24,7 +21,6 @@ export class Gantt {
   layoutConfig: GanttLayoutConfig;
   config: GanttConfig;
   groups: GanttGroups = new GanttGroups();
-  // times: GanttTime[] = [];
   bars: GanttBars = new GanttBars();
   links: GanttLinks = new GanttLinks();
 
@@ -65,10 +61,6 @@ export class Gantt {
     });
   }
 
-  calculate() {
-    this.bars.calculate();
-  }
-
   static fromJson(data: GanttJsonData) {
     const layoutConfig = new GanttLayoutConfig(data.layoutConfig || {});
     const config = new GanttConfig({
@@ -77,7 +69,9 @@ export class Gantt {
       startDate: data.config.startDate,
       durationUnit: data.config.durationUnit ? Unit[data.config.durationUnit] : undefined,
       dataScaleUnit: data.config.dataScaleUnit ? Unit[data.config.dataScaleUnit] : undefined,
-      daySplitTime: data.config.daySplitTime
+      daySplitTime: data.config.daySplitTime,
+      schedulingMode: data.config.schedulingMode ? SchedulingMode[data.config.schedulingMode] : undefined,
+      lazyDebounceTime: data.config.lazyDebounceTime
     });
     const gantt = new Gantt({
       config,
@@ -118,10 +112,12 @@ export class Gantt {
           duration: barJson.duration,
           start: barJson.start,
           end: barJson.end,
-          group: group
+          group: group,
+          schedulingMode: barJson.schedulingMode ? SchedulingMode[barJson.schedulingMode] : undefined
         });
       }
     });
+    gantt.bars.calculate();
 
     data.links.forEach(linkJson => {
       const sourceBar = gantt.bars.getById(linkJson.sourceId);

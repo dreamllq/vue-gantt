@@ -1,5 +1,5 @@
 import { DateString, SplitTimeString } from '@/types/date';
-import { GanttConfigClassConstructor } from '@/types/gantt-config';
+import { GanttConfigClassConstructor, SchedulingMode } from '@/types/gantt-config';
 import { Unit } from '@/types/unit';
 import { GanttLayoutConfig } from './gantt-layout-config';
 import moment from 'moment';
@@ -11,6 +11,8 @@ export class GanttConfig {
   durationUnit: Unit;
   dataScaleUnit: Unit;
   layoutConfig: GanttLayoutConfig;
+  lazyDebounceTime: number;
+  schedulingMode:SchedulingMode;
 
   constructor(data:GanttConfigClassConstructor) {
     this._startDate = data.startDate;
@@ -19,6 +21,8 @@ export class GanttConfig {
     this.durationUnit = Unit.second;
     this.dataScaleUnit = Unit.day;
     this.layoutConfig = data.layoutConfig;
+    this.lazyDebounceTime = data.lazyDebounceTime || 50;
+    this.schedulingMode = data.schedulingMode || SchedulingMode.FORWARD;
   }
   get daySplitTime() {
     const daySplitTime = this._daySplitTime;

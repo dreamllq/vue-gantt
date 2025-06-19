@@ -28,9 +28,8 @@ import { useStore } from '../store';
 import { useTimeLineHook } from './time-line-hook';
 import TimeScale from './time-scale.vue';
 
-const { timeLine, ganttEntity } = useStore()!;
-const { lazyDayList } = timeLine;
-useTimeLineHook();
+const { ganttEntity } = useStore()!;
+const { lazyDayList } = useTimeLineHook();
 </script>
 
 <style scoped lang="scss">
