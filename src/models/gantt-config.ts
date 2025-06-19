@@ -13,6 +13,10 @@ export class GanttConfig {
   layoutConfig: GanttLayoutConfig;
   lazyDebounceTime: number;
   schedulingMode:SchedulingMode;
+  draggable = false;
+  selectable = false;
+  checkable = false;
+  multipleDraggable = false;
 
   constructor(data:GanttConfigClassConstructor) {
     this._startDate = data.startDate;
@@ -23,6 +27,10 @@ export class GanttConfig {
     this.layoutConfig = data.layoutConfig;
     this.lazyDebounceTime = data.lazyDebounceTime || 50;
     this.schedulingMode = data.schedulingMode || SchedulingMode.FORWARD;
+    this.draggable = !!data.draggable;
+    this.selectable = !!data.selectable;
+    this.checkable = !!data.checkable;
+    this.multipleDraggable = !!data.multipleDraggable;
   }
   get daySplitTime() {
     const daySplitTime = this._daySplitTime;

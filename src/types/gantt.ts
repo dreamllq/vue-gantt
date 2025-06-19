@@ -16,7 +16,11 @@ export type GanttJsonDataConfig = {
   durationUnit?: keyof typeof Unit,
   dataScaleUnit?: keyof typeof Unit,
   lazyDebounceTime?:number,
-  schedulingMode?: keyof typeof SchedulingMode
+  schedulingMode?: keyof typeof SchedulingMode,
+  draggable?:boolean,
+  selectable?:boolean,
+  checkable?:boolean,
+  multipleDraggable?:boolean
 };
 
 export type GanttJsonDataLayoutConfig=GanttLayoutConfigClassConstructor;

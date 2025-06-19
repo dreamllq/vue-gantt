@@ -71,7 +71,11 @@ export class Gantt {
       dataScaleUnit: data.config.dataScaleUnit ? Unit[data.config.dataScaleUnit] : undefined,
       daySplitTime: data.config.daySplitTime,
       schedulingMode: data.config.schedulingMode ? SchedulingMode[data.config.schedulingMode] : undefined,
-      lazyDebounceTime: data.config.lazyDebounceTime
+      lazyDebounceTime: data.config.lazyDebounceTime,
+      draggable: data.config.draggable,
+      selectable: data.config.selectable,
+      checkable: data.config.checkable,
+      multipleDraggable: data.config.multipleDraggable
     });
     const gantt = new Gantt({
       config,

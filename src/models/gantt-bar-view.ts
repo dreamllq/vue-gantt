@@ -13,6 +13,8 @@ export class GanttBarView extends GanttBar {
   height = 0;
   st = 0;
   et = 0;
+  dragging = false;
+  selected = false;
   groups:GanttGroups;
   constructor(data:GanttBarViewClassConstructor) {
     super(data);

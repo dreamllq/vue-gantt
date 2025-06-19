@@ -2,7 +2,9 @@
   "config": {
     "endDate": "2024-06-14",
     "startDate": "2024-01-01",
-    "durationUnit": "second"
+    "durationUnit": "second",
+    "draggable": true,
+    "selectable": true
   },
   "groups": [
     {

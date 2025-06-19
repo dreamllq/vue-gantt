@@ -39,6 +39,8 @@ export const useSingleDraggingHook = () => {
           sy: bar.sy,
           width: bar.width
         };
+        bar.dragging = true;
+        bus.emit('bar-change', [bar.id]);
 
         dragging.value.startX = e.x;
         dragging.value.startY = e.y;
@@ -70,7 +72,8 @@ export const useSingleDraggingHook = () => {
       end: endTime
     });
     bar.calculate();
-    bus.emit('bar-change', bar.id);
+    bar.dragging = false;
+    bus.emit('bar-change', [bar.id]);
     draggingBar.value = undefined;
   };
 

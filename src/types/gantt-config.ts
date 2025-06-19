@@ -15,5 +15,9 @@ export type GanttConfigClassConstructor = {
   dataScaleUnit?: Unit,
   layoutConfig: GanttLayoutConfig,
   lazyDebounceTime?: number,
-  schedulingMode?: SchedulingMode
+  schedulingMode?: SchedulingMode,
+  draggable?:boolean,
+  selectable?:boolean,
+  checkable?:boolean,
+  multipleDraggable?:boolean
 } 
