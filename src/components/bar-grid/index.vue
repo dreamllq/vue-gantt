@@ -12,7 +12,7 @@
         }'
         :data-id='item.id'
         :data-type='getIdType(item.id)'>
-        {{ item.selected }}
+        <slot :bar='item' />
       </div>
     </template>
   </div>
@@ -30,11 +30,13 @@ const getIdType = (id:Id) => (typeof id);
 .gantt-bar-grid {
   width: 0;
   left: 0;
-  position: relative;
+  position: absolute;
+  top:0;
+  left: 0;
 
   .bar-cell {
     position: absolute;
-    background-color: var(--el-color-primary-light-3);
+    background-color: var(--bar-color);
   }
 }
 </style>

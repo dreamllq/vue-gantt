@@ -16,9 +16,14 @@
         <date-grid-bg />
         <work-time-grid />
         <date-grid />
-        <bar-grid />
+        <bar-grid>
+          <template #default='slotProps'>
+            <slot name='bar' v-bind='slotProps' />
+          </template>
+        </bar-grid>
         <drag-bar-grid v-if='ganttEntity.config.draggable && !ganttEntity.config.multipleDraggable' />
         <select-bar-grid v-if='ganttEntity.config.selectable && !ganttEntity.config.checkable' />
+        <link-grid />
       </template>
     </layout>
     <scroll />
@@ -38,6 +43,7 @@ import WorkTimeGrid from './work-time-grid/index.vue';
 import BarGrid from './bar-grid/index.vue';
 import DragBarGrid from './drag-bar-grid/index.vue';
 import SelectBarGrid from './select-bar-grid/index.vue';
+import LinkGrid from './link-grid/index.vue';
 
 const { entityReady, container, scroll, ganttEntity } = useStore()!;
 const { scrollReady } = scroll;

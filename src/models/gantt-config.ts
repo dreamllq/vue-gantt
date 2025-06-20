@@ -22,8 +22,8 @@ export class GanttConfig {
     this._startDate = data.startDate;
     this._endDate = data.endDate;
     this._daySplitTime = data.daySplitTime || '00:00';
-    this.durationUnit = Unit.second;
-    this.dataScaleUnit = Unit.day;
+    this.durationUnit = Unit.SECOND;
+    this.dataScaleUnit = Unit.DAY;
     this.layoutConfig = data.layoutConfig;
     this.lazyDebounceTime = data.lazyDebounceTime || 50;
     this.schedulingMode = data.schedulingMode || SchedulingMode.FORWARD;
@@ -54,11 +54,11 @@ export class GanttConfig {
   }
 
   get minuteWidth() {
-    if (this.dataScaleUnit === Unit.day) {
+    if (this.dataScaleUnit === Unit.DAY) {
       return this.layoutConfig.TIME_UNIT_WIDTH / 24 / 60; 
-    } else if (this.dataScaleUnit === Unit.week) {
+    } else if (this.dataScaleUnit === Unit.WEEK) {
       return this.layoutConfig.TIME_UNIT_WIDTH / 7 / 24 / 60; 
-    } else if (this.dataScaleUnit === Unit.minute) {
+    } else if (this.dataScaleUnit === Unit.MINUTE) {
       return this.layoutConfig.TIME_UNIT_WIDTH / 30 / 24 / 60;
     }
     return 0;

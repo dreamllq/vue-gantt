@@ -23,7 +23,9 @@ const { draggingBar } = useSingleDraggingHook();
 .gantt-single-drag{
   width: 0;
   left: 0;
-  position: relative;
+  position: absolute;
+  top:0;
+  left: 0;
 
   .dragging-bar-cell {
     position: absolute;

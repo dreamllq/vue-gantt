@@ -1,3 +1,3 @@
 export enum Unit {
-   month='month', week='week', day='day', hour='hour', minute='minute', second='second'
+   MONTH='month', WEEK='week', DAY='day', HOUR='hour', MINUTE='minute', SECOND='second'
 }

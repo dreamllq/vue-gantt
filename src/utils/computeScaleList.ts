@@ -1,5 +1,6 @@
 import { Moment } from 'moment';
 import { computeDayScale } from './computeDayScale';
+import { Unit } from '@/types/unit';
 
 export const computeScaleList = ({ dataScaleUnit, date, step, thWidth, secondWidth }) => {
   const list:{
@@ -8,7 +9,7 @@ export const computeScaleList = ({ dataScaleUnit, date, step, thWidth, secondWid
     date: Moment
   }[] = [];
   // 判断 日 周 月
-  if (dataScaleUnit === 'day') {
+  if (dataScaleUnit === Unit.DAY) {
     const dayScales = computeDayScale(date);
     const stepNum = step;
     // const { hour, minute } = daySplitTime;
@@ -24,7 +25,7 @@ export const computeScaleList = ({ dataScaleUnit, date, step, thWidth, secondWid
       });
     }
     return list;
-  } else if (dataScaleUnit === 'week') {
+  } else if (dataScaleUnit === Unit.WEEK) {
     const stepNum = step;
     // const { hour, minute } = daySplitTime;
     const day = 1; // 周第几天
@@ -38,7 +39,7 @@ export const computeScaleList = ({ dataScaleUnit, date, step, thWidth, secondWid
       });
     }
     return list;
-  } else if (dataScaleUnit === 'month') {
+  } else if (dataScaleUnit === Unit.MONTH) {
     const stepNum = step;
     // const { hour, minute } = daySplitTime;
     const day = 1; // 月第几天

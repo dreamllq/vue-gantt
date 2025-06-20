@@ -1,6 +1,13 @@
 <template>
   <root :data='data'>
-    <wrapper />
+    <wrapper>
+      <template #aside-header>
+        <slot name='aside-header' />
+      </template>
+      <template #bar='slotProps'>
+        <slot name='bar' v-bind='slotProps' />
+      </template>
+    </wrapper>
   </root>
 </template>
 

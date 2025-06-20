@@ -1,22 +1,23 @@
+import { Unit } from '@/types/unit';
 import moment, { Moment } from 'moment';
 
 export const computeDayList = (start:Moment, days:number, unit:string) => {
   const dateMoment = start.clone();
   const list:{seconds: number, date: Moment}[] = [];
   for (let i = 0; i < days; i++) {
-    if (unit === 'day') {
+    if (unit === Unit.DAY) {
       list.push({
         seconds: computeOneDayHasHours(dateMoment) * 60 * 60,
         date: dateMoment.clone()
       });
       dateMoment.add(1, 'd');
-    } else if (unit === 'week') {
+    } else if (unit === Unit.WEEK) {
       list.push({
         seconds: computeOneWeekHasHours(dateMoment) * 60 * 60,
         date: dateMoment.clone() 
       });
       dateMoment.add(1, 'week');
-    } else if (unit === 'month') {
+    } else if (unit === Unit.MINUTE) {
       list.push({
         seconds: computeOneMonthHasHours(dateMoment) * 60 * 60,
         date: dateMoment.clone() 

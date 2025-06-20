@@ -8,8 +8,10 @@ import { useLayout } from './hooks/layout';
 import { useLazy } from './hooks/lazy';
 import { useBus } from './hooks/bus';
 import { useDrag } from './hooks/drag';
+import { v4 as uuidv4 } from 'uuid';
 
 const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) => {
+  const ganttId = uuidv4();
   const entityReady = ref(false);
 
   const ganttEntity = Gantt.fromJson(data);
@@ -29,6 +31,7 @@ const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) =>
   });
 
   return {
+    ganttId,
     entityReady,
     ganttEntity,
     bus,

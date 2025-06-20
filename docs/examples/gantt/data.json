@@ -2,7 +2,7 @@
   "config": {
     "endDate": "2024-06-14",
     "startDate": "2024-01-01",
-    "durationUnit": "second",
+    "durationUnit": "SECOND",
     "draggable": true,
     "selectable": true
   },
@@ -79,9 +79,9 @@
     {
       "duration": 72000,
       "end": null,
-      "groupId": 1,
+      "groupId": 2,
       "id": 2,
-      "start": "2024-01-01 00:00:00"
+      "start": "2024-01-03 02:00:00"
     }
   ],
   "links": [

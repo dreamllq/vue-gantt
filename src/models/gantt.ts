@@ -57,7 +57,8 @@ export class Gantt {
     this.links.add({
       ...data,
       config: this.config,
-      layoutConfig: this.layoutConfig
+      layoutConfig: this.layoutConfig,
+      bars: this.bars
     });
   }
 
@@ -135,6 +136,7 @@ export class Gantt {
         });
       }
     });
+    gantt.links.calculate();
 
     return gantt;
   }

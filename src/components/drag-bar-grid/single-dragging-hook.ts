@@ -2,6 +2,7 @@ import { Id } from '@/types/id';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { useStore } from '../store';
 import dom from '@/utils/dom';
+import { GanttBarView } from '@/models/gantt-bar-view';
 
 type DraggingBar = {
   id: Id,
@@ -41,6 +42,7 @@ export const useSingleDraggingHook = () => {
         };
         bar.dragging = true;
         bus.emit('bar-change', [bar.id]);
+        bus.emit('bar-dragging-change', [bar.id], true);
 
         dragging.value.startX = e.x;
         dragging.value.startY = e.y;
@@ -61,6 +63,7 @@ export const useSingleDraggingHook = () => {
 
     draggingBar.value.sx = tempX;
     draggingBar.value.sy = tempY;
+    bus.emit('bar-dragging', [draggingBar.value.id]);
   };
   const onDragEnd = (e:MouseEvent) => {
     if (draggingBar.value === undefined) return;
@@ -74,6 +77,7 @@ export const useSingleDraggingHook = () => {
     bar.calculate();
     bar.dragging = false;
     bus.emit('bar-change', [bar.id]);
+    bus.emit('bar-dragging-change', [bar.id], false);
     draggingBar.value = undefined;
   };
 

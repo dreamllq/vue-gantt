@@ -1,6 +1,13 @@
 <template>
   <div style='height: 400px;'>
-    <gantt :data='data' />
+    <gantt :data='data'>
+      <template #aside-header>
+        aaa
+      </template>
+      <template #bar='{bar}'>
+        {{ bar.id }} \ {{ bar.selected }}
+      </template>
+    </gantt>
   </div>
 </template>
 

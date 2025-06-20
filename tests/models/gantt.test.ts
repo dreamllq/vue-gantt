@@ -44,6 +44,6 @@ describe('gantt', () => {
     expect(gantt.groups.getById(1)).toBe(gantt.bars.getById(2)?.group);
     expect(gantt.links.getById(1)?.source).toBe(gantt.bars.getById(1));
     expect(gantt.links.getById(1)?.target).toBe(gantt.bars.getById(2));
-    expect(gantt.links.getById(1)?.linkType).toBe('0');
+    expect(gantt.links.getById(1)?.linkType).toBe('FINISH_TO_START');
   });
 });
