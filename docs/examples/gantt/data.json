@@ -4,7 +4,8 @@
     "startDate": "2024-01-01",
     "durationUnit": "SECOND",
     "draggable": true,
-    "selectable": true
+    "selectable": true,
+    "linkShowStrategy": "ALL"
   },
   "groups": [
     {

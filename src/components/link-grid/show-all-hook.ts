@@ -5,8 +5,8 @@ import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { max, min, uniq } from 'lodash';
 import { Id } from '@/types/id';
 
-export const useLinkGridHook = (): { lazyLinkGrid:Ref<GanttLinkView[]> } => {
-  const lazyLinkGrid = ref<GanttLinkView[]>([]);
+export const useShowAllHook = () => {
+  const lazyLinkGrid: Ref<GanttLinkView[]> = ref([]);
   const draggingBarIds = ref<Id[]>([]);
   const { ganttEntity, lazy, bus } = useStore()!;
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;

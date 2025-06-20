@@ -3,6 +3,7 @@ import { GanttConfigClassConstructor, SchedulingMode } from '@/types/gantt-confi
 import { Unit } from '@/types/unit';
 import { GanttLayoutConfig } from './gantt-layout-config';
 import moment from 'moment';
+import { LinkShowStrategy } from '@/types/gantt-link';
 
 export class GanttConfig {
   _startDate: DateString;
@@ -17,6 +18,7 @@ export class GanttConfig {
   selectable = false;
   checkable = false;
   multipleDraggable = false;
+  linkShowStrategy:LinkShowStrategy;
 
   constructor(data:GanttConfigClassConstructor) {
     this._startDate = data.startDate;
@@ -31,6 +33,7 @@ export class GanttConfig {
     this.selectable = !!data.selectable;
     this.checkable = !!data.checkable;
     this.multipleDraggable = !!data.multipleDraggable;
+    this.linkShowStrategy = data.linkShowStrategy || LinkShowStrategy.NONE;
   }
   get daySplitTime() {
     const daySplitTime = this._daySplitTime;

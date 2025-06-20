@@ -1,5 +1,9 @@
 <template>
-  <single-drag />
+  <single-drag>
+    <template #default='slotProps'>
+      <slot name='draggingBar' v-bind='slotProps' />
+    </template>
+  </single-drag>
 </template>
 
 <script setup lang="ts">

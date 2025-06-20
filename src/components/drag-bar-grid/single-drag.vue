@@ -9,13 +9,17 @@
         width: `${draggingBar.width}px`,
         height: `${draggingBar.height}px`
       }'
-    />
+    >
+      <slot :bar='ganttEntity.bars.getById(draggingBar.id)' />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { useStore } from '../store';
 import { useSingleDraggingHook } from './single-dragging-hook';
 
+const { ganttEntity } = useStore()!;
 const { draggingBar } = useSingleDraggingHook();
 </script>
 

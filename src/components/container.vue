@@ -2,27 +2,35 @@
   <div
     ref='containerRef'
     class='gantt-container'
-    @wheel.prevent='scroll.onWheel'
-    @click='drag.onClick'
-    @mousedown='drag.onMouseDown'
-    @mouseup='drag.onMouseUp'
-    @mousemove='drag.onMouseMove'>
+    @wheel.prevent.stop='scroll.onWheel'
+    @mousedown.prevent='drag.onMouseDown'
+    @mouseup.prevent='drag.onMouseUp'
+    @mousemove.prevent='drag.onMouseMove'>
     <slot v-if='containerReady' />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useResizeObserver } from '@vueuse/core';
-import { onMounted, ref } from 'vue';
+import { useResizeObserver, useMouseInElement } from '@vueuse/core';
+import { onMounted, ref, watch } from 'vue';
 import { useStore } from './store';
 
 const containerRef = ref();
-const { container, scroll, drag } = useStore()!;
+const { container, scroll, drag, bus } = useStore()!;
 const { containerReady } = container;
+
+const { isOutside } = useMouseInElement(containerRef);
+
+watch(isOutside, () => {
+  if (isOutside.value === true) {
+    bus.emit('mouse-outside');
+  }
+}, { immediate: true });
 
 onMounted(() => {
   container.containerReady.value = false;
 });
+
 
 useResizeObserver(containerRef, (entries) => {
   const entry = entries[0];

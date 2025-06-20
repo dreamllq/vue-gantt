@@ -3,6 +3,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { useStore } from '../store';
 import dom from '@/utils/dom';
 import { GanttBarView } from '@/models/gantt-bar-view';
+import { max, min } from 'lodash';
 
 type DraggingBar = {
   id: Id,
@@ -65,11 +66,16 @@ export const useSingleDraggingHook = () => {
     draggingBar.value.sy = tempY;
     bus.emit('bar-dragging', [draggingBar.value.id]);
   };
-  const onDragEnd = (e:MouseEvent) => {
+  const onDragEnd = () => {
     if (draggingBar.value === undefined) return;
     const startTime = ganttEntity.config.startDate.add(Math.floor(draggingBar.value.sx / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
     const endTime = ganttEntity.config.startDate.add(Math.floor((draggingBar.value.sx + draggingBar.value.width) / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
+
+    const index = min([max([Math.floor(draggingBar.value.sy / ganttEntity.layoutConfig.ROW_HEIGHT), 0])!, ganttEntity.groups.expandedGroups.length - 1])!;
+    const group = ganttEntity.groups.expandedGroups[index];
+
     const bar = ganttEntity.bars.getById(draggingBar.value.id)!;
+    bar.group = group;
     bar.resetTimeRange({
       start: startTime,
       end: endTime
@@ -81,16 +87,22 @@ export const useSingleDraggingHook = () => {
     draggingBar.value = undefined;
   };
 
+  const onMouseOutSide = () => {
+    onDragEnd();
+  };
+
   onMounted(() => {
     bus.on('dragstart', onDragStart);
     bus.on('drag', onDrag);
     bus.on('dragend', onDragEnd);
+    bus.on('mouse-outside', onMouseOutSide);
   });
 
   onBeforeUnmount(() => {
     bus.off('dragstart', onDragStart);
     bus.off('drag', onDrag);
     bus.off('dragend', onDragEnd);
+    bus.off('mouse-outside', onMouseOutSide);
   });
 
   return { draggingBar };

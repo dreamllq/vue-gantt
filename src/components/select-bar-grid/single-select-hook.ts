@@ -29,6 +29,7 @@ export const useSingleSelectHook = () => {
           selectedBar.value.selected = true;
         }
         bus.emit('bar-change', [bar.id]);
+        bus.emit('bar-select-change', [bar.id]);
       } 
     }
   };

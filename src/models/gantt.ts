@@ -8,7 +8,7 @@ import { GanttScroll } from './gantt-scroll';
 import { GanttGroupWorkTimes } from './gantt-group-work-times';
 import { GanttGroupAddParams } from '@/types/gantt-group';
 import { GanttBarAddParams } from '@/types/gantt-bar';
-import { GanttLinkAddParams, GanttLinkType } from '@/types/gantt-link';
+import { GanttLinkAddParams, GanttLinkType, LinkShowStrategy } from '@/types/gantt-link';
 import { GanttClassConstructor, GanttJsonData } from '@/types/gantt';
 import { GanttGroupWorkTime } from './gantt-group-work-time';
 import { GanttLayoutConfig } from './gantt-layout-config';
@@ -76,7 +76,8 @@ export class Gantt {
       draggable: data.config.draggable,
       selectable: data.config.selectable,
       checkable: data.config.checkable,
-      multipleDraggable: data.config.multipleDraggable
+      multipleDraggable: data.config.multipleDraggable,
+      linkShowStrategy: data.config.linkShowStrategy ? LinkShowStrategy[data.config.linkShowStrategy] : undefined
     });
     const gantt = new Gantt({
       config,

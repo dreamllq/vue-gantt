@@ -42,13 +42,9 @@ export const useDrag = (ganttEntity: Gantt, store:{
     }
   };
 
-  const onClick = (e:MouseEvent) => {
-  };
-
   return {
     onMouseDown,
     onMouseUp,
-    onMouseMove,
-    onClick
+    onMouseMove
   };
 };

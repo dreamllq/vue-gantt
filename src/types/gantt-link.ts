@@ -45,3 +45,11 @@ export type LinkPathPoint = {x: number, y: number};
 export type LinkPath = LinkPathPoint[]
 export type Arrow = {direction: ArrowDirection, point: LinkPathPoint}
 export type LinkData = {path: LinkPath, arrow: Arrow}
+
+export enum LinkShowStrategy {
+  NONE,
+  ALL,
+  SELECTED,
+  SELECTED_All,
+  CUSTOMIZE
+}

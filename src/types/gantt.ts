@@ -4,7 +4,7 @@ import { Id } from './id';
 import { Unit } from './unit';
 import { GanttLayoutConfig } from '@/models/gantt-layout-config';
 import { GanttLayoutConfigClassConstructor } from './gantt-layout-config';
-import { GanttLinkType } from './gantt-link';
+import { GanttLinkType, LinkShowStrategy } from './gantt-link';
 import { SchedulingMode } from './gantt-config';
 
 export type GanttClassConstructor = { config: GanttConfig, layoutConfig: GanttLayoutConfig}
@@ -20,7 +20,8 @@ export type GanttJsonDataConfig = {
   draggable?:boolean,
   selectable?:boolean,
   checkable?:boolean,
-  multipleDraggable?:boolean
+  multipleDraggable?:boolean,
+  linkShowStrategy?: keyof typeof LinkShowStrategy
 };
 
 export type GanttJsonDataLayoutConfig=GanttLayoutConfigClassConstructor;
