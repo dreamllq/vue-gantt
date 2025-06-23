@@ -14,6 +14,7 @@
 import { useResizeObserver, useMouseInElement } from '@vueuse/core';
 import { onMounted, ref, watch } from 'vue';
 import { useStore } from './store';
+import { Events } from '@/types';
 
 const containerRef = ref();
 const { container, scroll, drag, bus } = useStore()!;
@@ -23,7 +24,7 @@ const { isOutside } = useMouseInElement(containerRef);
 
 watch(isOutside, () => {
   if (isOutside.value === true) {
-    bus.emit('mouse-outside');
+    bus.emit(Events.MOUSE_OUTSIDE);
   }
 }, { immediate: true });
 

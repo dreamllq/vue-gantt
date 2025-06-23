@@ -4,6 +4,7 @@ import { useStore } from '../store';
 import dom from '@/utils/dom';
 import { GanttBarView } from '@/models/gantt-bar-view';
 import { max, min } from 'lodash';
+import { Events } from '@/types';
 
 type DraggingBar = {
   id: Id,
@@ -42,8 +43,8 @@ export const useSingleDraggingHook = () => {
           width: bar.width
         };
         bar.dragging = true;
-        bus.emit('bar-change', [bar.id]);
-        bus.emit('bar-dragging-change', [bar.id], true);
+        bus.emit(Events.BAR_CHANGE, [bar.id]);
+        bus.emit(Events.BAR_DRAGGING_CHANGE, [bar.id], true);
 
         dragging.value.startX = e.x;
         dragging.value.startY = e.y;
@@ -64,7 +65,7 @@ export const useSingleDraggingHook = () => {
 
     draggingBar.value.sx = tempX;
     draggingBar.value.sy = tempY;
-    bus.emit('bar-dragging', [draggingBar.value.id]);
+    bus.emit(Events.BAR_DRAGGING, [draggingBar.value.id]);
   };
   const onDragEnd = () => {
     if (draggingBar.value === undefined) return;
@@ -82,8 +83,8 @@ export const useSingleDraggingHook = () => {
     });
     bar.calculate();
     bar.dragging = false;
-    bus.emit('bar-change', [bar.id]);
-    bus.emit('bar-dragging-change', [bar.id], false);
+    bus.emit(Events.BAR_CHANGE, [bar.id]);
+    bus.emit(Events.BAR_DRAGGING_CHANGE, [bar.id], false);
     draggingBar.value = undefined;
   };
 
@@ -92,17 +93,17 @@ export const useSingleDraggingHook = () => {
   };
 
   onMounted(() => {
-    bus.on('dragstart', onDragStart);
-    bus.on('drag', onDrag);
-    bus.on('dragend', onDragEnd);
-    bus.on('mouse-outside', onMouseOutSide);
+    bus.on(Events.DRAGSTART, onDragStart);
+    bus.on(Events.DRAG, onDrag);
+    bus.on(Events.DRAGEND, onDragEnd);
+    bus.on(Events.MOUSE_OUTSIDE, onMouseOutSide);
   });
 
   onBeforeUnmount(() => {
-    bus.off('dragstart', onDragStart);
-    bus.off('drag', onDrag);
-    bus.off('dragend', onDragEnd);
-    bus.off('mouse-outside', onMouseOutSide);
+    bus.off(Events.DRAGSTART, onDragStart);
+    bus.off(Events.DRAG, onDrag);
+    bus.off(Events.DRAGEND, onDragEnd);
+    bus.off(Events.MOUSE_OUTSIDE, onMouseOutSide);
   });
 
   return { draggingBar };

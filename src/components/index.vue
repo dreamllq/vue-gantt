@@ -1,6 +1,6 @@
 <template>
   <root :data='data'>
-    <wrapper>
+    <wrapper ref='wrapperRef'>
       <template #aside-header>
         <slot name='aside-header' />
       </template>
@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue';
+import { PropType, ref } from 'vue';
 import Root from './root.vue';
 import Wrapper from './wrapper.vue';
 import { GanttJsonData } from '@/types/gantt';
@@ -23,6 +23,10 @@ const props = defineProps({
     required: true
   }
 });
+
+const wrapperRef = ref<InstanceType<typeof Wrapper>>();
+
+defineExpose({ api: () => wrapperRef.value!.api() });
 </script>
 
 <style scoped lang="scss">

@@ -4,23 +4,31 @@ import { Unit } from '@/types/unit';
 import { GanttLayoutConfig } from './gantt-layout-config';
 import moment from 'moment';
 import { LinkShowStrategy } from '@/types/gantt-link';
+import EventEmitter from '@/utils/eventemitter';
 
-export class GanttConfig {
-  _startDate: DateString;
-  _endDate: DateString;
-  _daySplitTime: SplitTimeString;
+export class GanttConfig extends EventEmitter {
+  static EVENTS = {
+    DRAGGABLE_CHANGE: 'DRAGGABLE_CHANGE',
+    SELECTABLE_CHANGE: 'SELECTABLE_CHANGE',
+    CHECKABLE_CHANGE: 'CHECKABLE_CHANGE'
+  };
+
+  private _startDate: DateString;
+  private _endDate: DateString;
+  private _daySplitTime: SplitTimeString;
   durationUnit: Unit;
   dataScaleUnit: Unit;
   layoutConfig: GanttLayoutConfig;
   lazyDebounceTime: number;
   schedulingMode:SchedulingMode;
-  draggable = false;
-  selectable = false;
-  checkable = false;
+  private _draggable = false;
+  private _selectable = false;
+  private _checkable = false;
   multipleDraggable = false;
   linkShowStrategy:LinkShowStrategy;
 
   constructor(data:GanttConfigClassConstructor) {
+    super();
     this._startDate = data.startDate;
     this._endDate = data.endDate;
     this._daySplitTime = data.daySplitTime || '00:00';
@@ -29,12 +37,43 @@ export class GanttConfig {
     this.layoutConfig = data.layoutConfig;
     this.lazyDebounceTime = data.lazyDebounceTime || 50;
     this.schedulingMode = data.schedulingMode || SchedulingMode.FORWARD;
-    this.draggable = !!data.draggable;
-    this.selectable = !!data.selectable;
-    this.checkable = !!data.checkable;
+    this._draggable = !!data.draggable;
+    this._selectable = !!data.selectable;
+    this._checkable = !!data.checkable;
     this.multipleDraggable = !!data.multipleDraggable;
     this.linkShowStrategy = data.linkShowStrategy || LinkShowStrategy.NONE;
   }
+
+  get draggable() {
+    return this._draggable;
+  }
+
+  set draggable(val:boolean) {
+    if (this._draggable === val) return;
+    this._draggable = val;
+    this.emit(GanttConfig.EVENTS.DRAGGABLE_CHANGE, val);
+  }
+
+  get selectable() {
+    return this._selectable;
+  }
+
+  set selectable(val: boolean) {
+    if (this._selectable === val) return;
+    this._selectable = val;
+    this.emit(GanttConfig.EVENTS.SELECTABLE_CHANGE, val);
+  }
+
+  get checkable() {
+    return this._checkable;
+  }
+
+  set checkable(val:boolean) {
+    if (this._checkable === val) return;
+    this._checkable = val;
+    this.emit(GanttConfig.EVENTS.CHECKABLE_CHANGE, val);
+  }
+
   get daySplitTime() {
     const daySplitTime = this._daySplitTime;
     const [hour, minute] = daySplitTime.split(':');

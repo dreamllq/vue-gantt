@@ -1,3 +1,4 @@
 import './index.scss';
-export { default as Gantt } from '@/components/index.vue';
+export { default as GanttView } from '@/components/index.vue';
+export * from './types/index';
 

@@ -21,12 +21,12 @@
             <slot name='bar' v-bind='slotProps' />
           </template>
         </bar-grid>
-        <drag-bar-grid v-if='ganttEntity.config.draggable && !ganttEntity.config.multipleDraggable'>
+        <drag-bar-grid>
           <template #draggingBar='slotProps'>
             <slot name='bar' v-bind='slotProps' />
           </template>
         </drag-bar-grid>
-        <select-bar-grid v-if='ganttEntity.config.selectable && !ganttEntity.config.checkable' />
+        <select-bar-grid />
         <link-grid v-if='ganttEntity.config.linkShowStrategy !== LinkShowStrategy.NONE' />
       </template>
     </layout>
@@ -49,9 +49,25 @@ import DragBarGrid from './drag-bar-grid/index.vue';
 import SelectBarGrid from './select-bar-grid/index.vue';
 import LinkGrid from './link-grid/index.vue';
 import { LinkShowStrategy } from '@/types/gantt-link';
+import { DRAGGABLE_CHANGE } from '../constants/events';
 
-const { entityReady, container, scroll, ganttEntity } = useStore()!;
+const { entityReady, container, scroll, ganttEntity, bus } = useStore()!;
 const { scrollReady } = scroll;
+
+const setDraggable = (val: boolean) => {
+  ganttEntity.config.draggable = val;
+};
+
+const setSelectable = (val:boolean) => {
+  ganttEntity.config.selectable = val;
+};
+
+defineExpose({
+  api: () => ({
+    setDraggable,
+    setSelectable 
+  }) 
+});
 </script>
 
 <style scoped>

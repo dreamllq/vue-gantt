@@ -1,6 +1,7 @@
 import { Gantt } from '@/models/gantt';
 import { computed, ref } from 'vue';
 import { useBus } from './bus';
+import { Events } from '@/types';
 
 export const useLayout = (ganttEntity: Gantt, store:{
     bus: ReturnType<typeof useBus>
@@ -14,7 +15,7 @@ export const useLayout = (ganttEntity: Gantt, store:{
     mainHeight.value = data.height;
     layoutReady.value = true;
 
-    store.bus.emit('layout-main-size-change', {
+    store.bus.emit(Events.LAYOUT_MAIN_SIZE_CHANGE, {
       width: data.width,
       height: data.height 
     });

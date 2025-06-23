@@ -1,8 +1,9 @@
 
-import EventEmitter from 'eventemitter3';
+import { Events } from '@/types/events';
+import EventEmitter from '@/utils/eventemitter';
 
 export const useBus = () => {
-  const ee = new EventEmitter();
+  const ee = new EventEmitter<Events, any>();
 
   return {
     emit: ee.emit.bind(ee),

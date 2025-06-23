@@ -15,11 +15,11 @@
 <script setup lang="ts">
 import { useStore } from '../store';
 import LPath from './path.vue';
-import { useShowSelectedHook } from './show-selected-hook';
+import { useShowSelectedAllHook } from './show-selected-all-hook';
 
 const { ganttId } = useStore()!;
 const svgId = `path-svg-${ganttId}`;
-const { lazyLinkGrid, draggingBarIds } = useShowSelectedHook();
+const { lazyLinkGrid, draggingBarIds } = useShowSelectedAllHook();
 
 </script>
 

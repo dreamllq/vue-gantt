@@ -10,7 +10,7 @@
         height: `${draggingBar.height}px`
       }'
     >
-      <slot :bar='ganttEntity.bars.getById(draggingBar.id)' />
+      <slot :bar='ganttEntity.bars.getById(draggingBar.id)!' />
     </div>
   </div>
 </template>

@@ -8,6 +8,7 @@ export class GanttLink extends GanttBase {
   source: GanttBar;
   target: GanttBar;
   linkType: GanttLinkType;
+  linkGroup: string | undefined;
 
   constructor(data:GanttLinkClassConstructor) {
     super(data);

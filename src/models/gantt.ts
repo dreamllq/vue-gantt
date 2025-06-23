@@ -1,3 +1,4 @@
+import EventEmitter from '@/utils/eventemitter';
 import { GanttBars } from './gantt-bars';
 import { GanttConfig } from './gantt-config';
 import { GanttContainer } from './gantt-container';
@@ -15,7 +16,7 @@ import { GanttLayoutConfig } from './gantt-layout-config';
 import { Unit } from '@/types/unit';
 import { SchedulingMode } from '@/types/gantt-config';
 
-export class Gantt {
+export class Gantt extends EventEmitter {
   container: GanttContainer = new GanttContainer();
   scroll: GanttScroll;
   layoutConfig: GanttLayoutConfig;
@@ -25,6 +26,7 @@ export class Gantt {
   links: GanttLinks = new GanttLinks();
 
   constructor(data:GanttClassConstructor) {
+    super();
     this.config = data.config;
     this.layoutConfig = data.layoutConfig;
 
@@ -138,6 +140,7 @@ export class Gantt {
       }
     });
     gantt.links.calculate();
+    gantt.links.calculateLinkGroupMap();
 
     return gantt;
   }

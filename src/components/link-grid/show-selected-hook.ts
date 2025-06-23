@@ -6,23 +6,27 @@ import { max, min, uniq } from 'lodash';
 import { Id } from '@/types/id';
 import { Events } from '@/types';
 
-export const useShowAllHook = () => {
+export const useShowSelectedHook = () => {
   const lazyLinkGrid: Ref<GanttLinkView[]> = ref([]);
   const draggingBarIds = ref<Id[]>([]);
   const { ganttEntity, lazy, bus } = useStore()!;
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
   const lazyCalculate = () => {
-    lazyLinkGrid.value = ganttEntity.links.filter(link => isRectanglesOverlap({
-      x1: visibleAreaStartX.value,
-      y1: visibleAreaStartY.value,
-      x2: visibleAreaEndX.value,
-      y2: visibleAreaEndY.value
-    }, {
-      x1: min(link.path.map(point => point.x)) || 0,
-      y1: min(link.path.map(point => point.y)) || 0,
-      x2: max(link.path.map(point => point.x)) || 0,
-      y2: max(link.path.map(point => point.y)) || 0
-    }));
+    const selectBarIds = ganttEntity.bars.filter(item => item.selected).map(bar => bar.id);
+
+    lazyLinkGrid.value = ganttEntity.links
+      .filter(link => selectBarIds.includes(link.source.id) || selectBarIds.includes(link.target.id))
+      .filter(link => isRectanglesOverlap({
+        x1: visibleAreaStartX.value,
+        y1: visibleAreaStartY.value,
+        x2: visibleAreaEndX.value,
+        y2: visibleAreaEndY.value
+      }, {
+        x1: min(link.path.map(point => point.x)) || 0,
+        y1: min(link.path.map(point => point.y)) || 0,
+        x2: max(link.path.map(point => point.x)) || 0,
+        y2: max(link.path.map(point => point.y)) || 0
+      }));
   };
 
   if (lazyReady.value) {
@@ -51,11 +55,13 @@ export const useShowAllHook = () => {
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.on(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
+    bus.on(Events.BAR_SELECT_CHANGE, onVisibleAreaChange);
   });
     
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.off(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
+    bus.off(Events.BAR_SELECT_CHANGE, onVisibleAreaChange);
   });
 
   return {

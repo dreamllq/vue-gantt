@@ -1,8 +1,9 @@
 import { computeDayList } from '@/utils/computeDayList';
 import { useStore } from '../store';
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref, shallowRef } from 'vue';
 import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { cloneDeep } from 'lodash';
+import { Events } from '@/types';
 
 type GridItem = {
   index: number,
@@ -15,8 +16,8 @@ type GridItem = {
   timeString: string
 }
 export const useDateGridHook = () => {
-  const grid = ref<GridItem[]>([]);
-  const lazyGrid = ref<GridItem[]>([]);
+  const grid = shallowRef<GridItem[]>([]);
+  const lazyGrid = shallowRef<GridItem[]>([]);
 
   const { ganttEntity, lazy, bus } = useStore()!;
 
@@ -63,11 +64,11 @@ export const useDateGridHook = () => {
   };
   
   onMounted(() => {
-    bus.on('visible-area-change', onVisibleAreaChange);
+    bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
   });
   
   onBeforeUnmount(() => {
-    bus.off('visible-area-change', onVisibleAreaChange);
+    bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
   });
 
   return {

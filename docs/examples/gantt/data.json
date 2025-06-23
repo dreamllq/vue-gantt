@@ -5,7 +5,8 @@
     "durationUnit": "SECOND",
     "draggable": true,
     "selectable": true,
-    "linkShowStrategy": "ALL"
+    "checkable": true,
+    "linkShowStrategy": "SELECTED_All"
   },
   "groups": [
     {
@@ -30,11 +31,23 @@
     },
     {
       "id": 3,
-      "parentId": null
+      "parentId": null,
+      "workTimes": [
+        {
+          "start": "2024-01-01 00:00:00",
+          "end": "2024-02-01 12:00:00"
+        }
+      ]
     },
     {
       "id": 4,
-      "parentId": null
+      "parentId": null,
+      "workTimes": [
+        {
+          "start": "2024-01-01 00:00:00",
+          "end": "2024-02-01 12:00:00"
+        }
+      ]
     },
     {
       "id": 5,
@@ -83,14 +96,56 @@
       "groupId": 2,
       "id": 2,
       "start": "2024-01-03 02:00:00"
+    },
+    {
+      "duration": 72000,
+      "end": null,
+      "groupId": 3,
+      "id": 3,
+      "start": "2024-01-04 04:00:00"
+    },
+    {
+      "duration": 72000,
+      "end": null,
+      "groupId": 2,
+      "id": 4,
+      "start": "2024-01-02 00:00:00"
+    },
+    {
+      "duration": 72000,
+      "end": null,
+      "groupId": 3,
+      "id": 5,
+      "start": "2024-01-03 02:00:00"
+    },
+    {
+      "duration": 72000,
+      "end": null,
+      "groupId": 4,
+      "id": 6,
+      "start": "2024-01-04 04:00:00"
     }
   ],
   "links": [
     {
       "id": 1,
       "sourceId": 1,
-      "targetId": 2,
-      "linkType": "FINISH_TO_START"
+      "targetId": 2
+    },
+    {
+      "id": 2,
+      "sourceId": 2,
+      "targetId": 3
+    },
+    {
+      "id": 3,
+      "sourceId": 4,
+      "targetId": 5
+    },
+    {
+      "id": 4,
+      "sourceId": 5,
+      "targetId": 6
     }
   ]
 }

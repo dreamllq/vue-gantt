@@ -1,6 +1,7 @@
 import { Gantt } from '@/models/gantt';
 import { ref } from 'vue';
 import { useBus } from './bus';
+import { Events } from '@/types';
 
 export const useScroll = (ganttEntity:Gantt, store:{
     bus: ReturnType<typeof useBus>;
@@ -15,7 +16,7 @@ export const useScroll = (ganttEntity:Gantt, store:{
 
 
   const onWheel = (evt) => {
-    store.bus.emit('wheel', evt);
+    store.bus.emit(Events.WHEEL, evt);
 
     if (evt.shiftKey === true) {
       if (evt.deltaY > 0) {

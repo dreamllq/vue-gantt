@@ -1,22 +1,23 @@
-import { onBeforeUnmount, onMounted } from 'vue';
+import { onBeforeUnmount, onMounted, shallowRef } from 'vue';
 import { useStore } from '../store';
 import { computeDayList } from '@/utils/computeDayList';
 import { ref } from 'vue';
 import { ct } from '@/locales';
 import { cloneDeep } from 'lodash';
+import { Events } from '@/types';
 
 export const useTimeLineHook = () => {
   const { bus, lazy, ganttEntity } = useStore()!;
   const { visibleAreaStartX, visibleAreaEndX, lazyReady } = lazy;
   
-  const dayList = ref<{
+  const dayList = shallowRef<{
         formatString: any;
         seconds: number;
         date: moment.Moment;
         offsetSeconds: number
     }[]>([]);
   
-  const lazyDayList = ref<{
+  const lazyDayList = shallowRef<{
         formatString: any;
         seconds: number;
         date: moment.Moment;
@@ -69,11 +70,11 @@ export const useTimeLineHook = () => {
   };
 
   onMounted(() => {
-    bus.on('visible-area-change', onVisibleAreaChange);
+    bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
   });
 
   onBeforeUnmount(() => {
-    bus.off('visible-area-change', onVisibleAreaChange);
+    bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
   });
 
   return { lazyDayList };

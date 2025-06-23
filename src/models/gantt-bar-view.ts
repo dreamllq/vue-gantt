@@ -53,4 +53,20 @@ export class GanttBarView extends GanttBar {
     this.st = startSecond * 1000;
     this.et = endSecond * 1000;
   }
+
+  toJSON() {
+    return {
+      id: this.id,
+      sx: this.sx,
+      ex: this.ex,
+      width: this.width,
+      sy: this.sy,
+      ey: this.ey,
+      height: this.height,
+      st: this.st,
+      et: this.et,
+      dragging: this.dragging,
+      selected: this.selected
+    };
+  }
 }

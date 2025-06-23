@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 import { Gantt } from '@/models/gantt';
 import { useBus } from './bus';
+import { Events } from '@/types';
 
 export const useContainer = (ganttEntity: Gantt, store:{
   bus: ReturnType<typeof useBus>
@@ -12,7 +13,7 @@ export const useContainer = (ganttEntity: Gantt, store:{
 
     containerReady.value = true;
     
-    store.bus.emit('container-size-change', {
+    store.bus.emit(Events.CONTAINER_SIZE_CHANGE, {
       width: data.width,
       height: data.height 
     });

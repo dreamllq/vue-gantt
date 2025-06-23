@@ -2,6 +2,7 @@ import { Gantt } from '@/models/gantt';
 import { useBus } from './bus';
 import { ref } from 'vue';
 import { Id } from '@/types/id';
+import { Events } from '@/types';
 
 
 export const useDrag = (ganttEntity: Gantt, store:{
@@ -21,9 +22,9 @@ export const useDrag = (ganttEntity: Gantt, store:{
   const onMouseUp = (e:MouseEvent) => {
     if (mousedown.value === false) return;
     if (isDragging.value === false) {
-      store.bus.emit('click', e);
+      store.bus.emit(Events.CLICK, e);
     } else {
-      store.bus.emit('dragend', e);
+      store.bus.emit(Events.DRAGEND, e);
     }
 
     mousedown.value = false;
@@ -34,11 +35,11 @@ export const useDrag = (ganttEntity: Gantt, store:{
     if (mousedown.value === false) return;
     if (isDragging.value === false) {
       if (Math.abs(e.x - dragging.value.x) >= 5 || Math.abs(e.y - dragging.value.y) >= 5) {
-        store.bus.emit('dragstart', e);
+        store.bus.emit(Events.DRAGSTART, e);
         isDragging.value = true;
       }
     } else {
-      store.bus.emit('drag', e);
+      store.bus.emit(Events.DRAG, e);
     }
   };
 

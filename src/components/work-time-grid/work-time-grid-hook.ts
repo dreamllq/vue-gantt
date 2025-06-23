@@ -3,6 +3,7 @@ import { useStore } from '../store';
 import moment from 'moment';
 import { cloneDeep } from 'lodash';
 import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
+import { Events } from '@/types';
 
 type GridItem = {
   index: number,
@@ -64,11 +65,11 @@ export const useWorkTimeGridHook = () => {
   };
   
   onMounted(() => {
-    bus.on('visible-area-change', onVisibleAreaChange);
+    bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
   });
   
   onBeforeUnmount(() => {
-    bus.off('visible-area-change', onVisibleAreaChange);
+    bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
   });
 
   return {

@@ -4,6 +4,7 @@ import { useLayout } from './layout';
 import { computed, ref, watch } from 'vue';
 import { debounce, max, min } from 'lodash';
 import { useBus } from './bus';
+import { Events } from '@/types';
 
 export const useLazy = (ganttEntity: Gantt, store:{
   scroll: ReturnType<typeof useScroll>;
@@ -35,7 +36,7 @@ export const useLazy = (ganttEntity: Gantt, store:{
     visibleAreaStartGroupIndex.value = Math.floor(visibleAreaStartY.value / ganttEntity.layoutConfig.ROW_HEIGHT);
     visibleAreaEndGroupIndex.value = Math.ceil(visibleAreaEndY.value / ganttEntity.layoutConfig.ROW_HEIGHT);
     lazyReady.value = true;
-    store.bus.emit('visible-area-change');
+    store.bus.emit(Events.VISIBLE_AREA_CHANGE);
   };
   const calculateVisibleAreaDebounce = debounce(calculateVisibleArea, ganttEntity.config.lazyDebounceTime);
 

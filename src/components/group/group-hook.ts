@@ -1,6 +1,7 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { useStore } from '../store';
 import { GanttGroupView } from '@/models/gantt-group-view';
+import { Events } from '@/types';
 
 export const useGroupHook = () => {
   const { ganttEntity, bus, lazy } = useStore()!;
@@ -31,11 +32,11 @@ export const useGroupHook = () => {
   };
   
   onMounted(() => {
-    bus.on('visible-area-change', onVisibleAreaChange);
+    bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
   });
   
   onBeforeUnmount(() => {
-    bus.off('visible-area-change', onVisibleAreaChange);
+    bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
   });
 
   return { lazyGroup };
