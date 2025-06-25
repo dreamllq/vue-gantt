@@ -76,6 +76,10 @@ export class GanttBarView extends GanttBar {
 
   calculateOverlap() {
     const group = this.groups.getById(this.group.id)!;
+    this.overlapBarIds.forEach(id => {
+      this.bars.getById(id)!.overlapBarIds = this.bars.getById(id)!.overlapBarIds.filter(oid => oid !== this.id);
+    });
+    this.overlapBarIds = [];
     if (!group.barOverlap) {
       this.calculateOverlapBarIds();
       this.bus.emit(GanttBusEvents.GROUP_OVERLAP_CHANGE, {
@@ -85,10 +89,6 @@ export class GanttBarView extends GanttBar {
     }
   }
   calculateOverlapBarIds() {
-    this.overlapBarIds.forEach(id => {
-      this.bars.getById(id)!.overlapBarIds = this.bars.getById(id)!.overlapBarIds.filter(oid => oid !== this.id);
-    });
-    this.overlapBarIds = [];
     const groupBars = this.bars.filter(item => item.group.id === this.group.id);
     const overlapBars = groupBars.filter(bar => bar.id === this.id ? false : isRectanglesOverlap({
       x1: this.sx,

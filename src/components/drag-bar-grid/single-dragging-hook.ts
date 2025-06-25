@@ -82,7 +82,7 @@ export const useSingleDraggingHook = () => {
     if (bar.group.id !== group.id) {
       recentGroupId = bar.group.id;
       bar.group = group;
-      bar.rowIndex = dropRowIndex;
+      // bar.rowIndex = dropRowIndex;
       // ganttEntity.bars.calculateGroupBarsRowIndex(group.id);
     }
     bar.resetTimeRange({
@@ -93,10 +93,7 @@ export const useSingleDraggingHook = () => {
     bar.rowIndex = dropRowIndex;
     bar.calculate();
     if (recentGroupId) {
-      ganttEntity.bars.calculateGroupOverlap({
-        barId: bar.id,
-        groupId: recentGroupId
-      });
+      ganttEntity.bars.calculateGroupOverlap({ groupId: recentGroupId });
     }
     bus.emit(Events.BAR_CHANGE, [bar.id]);
     bus.emit(Events.BAR_DRAGGING_CHANGE, [bar.id], false);

@@ -39,7 +39,7 @@ export class GanttBars extends BizArray<GanttBarView> {
 
   calculateGroupOverlap(data:{
     groupId: Id,
-    barId:Id
+    barId?:Id
   }) {
     const group = this.groups.getById(data.groupId)!;
     if (group.barOverlap) return;
@@ -51,7 +51,7 @@ export class GanttBars extends BizArray<GanttBarView> {
    * 计算指定group下的bar的rowIndex属性
    * @param groupId 分组id
    */
-  calculateGroupBarsRowIndex(groupId: Id, barId: Id) {
+  calculateGroupBarsRowIndex(groupId: Id, barId?: Id) {
     const group = this.groups.getById(groupId)!;
     if (group.barOverlap) return;
     const groupBars = this.filter(item => item.group.id === groupId).toSorted((a, b) => {
@@ -76,7 +76,7 @@ export class GanttBars extends BizArray<GanttBarView> {
     });
 
     const changeIds:Id[] = [];
-
+    
     groupBars.forEach(bar => {
       const rowIndexList = bar.overlapBarIds.map(id => this.getById(id)!.rowIndex);
       let rowIndex = 0;
@@ -87,11 +87,15 @@ export class GanttBars extends BizArray<GanttBarView> {
       if (bar.id === barId) {
         rowIndex = min([rowIndex, bar.rowIndex])!;
       }
+      
       if (bar.rowIndex !== rowIndex) {
         bar.rowIndex = rowIndex;
         changeIds.push(bar.id);
       }
     });
+
+    console.log(groupBars);
+    
   }
 
   /**
