@@ -5,7 +5,7 @@
     </svg>
     <template v-for='link in lazyLinkGrid' :key='link.id'>
       <l-path 
-        v-if='!draggingBarIds.includes(link.source.id) && !draggingBarIds.includes(link.target.id)'
+        v-if='!draggingBarIds.includes(link.sourceId) && !draggingBarIds.includes(link.targetId)'
         :link='link' 
       />
     </template>

@@ -24,6 +24,7 @@ export const useWorkTimeGridHook = () => {
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
 
   const calculate = () => {
+    workTimeGrid.value = [];
     ganttEntity.groups.expandedGroups.forEach((group, index) => {
       group.workTimes.forEach(wt => {
         const seconds = wt.endMoment.diff(wt.startMoment, 'second');
@@ -32,9 +33,9 @@ export const useWorkTimeGridHook = () => {
           seconds: seconds,
           date: wt.startMoment.clone(),
           x: wt.startMoment.diff(ganttEntity.config.startDate, 'second') * ganttEntity.config.secondWidth,
-          y: index * ganttEntity.layoutConfig.ROW_HEIGHT,
+          y: ganttEntity.groups.getGroupTopByIndex(index),
           width: seconds * ganttEntity.config.secondWidth,
-          height: ganttEntity.layoutConfig.ROW_HEIGHT,
+          height: group.height,
           timeString: wt.startMoment.format('YYYY-MM-DD HH:mm:ss')
         });
       });
@@ -64,12 +65,19 @@ export const useWorkTimeGridHook = () => {
     lazyCalculate();
   };
   
+  const onWorkTimeGridChange = () => {
+    calculate();
+    lazyCalculate();
+  };
+
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
+    bus.on(Events.WORK_TIME_GRID_CHANGE, onWorkTimeGridChange);
   });
   
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
+    bus.off(Events.WORK_TIME_GRID_CHANGE, onWorkTimeGridChange);
   });
 
   return {

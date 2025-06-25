@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { GanttLinkView } from '@/models/gantt-link-view';
-import { onMounted, onUnmounted, PropType } from 'vue';
+import { onMounted, onUnmounted, PropType, watch } from 'vue';
 import { path as d3Path } from 'd3-path';
 import { select as d3Select } from 'd3-selection';
 import { line as d3Line, curveBasis, curveLinear } from 'd3-shape';
@@ -17,7 +17,7 @@ import { useStore } from '../store';
 
 const props = defineProps({
   link: {
-    type: Object as PropType<GanttLinkView>,
+    type: Object as PropType<ReturnType<typeof GanttLinkView.prototype.toJSON>>,
     required: true
   }
 });
@@ -26,6 +26,10 @@ const { ganttId } = useStore()!;
 const svgId = `#path-svg-${ganttId}`;
 
 let cp: {remove:()=>void} | null = null;
+
+watch(() => props.link, () => {
+  renderLink();
+}, { deep: true });
 const renderLink = () => {
   
   if (cp !== null) {

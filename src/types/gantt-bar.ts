@@ -4,9 +4,13 @@ import { DateTimeString } from './date';
 import { GanttBaseClassConstructor } from './gantt-base';
 import { GanttGroups } from '@/models/gantt-groups';
 import { SchedulingMode } from './gantt-config';
+import { GanttBars } from '@/models/gantt-bars';
+import { GanttBus } from '@/models/gantt-bus';
 
 export type GanttBarViewClassConstructor = GanttBarClassConstructor & {
   groups: GanttGroups
+  bars: GanttBars
+  bus: GanttBus
 }
 
 export type GanttBarClassConstructor = {

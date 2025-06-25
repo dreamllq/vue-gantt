@@ -3,11 +3,18 @@ import { GanttBar } from './gantt-bar';
 import { GanttGroups } from './gantt-groups';
 import { computeTimeSecond } from '@/utils/compute-time-second';
 import moment from 'moment';
+import { GanttBars } from './gantt-bars';
+import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
+import { max } from 'lodash';
+import { Id } from '@/types';
+import { GanttBus } from './gantt-bus';
+import { GanttBusEvents } from '@/types/gantt-bus';
 
 export class GanttBarView extends GanttBar {
   sx = 0;
   ex = 0;
   width = 0;
+  _sy = 0;
   sy = 0;
   ey = 0;
   height = 0;
@@ -16,10 +23,16 @@ export class GanttBarView extends GanttBar {
   dragging = false;
   selected = false;
   groups:GanttGroups;
+  bars: GanttBars;
+  rowIndex = 0;
+  bus:GanttBus;
+  overlapBarIds:Id[] = [];
   
   constructor(data:GanttBarViewClassConstructor) {
     super(data);
     this.groups = data.groups;
+    this.bars = data.bars;
+    this.bus = data.bus;
   }
 
   get startMoment() {
@@ -31,6 +44,11 @@ export class GanttBarView extends GanttBar {
   }
 
   calculate() {
+    this.calculatePos();
+    this.calculateOverlap();
+  }
+
+  calculatePos() {
     const startSecond = Math.floor(this.startMoment.toDate().getTime() / 1000);
     const endSecond = Math.floor(this.endMoment.toDate().getTime() / 1000);
 
@@ -39,19 +57,116 @@ export class GanttBarView extends GanttBar {
     const ex = sx + width;
         
     const height = this.layoutConfig.BAR_HEIGHT;
-    const groupIndex = this.groups.findIndex(item => item === this.group);
-    const taskCenterTop = this.layoutConfig.TASK_CENTER_TOP;
-    const sy = groupIndex * this.layoutConfig.ROW_HEIGHT + taskCenterTop - (height / 2);
+    const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
+    const barCenterTop = this.layoutConfig.BAR_CENTER_TOP;
+    const _sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
+    const sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
     const ey = sy + height;
-
+   
     this.sx = sx;
     this.ex = ex;
     this.width = width;
+    this._sy = _sy;
     this.sy = sy;
     this.ey = ey;
     this.height = height;
     this.st = startSecond * 1000;
     this.et = endSecond * 1000;
+  }
+
+  calculateOverlap() {
+    const group = this.groups.getById(this.group.id)!;
+    if (!group.barOverlap) {
+      this.calculateOverlapBarIds();
+      this.updateCurrentGroupBarsPos();
+      this.updateAfterGroupsBarsPos();
+    }
+  }
+  calculateOverlapBarIds() {
+    this.overlapBarIds.forEach(id => {
+      this.bars.getById(id)!.overlapBarIds = this.bars.getById(id)!.overlapBarIds.filter(oid => oid !== this.id);
+    });
+    this.overlapBarIds = [];
+    const groupBars = this.bars.filter(item => item.group.id === this.group.id);
+    const overlapBars = groupBars.filter(bar => bar.id === this.id ? false : isRectanglesOverlap({
+      x1: this.sx,
+      y1: this._sy,
+      x2: this.ex,
+      y2: this.ey
+    }, {
+      x1: bar.sx,
+      y1: bar._sy,
+      x2: bar.ex,
+      y2: bar.ey
+    }));
+      
+    overlapBars.forEach(bar => {
+      bar.overlapBarIds.push(this.id);
+      this.overlapBarIds.push(bar.id);
+    });
+  }
+
+  updateCurrentGroupBarsPos() {
+    const groupBars = this.bars.filter(item => item.group.id === this.group.id).toSorted((a, b) => {
+      if (a.rowIndex < b.rowIndex) {
+        return -1;
+      } else if (a.rowIndex > b.rowIndex) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
+    const changeIds:Id[] = [];
+
+    groupBars.forEach(bar => {
+      const rowIndexList = bar.overlapBarIds.map(id => this.bars.getById(id)!.rowIndex);
+      let rowIndex = 0;
+      while (rowIndexList.includes(rowIndex)) {
+        rowIndex++;
+      }
+      if (bar.rowIndex !== rowIndex) {
+        bar.rowIndex = rowIndex;
+        bar.sy = bar._sy + (bar.rowIndex * bar.layoutConfig.ROW_HEIGHT);
+        changeIds.push(bar.id);
+      }
+    });
+    this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, changeIds);
+  }
+
+  // 更新此group后的group关联的bar的y位置
+  updateAfterGroupsBarsPos() {
+    const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
+    const group = this.groups.getById(this.group.id)!;
+    const groupBars = this.bars.filter(item => item.group.id === this.group.id);
+    const rows = max(groupBars.map(item => item.rowIndex + 1)) || 1;
+    if (group.rows !== rows) {
+      group.rows = rows;
+      const ids:Id[] = [];
+      for (let i = groupIndex + 1; i < this.groups.expandedGroups.length; i++) {
+        ids.push(this.groups.expandedGroups[i].id);
+      }
+      const bars = this.bars.filter(item => ids.includes(item.group.id));
+      bars.forEach(item => item.batchChangeY());
+      this.bus.emit(GanttBusEvents.GROUP_ROWS_CHANGE, {
+        groupId: group.id,
+        effectGroupIds: ids,
+        effectBarIds: bars.map(item => item.id)
+      });
+    }
+  }
+
+  batchChangeY() {
+    const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
+    const barCenterTop = this.layoutConfig.BAR_CENTER_TOP;
+    const height = this.layoutConfig.BAR_HEIGHT;
+    const _sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
+    const sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2) + (this.rowIndex * this.layoutConfig.ROW_HEIGHT);
+    const ey = sy + height;
+
+    this._sy = _sy;
+    this.sy = sy;
+    this.ey = ey;
   }
 
   toJSON() {

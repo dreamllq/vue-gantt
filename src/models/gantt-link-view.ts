@@ -5,6 +5,7 @@ import { calculateFinishToFinishLink } from '@/utils/link/finish-to-finish-link'
 import { calculateFinishToStartLink } from '@/utils/link/finish-to-start-link';
 import { calculateStartToFinishLink } from '@/utils/link/start-to-finish-link';
 import { calculateStartToStartLink } from '@/utils/link/start-to-start-link';
+import { cloneDeep } from 'lodash';
 
 const calculateFunction = {
   [GanttLinkType.FINISH_TO_FINISH]: calculateFinishToFinishLink,
@@ -80,5 +81,15 @@ export class GanttLinkView extends GanttLink {
 
     this.arrow = data.arrow;
     this.path = data.path;
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      arrow: cloneDeep(this.arrow),
+      path: cloneDeep(this.path),
+      sourceId: this.source.id,
+      targetId: this.target.id
+    };
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <show-all v-if='ganttEntity.config.linkShowStrategy === LinkShowStrategy.ALL' />
   <show-selected v-if='ganttEntity.config.linkShowStrategy === LinkShowStrategy.SELECTED' />
-  <show-selected-all v-if='ganttEntity.config.linkShowStrategy === LinkShowStrategy.SELECTED_All' />
+  <show-selected-all v-if='ganttEntity.config.linkShowStrategy === LinkShowStrategy.SELECTED_ALL' />
 </template>
 
 <script setup lang="ts">

@@ -50,6 +50,6 @@ export enum LinkShowStrategy {
   NONE,
   ALL,
   SELECTED,
-  SELECTED_All,
+  SELECTED_ALL,
   CUSTOMIZE
 }

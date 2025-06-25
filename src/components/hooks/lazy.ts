@@ -29,12 +29,12 @@ export const useLazy = (ganttEntity: Gantt, store:{
     visibleAreaStartX.value = max([0, scrollLeft.value - mainWidth.value]) || 0;
     visibleAreaEndX.value = min([scrollLeft.value + (mainWidth.value * 2), ganttEntity.config.totalSeconds * ganttEntity.config.secondWidth]) || 0;
     visibleAreaStartY.value = max([0, scrollTop.value - mainHeight.value]) || 0;
-    visibleAreaEndY.value = min([scrollTop.value + (mainHeight.value * 2), ganttEntity.groups.expandedGroups.length * ganttEntity.layoutConfig.ROW_HEIGHT]) || 0;
+    visibleAreaEndY.value = min([scrollTop.value + (mainHeight.value * 2), ganttEntity.groups.getGroupHeight]) || 0;
 
     visibleAreaStartDate.value = ganttEntity.config.startDate.clone().add(Math.floor(visibleAreaStartX.value / ganttEntity.config.secondWidth), 'second');
     visibleAreaEndDate.value = ganttEntity.config.startDate.clone().add(Math.floor(visibleAreaEndX.value / ganttEntity.config.secondWidth), 'second');
-    visibleAreaStartGroupIndex.value = Math.floor(visibleAreaStartY.value / ganttEntity.layoutConfig.ROW_HEIGHT);
-    visibleAreaEndGroupIndex.value = Math.ceil(visibleAreaEndY.value / ganttEntity.layoutConfig.ROW_HEIGHT);
+    visibleAreaStartGroupIndex.value = ganttEntity.groups.getGroupIndexByTop(visibleAreaStartY.value);
+    visibleAreaEndGroupIndex.value = ganttEntity.groups.getGroupIndexByTop(visibleAreaEndY.value) + 1;
     lazyReady.value = true;
     store.bus.emit(Events.VISIBLE_AREA_CHANGE);
   };

@@ -6,7 +6,13 @@
     "draggable": true,
     "selectable": true,
     "checkable": true,
-    "linkShowStrategy": "SELECTED_All"
+    "linkShowStrategy": "ALL"
+  },
+  "layoutConfig": {
+    "ROW_HEIGHT": 40,
+    "BAR_HEIGHT": 30,
+    "BAR_CENTER_TOP": 20,
+    "GRID_CELL_WIDTH": 100
   },
   "groups": [
     {
@@ -95,7 +101,7 @@
       "end": null,
       "groupId": 2,
       "id": 2,
-      "start": "2024-01-03 02:00:00"
+      "start": "2024-01-02 12:00:00"
     },
     {
       "duration": 72000,

@@ -21,7 +21,7 @@ export class GanttScroll extends GanttBase {
     this.hasY = hasScroll.y;
   }
   calculateHasScroll() {
-    const dataHeight = this.groups.length * this.layoutConfig.ROW_HEIGHT;
+    const dataHeight = this.groups.getGroupHeight();
     const scheduleWidth = this.config.totalSeconds * this.config.secondWidth;
       
     // 在都没有滚动条的时候，判断数据显示是否超出可视区
@@ -58,6 +58,6 @@ export class GanttScroll extends GanttBase {
   }
 
   get yScrollBarHeight() {
-    return this.groups.length * this.layoutConfig.ROW_HEIGHT;
+    return this.groups.getGroupHeight();
   }
 }

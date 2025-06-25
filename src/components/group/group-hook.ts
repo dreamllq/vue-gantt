@@ -33,10 +33,12 @@ export const useGroupHook = () => {
   
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
+    bus.on(Events.GROUP_CHANGE, onVisibleAreaChange);
   });
   
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
+    bus.off(Events.GROUP_CHANGE, onVisibleAreaChange);
   });
 
   return { lazyGroup };

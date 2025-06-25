@@ -15,20 +15,33 @@ import { GanttGroupWorkTime } from './gantt-group-work-time';
 import { GanttLayoutConfig } from './gantt-layout-config';
 import { Unit } from '@/types/unit';
 import { SchedulingMode } from '@/types/gantt-config';
+import { GanttBus } from './gantt-bus';
 
 export class Gantt extends EventEmitter {
   container: GanttContainer = new GanttContainer();
   scroll: GanttScroll;
   layoutConfig: GanttLayoutConfig;
   config: GanttConfig;
-  groups: GanttGroups = new GanttGroups();
-  bars: GanttBars = new GanttBars();
+  groups: GanttGroups;
+  bars: GanttBars;
   links: GanttLinks = new GanttLinks();
+  bus: GanttBus = new GanttBus();
 
   constructor(data:GanttClassConstructor) {
     super();
     this.config = data.config;
     this.layoutConfig = data.layoutConfig;
+
+    this.groups = new GanttGroups({
+      layoutConfig: this.layoutConfig,
+      config: this.config
+    });
+
+    this.bars = new GanttBars({
+      layoutConfig: this.layoutConfig,
+      config: this.config,
+      groups: this.groups
+    });
 
     this.scroll = new GanttScroll({
       layoutConfig: this.layoutConfig,
@@ -51,7 +64,9 @@ export class Gantt extends EventEmitter {
       ...data,
       config: this.config,
       layoutConfig: this.layoutConfig,
-      groups: this.groups
+      groups: this.groups,
+      bars: this.bars,
+      bus: this.bus
     });
   }
 
@@ -105,9 +120,10 @@ export class Gantt extends EventEmitter {
 
       gantt.addGroup({
         id: groupJson.id,
-        isExpand: groupJson.isExpand,
         parent: parentGroup,
-        workTimes: workTimes
+        workTimes: workTimes,
+        isExpand: groupJson.isExpand,
+        barOverlap: groupJson.barOverlap
       });
     });
     gantt.groups.calculateExpandedGroups();
@@ -125,7 +141,6 @@ export class Gantt extends EventEmitter {
         });
       }
     });
-    gantt.bars.calculate();
 
     data.links.forEach(linkJson => {
       const sourceBar = gantt.bars.getById(linkJson.sourceId);
@@ -143,9 +158,5 @@ export class Gantt extends EventEmitter {
     gantt.links.calculateLinkGroupMap();
 
     return gantt;
-  }
-
-  toJson():GanttJsonData {
-    return {};
   }
 }

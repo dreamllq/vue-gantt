@@ -4,8 +4,8 @@
       <div
         class='group-item'
         :style='{
-          height: `${ganttEntity.layoutConfig.ROW_HEIGHT}px`,
-          top: `${item.index * ganttEntity.layoutConfig.ROW_HEIGHT}px`
+          height: `${item.group.height}px`,
+          top: `${ganttEntity.groups.getGroupTopByIndex(item.index)}px`
         }'
       >
         <slot :data='item.group'>

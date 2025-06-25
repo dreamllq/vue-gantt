@@ -72,17 +72,21 @@ export const useSingleDraggingHook = () => {
     const startTime = ganttEntity.config.startDate.add(Math.floor(draggingBar.value.sx / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
     const endTime = ganttEntity.config.startDate.add(Math.floor((draggingBar.value.sx + draggingBar.value.width) / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
 
-    const index = min([max([Math.floor(draggingBar.value.sy / ganttEntity.layoutConfig.ROW_HEIGHT), 0])!, ganttEntity.groups.expandedGroups.length - 1])!;
+    const index = ganttEntity.groups.getGroupIndexByTop(draggingBar.value.sy);
     const group = ganttEntity.groups.expandedGroups[index];
 
     const bar = ganttEntity.bars.getById(draggingBar.value.id)!;
-    bar.group = group;
+    if (bar.group.id !== group.id) {
+      bar.group = group;
+      bar.rowIndex = Number.MAX_SAFE_INTEGER;
+    }
     bar.resetTimeRange({
       start: startTime,
       end: endTime
     });
-    bar.calculate();
     bar.dragging = false;
+    bar.rowIndex += 1;
+    bar.calculate();
     bus.emit(Events.BAR_CHANGE, [bar.id]);
     bus.emit(Events.BAR_DRAGGING_CHANGE, [bar.id], false);
     draggingBar.value = undefined;

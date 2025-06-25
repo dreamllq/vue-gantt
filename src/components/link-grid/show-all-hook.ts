@@ -7,7 +7,7 @@ import { Id } from '@/types/id';
 import { Events } from '@/types';
 
 export const useShowAllHook = () => {
-  const lazyLinkGrid: Ref<GanttLinkView[]> = ref([]);
+  const lazyLinkGrid: Ref<ReturnType<typeof GanttLinkView.prototype.toJSON>[]> = ref([]);
   const draggingBarIds = ref<Id[]>([]);
   const { ganttEntity, lazy, bus } = useStore()!;
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
@@ -22,7 +22,7 @@ export const useShowAllHook = () => {
       y1: min(link.path.map(point => point.y)) || 0,
       x2: max(link.path.map(point => point.x)) || 0,
       y2: max(link.path.map(point => point.y)) || 0
-    }));
+    })).map(link => link.toJSON());
   };
 
   if (lazyReady.value) {
@@ -47,15 +47,26 @@ export const useShowAllHook = () => {
   const onVisibleAreaChange = () => {
     lazyCalculate();
   };
+
+  const onBarPosChange = (ids:Id[]) => {
+    const links = uniq(ids.reduce<GanttLinkView[]>((acc, id) => {
+      const links = ganttEntity.links.getLinksByBarId(id);
+      return [...acc, ...links];
+    }, []));
+    links.forEach(link => link.calculate());
+    lazyCalculate();
+  };
   
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.on(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
+    bus.on(Events.BAR_POS_CHANGE, onBarPosChange);
   });
     
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.off(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
+    bus.off(Events.BAR_POS_CHANGE, onBarPosChange);
   });
 
   return {

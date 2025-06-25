@@ -38,15 +38,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchPostEffect } from 'vue';
+import { onBeforeMount, onMounted, ref, watchPostEffect } from 'vue';
 import { useStore } from '../store';
 import { max } from 'lodash';
 import { useSizeHook } from './size-hook';
+import { Events } from '@/types';
 
-const { ganttEntity, scroll, layout } = useStore()!;
+const { ganttEntity, scroll, layout, bus } = useStore()!;
 const { layoutReady } = layout;
-
-
 
 const { scrollLeft, scrollTop } = scroll;
 
@@ -68,7 +67,7 @@ const asideStyle = ref({ width: `${ganttEntity.layoutConfig.GRID_CELL_WIDTH}px` 
 const headerStyle = ref({ height: `${ganttEntity.layoutConfig.HEADER_HEIGHT}px` });
 
 const asideMainStyle = ref({ paddingBottom: `${ganttEntity.scroll.hasX ? ganttEntity.layoutConfig.SCROLL_HEIGHT : 0}px` });
-const asideMainInnerStyle = ref({ height: `${ganttEntity.groups.expandedGroups.length * ganttEntity.layoutConfig.ROW_HEIGHT}px` });
+const asideMainInnerStyle = ref({ height: `${ganttEntity.groups.getGroupHeight()}px` });
 
 const mainHeaderStyle = ref({
   height: `${ganttEntity.layoutConfig.HEADER_HEIGHT}px`,
@@ -82,7 +81,24 @@ const mainContainerStyle = ref({
 });
 const mainContainerInnerStyle = ref({
   width: `${max([ganttEntity.config.totalSeconds * ganttEntity.config.secondWidth, ganttEntity.container.width])}px`,
-  height: `${ganttEntity.groups.expandedGroups.length * ganttEntity.layoutConfig.ROW_HEIGHT}px` 
+  height: `${ganttEntity.groups.getGroupHeight()}px` 
+});
+
+const onLayoutChange = () => {
+  asideMainInnerStyle.value.height = `${ganttEntity.groups.getGroupHeight()}px`;
+
+  mainHeaderInnerStyle.value.width = `${max([ganttEntity.config.totalSeconds * ganttEntity.config.secondWidth, ganttEntity.container.width])}px`;
+
+  mainContainerInnerStyle.value.width = `${max([ganttEntity.config.totalSeconds * ganttEntity.config.secondWidth, ganttEntity.container.width])}px`;
+  mainContainerInnerStyle.value.height = `${ganttEntity.groups.getGroupHeight()}px`;
+};
+
+onMounted(() => {
+  bus.on(Events.LAYOUT_CHANGE, onLayoutChange);
+});
+
+onBeforeMount(() => {
+  bus.off(Events.LAYOUT_CHANGE, onLayoutChange);
 });
 </script>
 

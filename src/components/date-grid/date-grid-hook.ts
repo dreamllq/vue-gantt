@@ -24,6 +24,7 @@ export const useDateGridHook = () => {
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
 
   const calculate = () => {
+    grid.value = [];
     const dl = computeDayList(ganttEntity.config.startDate, ganttEntity.config.dataUnitCount, ganttEntity.config.dataScaleUnit);
     ganttEntity.groups.expandedGroups.forEach((item, index) => {
       dl.forEach(dItem => {
@@ -32,9 +33,9 @@ export const useDateGridHook = () => {
           seconds: dItem.seconds,
           date: dItem.date,
           x: dItem.date.diff(ganttEntity.config.startDate, 'second') * ganttEntity.config.secondWidth,
-          y: index * ganttEntity.layoutConfig.ROW_HEIGHT,
+          y: ganttEntity.groups.getGroupTopByIndex(index),
           width: dItem.seconds * ganttEntity.config.secondWidth,
-          height: ganttEntity.layoutConfig.ROW_HEIGHT,
+          height: item.height,
           timeString: dItem.date.format('YYYY-MM-DD HH:mm:ss')
         });
       });
@@ -54,7 +55,9 @@ export const useDateGridHook = () => {
       y2: item.y + item.height
     }));
   };
+
   calculate();
+
   if (lazyReady.value) {
     lazyCalculate();
   }
@@ -62,13 +65,20 @@ export const useDateGridHook = () => {
   const onVisibleAreaChange = () => {
     lazyCalculate();
   };
+
+  const onDateGridChange = () => {
+    calculate();
+    lazyCalculate();
+  };
   
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
+    bus.on(Events.DATE_GRID_CHANGE, onDateGridChange);
   });
   
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
+    bus.off(Events.DATE_GRID_CHANGE, onDateGridChange);
   });
 
   return {
