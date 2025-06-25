@@ -6,7 +6,7 @@
     "draggable": true,
     "selectable": true,
     "checkable": true,
-    "linkShowStrategy": "ALL"
+    "linkShowStrategy": "SELECTED_ALL"
   },
   "layoutConfig": {
     "ROW_HEIGHT": 40,

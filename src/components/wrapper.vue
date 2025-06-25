@@ -29,6 +29,9 @@
         <select-bar-grid />
         <link-grid v-if='ganttEntity.config.linkShowStrategy !== LinkShowStrategy.NONE' />
       </template>
+      <template #main-tip>
+        <mouse-hover-auto-scroll />
+      </template>
     </layout>
     <scroll />
   </container>
@@ -48,8 +51,8 @@ import BarGrid from './bar-grid/index.vue';
 import DragBarGrid from './drag-bar-grid/index.vue';
 import SelectBarGrid from './select-bar-grid/index.vue';
 import LinkGrid from './link-grid/index.vue';
+import MouseHoverAutoScroll from './mouse-hover-auto-scroll/index.vue';
 import { LinkShowStrategy } from '@/types/gantt-link';
-import { DRAGGABLE_CHANGE } from '../constants/events';
 
 const { entityReady, container, scroll, ganttEntity, bus } = useStore()!;
 const { scrollReady } = scroll;

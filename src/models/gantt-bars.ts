@@ -69,6 +69,7 @@ export class GanttBars extends BizArray<GanttBarView> {
         }
       }
     });
+    
     groupBars.forEach(item => {
       if (item.id !== barId) {
         item.rowIndex++;
@@ -93,9 +94,6 @@ export class GanttBars extends BizArray<GanttBarView> {
         changeIds.push(bar.id);
       }
     });
-
-    console.log(groupBars);
-    
   }
 
   /**

@@ -30,6 +30,9 @@
             <div :style='mainContainerInnerStyle' class='hidden-container'>
               <slot v-if='layoutReady' name='main-main' />
             </div>
+            <div class='main-tip-block'>
+              <slot v-if='layoutReady' name='main-tip' />
+            </div>
           </div>
         </div>
       </div>
@@ -155,6 +158,7 @@ onBeforeMount(() => {
     width: 100%;
     overflow: hidden;
     box-sizing: border-box;
+    position: relative;
   }
 
   .hidden-container{
@@ -197,6 +201,17 @@ onBeforeMount(() => {
   .main-main-inner{
     border-bottom: 1px solid var(--border-color);
     border-right: 1px solid var(--border-color);
+  }
+
+  .main-tip-block{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+    overflow: hidden;
   }
 }
 </style>

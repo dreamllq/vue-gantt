@@ -80,8 +80,8 @@ export class GanttBarView extends GanttBar {
       this.bars.getById(id)!.overlapBarIds = this.bars.getById(id)!.overlapBarIds.filter(oid => oid !== this.id);
     });
     this.overlapBarIds = [];
+    this.calculateOverlapBarIds();
     if (!group.barOverlap) {
-      this.calculateOverlapBarIds();
       this.bus.emit(GanttBusEvents.GROUP_OVERLAP_CHANGE, {
         barId: this.id,
         groupId: group.id

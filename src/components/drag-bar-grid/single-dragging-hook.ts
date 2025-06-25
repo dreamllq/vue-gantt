@@ -2,8 +2,6 @@ import { Id } from '@/types/id';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { useStore } from '../store';
 import dom from '@/utils/dom';
-import { GanttBarView } from '@/models/gantt-bar-view';
-import { max, min } from 'lodash';
 import { Events } from '@/types';
 
 type DraggingBar = {
@@ -28,7 +26,6 @@ export const useSingleDraggingHook = () => {
   const onDragStart = (e:MouseEvent) => {
     const domPath = dom.getPath(e.target);
     const barTarget = domPath.find(p => p.classList && p.classList.contains('gantt-bar-cell')) as HTMLElement;
-    // console.log('onDragStart', barTarget, barTarget.dataset.id);
     if (barTarget) {
       const type = barTarget.dataset.type as string;
       const id = type === 'number' ? Number(barTarget.dataset.id) : barTarget.dataset.id as Id;
@@ -82,8 +79,6 @@ export const useSingleDraggingHook = () => {
     if (bar.group.id !== group.id) {
       recentGroupId = bar.group.id;
       bar.group = group;
-      // bar.rowIndex = dropRowIndex;
-      // ganttEntity.bars.calculateGroupBarsRowIndex(group.id);
     }
     bar.resetTimeRange({
       start: startTime,
