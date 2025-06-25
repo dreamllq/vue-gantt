@@ -13,7 +13,10 @@ describe('gantt-groups', () => {
   });
 
   test('expandedGroups', () => {
-    const groups = new GanttGroups();
+    const groups = new GanttGroups({
+      config,
+      layoutConfig
+    });
 
     const gg1 = new GanttGroupView({
       config,

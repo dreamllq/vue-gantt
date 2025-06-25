@@ -43,12 +43,12 @@ export const useBarGridHook = () => {
   
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
-    bus.on(Events.BAR_CHANGE, onBarChange);
+    bus.on(Events.BAR_CHANGE_FRAGMENTATION, onBarChange);
   });
   
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
-    bus.off(Events.BAR_CHANGE, onBarChange);
+    bus.off(Events.BAR_CHANGE_FRAGMENTATION, onBarChange);
   });
 
   return { lazyBarGrid };

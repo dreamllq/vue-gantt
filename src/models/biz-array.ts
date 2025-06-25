@@ -58,4 +58,16 @@ export class BizArray<T> extends Array<T & {id: Id}> {
     });
     return deleteItems;
   }
+
+  filter<S extends (T & { id: Id; })>(predicate: (value: (T & { id: Id; }), index: number, array: (T & { id: Id; })[]) => value is S, thisArg?: any): S[];
+  filter(predicate: (value: (T & { id: Id; }), index: number, array: (T & { id: Id; })[]) => unknown, thisArg?: any): T[];
+  filter(fn:any) {
+    const list:(T & {id: Id})[] = [];
+    this.forEach(item => {
+      if (fn(item)) {
+        list.push(item);
+      }
+    });
+    return list;
+  }
 }

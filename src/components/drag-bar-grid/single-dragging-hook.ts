@@ -74,19 +74,30 @@ export const useSingleDraggingHook = () => {
 
     const index = ganttEntity.groups.getGroupIndexByTop(draggingBar.value.sy);
     const group = ganttEntity.groups.expandedGroups[index];
+    const top = ganttEntity.groups.getGroupTopByIndex(index);
+    const dropRowIndex = Math.floor((draggingBar.value.sy - top) / ganttEntity.layoutConfig.ROW_HEIGHT);
 
     const bar = ganttEntity.bars.getById(draggingBar.value.id)!;
+    let recentGroupId:Id|null = null;
     if (bar.group.id !== group.id) {
+      recentGroupId = bar.group.id;
       bar.group = group;
-      bar.rowIndex = Number.MAX_SAFE_INTEGER;
+      bar.rowIndex = dropRowIndex;
+      // ganttEntity.bars.calculateGroupBarsRowIndex(group.id);
     }
     bar.resetTimeRange({
       start: startTime,
       end: endTime
     });
     bar.dragging = false;
-    bar.rowIndex += 1;
+    bar.rowIndex = dropRowIndex;
     bar.calculate();
+    if (recentGroupId) {
+      ganttEntity.bars.calculateGroupOverlap({
+        barId: bar.id,
+        groupId: recentGroupId
+      });
+    }
     bus.emit(Events.BAR_CHANGE, [bar.id]);
     bus.emit(Events.BAR_DRAGGING_CHANGE, [bar.id], false);
     draggingBar.value = undefined;

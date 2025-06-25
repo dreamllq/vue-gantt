@@ -78,8 +78,10 @@ export class GanttBarView extends GanttBar {
     const group = this.groups.getById(this.group.id)!;
     if (!group.barOverlap) {
       this.calculateOverlapBarIds();
-      this.updateCurrentGroupBarsPos();
-      this.updateAfterGroupsBarsPos();
+      this.bus.emit(GanttBusEvents.GROUP_OVERLAP_CHANGE, {
+        barId: this.id,
+        groupId: group.id
+      });
     }
   }
   calculateOverlapBarIds() {
@@ -106,57 +108,7 @@ export class GanttBarView extends GanttBar {
     });
   }
 
-  updateCurrentGroupBarsPos() {
-    const groupBars = this.bars.filter(item => item.group.id === this.group.id).toSorted((a, b) => {
-      if (a.rowIndex < b.rowIndex) {
-        return -1;
-      } else if (a.rowIndex > b.rowIndex) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
-
-    const changeIds:Id[] = [];
-
-    groupBars.forEach(bar => {
-      const rowIndexList = bar.overlapBarIds.map(id => this.bars.getById(id)!.rowIndex);
-      let rowIndex = 0;
-      while (rowIndexList.includes(rowIndex)) {
-        rowIndex++;
-      }
-      if (bar.rowIndex !== rowIndex) {
-        bar.rowIndex = rowIndex;
-        bar.sy = bar._sy + (bar.rowIndex * bar.layoutConfig.ROW_HEIGHT);
-        changeIds.push(bar.id);
-      }
-    });
-    this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, changeIds);
-  }
-
-  // 更新此group后的group关联的bar的y位置
-  updateAfterGroupsBarsPos() {
-    const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
-    const group = this.groups.getById(this.group.id)!;
-    const groupBars = this.bars.filter(item => item.group.id === this.group.id);
-    const rows = max(groupBars.map(item => item.rowIndex + 1)) || 1;
-    if (group.rows !== rows) {
-      group.rows = rows;
-      const ids:Id[] = [];
-      for (let i = groupIndex + 1; i < this.groups.expandedGroups.length; i++) {
-        ids.push(this.groups.expandedGroups[i].id);
-      }
-      const bars = this.bars.filter(item => ids.includes(item.group.id));
-      bars.forEach(item => item.batchChangeY());
-      this.bus.emit(GanttBusEvents.GROUP_ROWS_CHANGE, {
-        groupId: group.id,
-        effectGroupIds: ids,
-        effectBarIds: bars.map(item => item.id)
-      });
-    }
-  }
-
-  batchChangeY() {
+  changeY() {
     const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
     const barCenterTop = this.layoutConfig.BAR_CENTER_TOP;
     const height = this.layoutConfig.BAR_HEIGHT;
@@ -181,7 +133,8 @@ export class GanttBarView extends GanttBar {
       st: this.st,
       et: this.et,
       dragging: this.dragging,
-      selected: this.selected
+      selected: this.selected,
+      rowIndex: this.rowIndex
     };
   }
 }

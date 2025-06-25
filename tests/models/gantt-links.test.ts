@@ -1,7 +1,9 @@
 import { GanttBar } from '@/models/gantt-bar';
 import { GanttBars } from '@/models/gantt-bars';
+import { GanttBus } from '@/models/gantt-bus';
 import { GanttConfig } from '@/models/gantt-config';
 import { GanttGroup } from '@/models/gantt-group';
+import { GanttGroups } from '@/models/gantt-groups';
 import { GanttLayoutConfig } from '@/models/gantt-layout-config';
 import { GanttLinks } from '@/models/gantt-links';
 
@@ -12,7 +14,17 @@ describe('gantt-links 合并', () => {
     layoutConfig,
     startDate: ''
   });
-  const bars = new GanttBars();
+  const bus = new GanttBus();
+  const groups = new GanttGroups({
+    config,
+    layoutConfig
+  });
+  const bars = new GanttBars({
+    config,
+    layoutConfig,
+    bus,
+    groups
+  });
   const group = new GanttGroup({
     config,
     layoutConfig,
@@ -150,7 +162,17 @@ describe('gantt-links 合并2', () => {
     layoutConfig,
     startDate: ''
   });
-  const bars = new GanttBars();
+  const bus = new GanttBus();
+  const groups = new GanttGroups({
+    config,
+    layoutConfig
+  });
+  const bars = new GanttBars({
+    config,
+    layoutConfig,
+    bus,
+    groups
+  });
   const group = new GanttGroup({
     config,
     layoutConfig,
@@ -314,7 +336,17 @@ describe('gantt-links 分叉', () => {
     layoutConfig,
     startDate: ''
   });
-  const bars = new GanttBars();
+  const bus = new GanttBus();
+  const groups = new GanttGroups({
+    config,
+    layoutConfig
+  });
+  const bars = new GanttBars({
+    config,
+    layoutConfig,
+    bus,
+    groups
+  });
   const group = new GanttGroup({
     config,
     layoutConfig,
@@ -452,7 +484,17 @@ describe('gantt-links 分叉2', () => {
     layoutConfig,
     startDate: ''
   });
-  const bars = new GanttBars();
+  const bus = new GanttBus();
+  const groups = new GanttGroups({
+    config,
+    layoutConfig
+  });
+  const bars = new GanttBars({
+    config,
+    layoutConfig,
+    bus,
+    groups
+  });
   const group = new GanttGroup({
     config,
     layoutConfig,
@@ -593,7 +635,17 @@ describe('gantt-links 多条单链', () => {
     layoutConfig,
     startDate: ''
   });
-  const bars = new GanttBars();
+  const bus = new GanttBus();
+  const groups = new GanttGroups({
+    config,
+    layoutConfig
+  });
+  const bars = new GanttBars({
+    config,
+    layoutConfig,
+    bus,
+    groups
+  });
   const group = new GanttGroup({
     config,
     layoutConfig,
@@ -736,7 +788,17 @@ describe('gantt-links 菱形', () => {
     layoutConfig,
     startDate: ''
   });
-  const bars = new GanttBars();
+  const bus = new GanttBus();
+  const groups = new GanttGroups({
+    config,
+    layoutConfig
+  });
+  const bars = new GanttBars({
+    config,
+    layoutConfig,
+    bus,
+    groups
+  });
   const group = new GanttGroup({
     config,
     layoutConfig,
@@ -875,7 +937,17 @@ describe('gantt-links 菱形', () => {
     layoutConfig,
     startDate: ''
   });
-  const bars = new GanttBars();
+  const bus = new GanttBus();
+  const groups = new GanttGroups({
+    config,
+    layoutConfig
+  });
+  const bars = new GanttBars({
+    config,
+    layoutConfig,
+    bus,
+    groups
+  });
   const group = new GanttGroup({
     config,
     layoutConfig,

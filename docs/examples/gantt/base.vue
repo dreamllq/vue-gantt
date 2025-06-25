@@ -11,7 +11,7 @@
         aaa
       </template>
       <template #bar='{bar}'>
-        {{ bar.id }} \ {{ bar.selected }}
+        {{ bar.id }} \ {{ bar.selected }} \ {{ bar.rowIndex }}
       </template>
     </gantt-view>
   </div>

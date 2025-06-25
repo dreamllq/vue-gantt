@@ -81,7 +81,7 @@ export class GanttLinks extends BizArray<GanttLinkView> {
   }
 
   // 寻找开始链接
-  private calculateStartLinks = () => {
+  calculateStartLinks = () => {
     const startLinks: GanttLinkView[] = [];
 
     this.forEach(item => {
