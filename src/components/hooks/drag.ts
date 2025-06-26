@@ -1,6 +1,6 @@
 import { Gantt } from '@/models/gantt';
 import { useBus } from './bus';
-import { ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { Id } from '@/types/id';
 import { Events } from '@/types';
 
@@ -14,6 +14,8 @@ export const useDrag = (ganttEntity: Gantt, store:{
     x: 0,
     y: 0 
   });
+  const draggingMouseEvent = ref<MouseEvent>();
+
   const onMouseDown = (e:MouseEvent) => {
     mousedown.value = true;
     dragging.value.x = e.x;
@@ -32,6 +34,7 @@ export const useDrag = (ganttEntity: Gantt, store:{
   };
 
   const onMouseMove = (e:MouseEvent) => {
+    draggingMouseEvent.value = e;
     if (mousedown.value === false) return;
     if (isDragging.value === false) {
       if (Math.abs(e.x - dragging.value.x) >= 5 || Math.abs(e.y - dragging.value.y) >= 5) {
@@ -42,6 +45,20 @@ export const useDrag = (ganttEntity: Gantt, store:{
       store.bus.emit(Events.DRAG, e);
     }
   };
+  const updateDragging = () => {
+    if (mousedown.value === false) return;
+    if (!draggingMouseEvent.value) return;
+    onMouseMove(draggingMouseEvent.value);
+  };
+  onMounted(() => {
+    store.bus.on(Events.MOUSE_CONTAINER_OUTSIDE, onMouseUp);
+    store.bus.on(Events.AUTO_SCROLL_CHANGE, updateDragging);
+  });
+
+  onBeforeUnmount(() => {
+    store.bus.off(Events.MOUSE_CONTAINER_OUTSIDE, onMouseUp);
+    store.bus.off(Events.AUTO_SCROLL_CHANGE, updateDragging);
+  });
 
   return {
     onMouseDown,

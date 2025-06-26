@@ -17,5 +17,5 @@ export const useAutoScrollHook = () => {
     bus.off(Events.BAR_DRAGGING_CHANGE, onDraggingChange);
   });
 
-  return { dragging: true };
+  return { dragging: dragging };
 };

@@ -52,6 +52,7 @@ export const useSingleDraggingHook = () => {
       }
     }
   };
+
   const onDrag = (e:MouseEvent) => {
     if (draggingBar.value === undefined) return;
     const offsetX = e.x - dragging.value.startX;
@@ -103,14 +104,12 @@ export const useSingleDraggingHook = () => {
     bus.on(Events.DRAGSTART, onDragStart);
     bus.on(Events.DRAG, onDrag);
     bus.on(Events.DRAGEND, onDragEnd);
-    bus.on(Events.MOUSE_OUTSIDE, onMouseOutSide);
   });
 
   onBeforeUnmount(() => {
     bus.off(Events.DRAGSTART, onDragStart);
     bus.off(Events.DRAG, onDrag);
     bus.off(Events.DRAGEND, onDragEnd);
-    bus.off(Events.MOUSE_OUTSIDE, onMouseOutSide);
   });
 
   return { draggingBar };

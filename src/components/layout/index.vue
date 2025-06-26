@@ -30,9 +30,9 @@
             <div :style='mainContainerInnerStyle' class='hidden-container'>
               <slot v-if='layoutReady' name='main-main' />
             </div>
-            <div class='main-tip-block'>
-              <slot v-if='layoutReady' name='main-tip' />
-            </div>
+          </div>
+          <div class='main-tip-block' :style='mainContainerStyle'>
+            <slot v-if='layoutReady' name='main-tip' />
           </div>
         </div>
       </div>
@@ -41,11 +41,12 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onMounted, ref, watchPostEffect } from 'vue';
+import { onBeforeMount, onMounted, ref, watch, watchPostEffect } from 'vue';
 import { useStore } from '../store';
 import { max } from 'lodash';
 import { useSizeHook } from './size-hook';
 import { Events } from '@/types';
+import { useMouseInElement } from '@vueuse/core';
 
 const { ganttEntity, scroll, layout, bus } = useStore()!;
 const { layoutReady } = layout;
@@ -56,6 +57,14 @@ const mainContainerRef = ref();
 const mainHeaderRef = ref();
 const asideMainRef = ref();
 useSizeHook({ mainContainerRef });
+
+const { isOutside } = useMouseInElement(mainContainerRef);
+
+watch(isOutside, () => {
+  if (isOutside.value === true) {
+    bus.emit(Events.MOUSE_CONTAINER_OUTSIDE);
+  }
+}, { immediate: true });
 
 watchPostEffect(() => {
   asideMainRef.value.scrollTop = scrollTop.value;

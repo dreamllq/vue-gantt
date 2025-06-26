@@ -1,5 +1,5 @@
 <template>
-  <hover-scroll-render v-if='dragging' />
+  <hover-scroll-render />
 </template>
 
 <script setup lang="ts">
