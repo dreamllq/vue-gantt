@@ -5,15 +5,15 @@ import { GanttBarView } from '@/models/gantt-bar-view';
 import { Events, Id } from '@/types';
 
 export const useMultipleSelectHook = () => {
-  const { bus, ganttEntity } = useStore()!;
+  const { bus, ganttEntity, barHtmlClass } = useStore()!;
   const selectedBars = ref<GanttBarView[]>([]);
 
   onMounted(() => {
     selectedBars.value = ganttEntity.bars.filter(item => item.selected);
   });
   const onClick = (e:MouseEvent) => {
-    const domPath = dom.getPath(e.target);
-    const barTarget = domPath.find(p => p.classList && p.classList.contains('gantt-bar-cell')) as HTMLElement;
+    const domPath = dom.getPath(e.target as HTMLElement);
+    const barTarget = domPath.find(p => p.classList && p.classList.contains(barHtmlClass)) as HTMLElement;
     if (barTarget) {
       const type = barTarget.dataset.type as string;
       const id = type === 'number' ? Number(barTarget.dataset.id) : barTarget.dataset.id as Id;

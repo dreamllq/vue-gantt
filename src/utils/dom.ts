@@ -1,4 +1,4 @@
-const getParents = (dom) => {
+const getParents = (dom:HTMLElement):HTMLElement[] => {
   const parent = dom.parentElement;
   if (!parent) {
     return [];
@@ -9,8 +9,8 @@ const getParents = (dom) => {
   }
 };
 
-const getPath = (dom) => {
-  let list = getParents(dom);
+const getPath = (dom:HTMLElement) => {
+  const list = getParents(dom);
   list.unshift(dom);
   return list;
 };

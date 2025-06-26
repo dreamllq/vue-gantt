@@ -19,10 +19,10 @@
 
 <script setup lang="ts">
 import { GanttView, GanttJsonData, GanttViewInstance } from '@/index.ts';
-import data from './data.json';
+import { data } from './data.ts';
 import { ref } from 'vue';
 
-const ganttData = ref<GanttJsonData>(data as GanttJsonData);
+const ganttData = ref<GanttJsonData>(data);
 const ganttRef = ref<GanttViewInstance>();
 
 let draggable = ganttData.value.config.draggable;

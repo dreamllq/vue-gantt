@@ -25,6 +25,7 @@ export class GanttConfig extends EventEmitter {
   private _selectable = false;
   private _checkable = false;
   multipleDraggable = false;
+  contextMenuEnable = false;
   linkShowStrategy:LinkShowStrategy;
 
   constructor(data:GanttConfigClassConstructor) {
@@ -41,6 +42,7 @@ export class GanttConfig extends EventEmitter {
     this._selectable = !!data.selectable;
     this._checkable = !!data.checkable;
     this.multipleDraggable = !!data.multipleDraggable;
+    this.contextMenuEnable = !!data.contextMenuEnable;
     this.linkShowStrategy = data.linkShowStrategy || LinkShowStrategy.NONE;
   }
 

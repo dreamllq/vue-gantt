@@ -3,6 +3,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { useStore } from '../store';
 import dom from '@/utils/dom';
 import { Events } from '@/types';
+import { max } from 'lodash';
 
 type DraggingBar = {
   id: Id,
@@ -21,11 +22,11 @@ export const useSingleDraggingHook = () => {
     startScrollLeft: 0,
     startScrollTop: 0
   });
-  const { bus, ganttEntity, scroll } = useStore()!;
+  const { bus, ganttEntity, scroll, barHtmlClass } = useStore()!;
   const { scrollLeft, scrollTop } = scroll;
   const onDragStart = (e:MouseEvent) => {
-    const domPath = dom.getPath(e.target);
-    const barTarget = domPath.find(p => p.classList && p.classList.contains('gantt-bar-cell')) as HTMLElement;
+    const domPath = dom.getPath(e.target as HTMLElement);
+    const barTarget = domPath.find(p => p.classList && p.classList.contains(barHtmlClass)) as HTMLElement;
     if (barTarget) {
       const type = barTarget.dataset.type as string;
       const id = type === 'number' ? Number(barTarget.dataset.id) : barTarget.dataset.id as Id;
@@ -73,7 +74,7 @@ export const useSingleDraggingHook = () => {
     const index = ganttEntity.groups.getGroupIndexByTop(draggingBar.value.sy);
     const group = ganttEntity.groups.expandedGroups[index];
     const top = ganttEntity.groups.getGroupTopByIndex(index);
-    const dropRowIndex = Math.floor((draggingBar.value.sy - top) / ganttEntity.layoutConfig.ROW_HEIGHT);
+    const dropRowIndex = max([Math.floor((draggingBar.value.sy - top) / ganttEntity.layoutConfig.ROW_HEIGHT), 0])!;
 
     const bar = ganttEntity.bars.getById(draggingBar.value.id)!;
     let recentGroupId:Id|null = null;

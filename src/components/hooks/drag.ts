@@ -1,9 +1,7 @@
 import { Gantt } from '@/models/gantt';
 import { useBus } from './bus';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import { Id } from '@/types/id';
 import { Events } from '@/types';
-
 
 export const useDrag = (ganttEntity: Gantt, store:{
   bus: ReturnType<typeof useBus>
@@ -17,12 +15,19 @@ export const useDrag = (ganttEntity: Gantt, store:{
   const draggingMouseEvent = ref<MouseEvent>();
 
   const onMouseDown = (e:MouseEvent) => {
-    mousedown.value = true;
-    dragging.value.x = e.x;
-    dragging.value.y = e.y;
+    if (e.button === 0) {
+      // 左键
+      mousedown.value = true;
+      dragging.value.x = e.x;
+      dragging.value.y = e.y;
+    }
   };
   const onMouseUp = (e:MouseEvent) => {
     if (mousedown.value === false) return;
+    if (e.button === 2) {
+      // 右键
+      store.bus.emit(Events.CONTEXTMENU, e);
+    }
     if (isDragging.value === false) {
       store.bus.emit(Events.CLICK, e);
     } else {
@@ -45,18 +50,26 @@ export const useDrag = (ganttEntity: Gantt, store:{
       store.bus.emit(Events.DRAG, e);
     }
   };
+
   const updateDragging = () => {
     if (mousedown.value === false) return;
     if (!draggingMouseEvent.value) return;
     onMouseMove(draggingMouseEvent.value);
   };
+
+  const onMouseOutside = () => {
+    if (mousedown.value === false) return;
+    if (!draggingMouseEvent.value) return;
+    onMouseUp(draggingMouseEvent.value);
+  };
+
   onMounted(() => {
-    store.bus.on(Events.MOUSE_CONTAINER_OUTSIDE, onMouseUp);
+    store.bus.on(Events.MOUSE_CONTAINER_OUTSIDE, onMouseOutside);
     store.bus.on(Events.AUTO_SCROLL_CHANGE, updateDragging);
   });
 
   onBeforeUnmount(() => {
-    store.bus.off(Events.MOUSE_CONTAINER_OUTSIDE, onMouseUp);
+    store.bus.off(Events.MOUSE_CONTAINER_OUTSIDE, onMouseOutside);
     store.bus.off(Events.AUTO_SCROLL_CHANGE, updateDragging);
   });
 

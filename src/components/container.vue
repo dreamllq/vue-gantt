@@ -3,6 +3,7 @@
     ref='containerRef'
     class='gantt-container'
     @wheel.prevent.stop='scroll.onWheel'
+    @contextmenu.prevent
     @mousedown.prevent='drag.onMouseDown'
     @mouseup.prevent='drag.onMouseUp'
     @mousemove.prevent='drag.onMouseMove'>

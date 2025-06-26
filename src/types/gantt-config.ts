@@ -21,5 +21,6 @@ export type GanttConfigClassConstructor = {
   selectable?:boolean,
   checkable?:boolean,
   multipleDraggable?:boolean,
+  contextMenuEnable?:boolean,
   linkShowStrategy?:LinkShowStrategy
 } 

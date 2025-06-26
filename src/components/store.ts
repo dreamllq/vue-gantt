@@ -13,6 +13,7 @@ import { useEvents } from './hooks/events';
 
 const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) => {
   const ganttId = uuidv4();
+  const barHtmlClass = '__gantt-bar-cell__';
   const entityReady = ref(false);
 
   const ganttEntity = Gantt.fromJson(data);
@@ -35,6 +36,7 @@ const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) =>
 
   return {
     ganttId,
+    barHtmlClass,
     entityReady,
     ganttEntity,
     bus,

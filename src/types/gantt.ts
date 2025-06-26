@@ -21,6 +21,7 @@ export type GanttJsonDataConfig = {
   selectable?:boolean,
   checkable?:boolean,
   multipleDraggable?:boolean,
+  contextMenuEnable?:boolean,
   linkShowStrategy?: keyof typeof LinkShowStrategy
 };
 
@@ -35,7 +36,8 @@ export type GanttJsonDataGroup = {
   id: Id, 
   parentId:Id | null, 
   isExpand?: boolean,
-  workTimes?:GanttJsonDataGroupWorkTime[]
+  workTimes?:GanttJsonDataGroupWorkTime[],
+  barOverlap?: boolean
 };
 
 export type GanttJsonDataBar = {

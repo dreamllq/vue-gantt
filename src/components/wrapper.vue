@@ -27,6 +27,7 @@
           </template>
         </drag-bar-grid>
         <select-bar-grid />
+        <contextmenu-bar-grid />
         <link-grid v-if='ganttEntity.config.linkShowStrategy !== LinkShowStrategy.NONE' />
       </template>
       <template #main-tip>
@@ -50,6 +51,7 @@ import WorkTimeGrid from './work-time-grid/index.vue';
 import BarGrid from './bar-grid/index.vue';
 import DragBarGrid from './drag-bar-grid/index.vue';
 import SelectBarGrid from './select-bar-grid/index.vue';
+import ContextmenuBarGrid from './contextmenu-bar-grid/index.vue';
 import LinkGrid from './link-grid/index.vue';
 import MouseHoverAutoScroll from './mouse-hover-auto-scroll/index.vue';
 import { LinkShowStrategy } from '@/types/gantt-link';

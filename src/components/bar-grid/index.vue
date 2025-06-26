@@ -4,6 +4,7 @@
       <div
         v-if='!item.dragging'
         class='bar-cell gantt-bar-cell'
+        :class='barHtmlClass'
         :style='{
           top: `${item.sy}px`,
           left: `${item.sx}px`,
@@ -21,7 +22,9 @@
 <script setup lang="ts">
 import { Id } from '@/types/id';
 import { useBarGridHook } from './bar-grid-hook';
+import { useStore } from '../store';
 
+const { barHtmlClass } = useStore()!;
 const { lazyBarGrid } = useBarGridHook();
 const getIdType = (id:Id) => (typeof id);
 </script>
@@ -32,7 +35,6 @@ const getIdType = (id:Id) => (typeof id);
   left: 0;
   position: absolute;
   top:0;
-  left: 0;
 
   .bar-cell {
     position: absolute;
