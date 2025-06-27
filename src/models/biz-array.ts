@@ -4,8 +4,13 @@ export class BizArray<T> extends Array<T & {id: Id}> {
 
   // 导致数据变化的方法：push\pop\shift\unshift\splice\
   _map = new Map<Id, T & {id: Id}>(); 
+
+  private idUniqValid(id:Id) {
+    if (this._map.has(id)) {
+      throw new Error(`id重复: ${id}`);
+    }
+  }
   getById(id: Id) {
-    // return this.find(item => item.id === id);
     return this._map.get(id);
   }
 
@@ -16,6 +21,7 @@ export class BizArray<T> extends Array<T & {id: Id}> {
 
   push(...items:(T & { id: Id })[]) {
     items.forEach(item => {
+      this.idUniqValid(item.id);
       this._map.set(item.id, item);
     });
     return super.push(...items);
@@ -39,6 +45,7 @@ export class BizArray<T> extends Array<T & {id: Id}> {
 
   unshift(...items: (T & { id: Id; })[]) {
     items.forEach(item => {
+      this.idUniqValid(item.id);
       this._map.set(item.id, item);
     });
     return super.unshift(...items);
@@ -50,6 +57,7 @@ export class BizArray<T> extends Array<T & {id: Id}> {
     const deleteItems = super.splice(start, deleteCount, ...items);
     if (Array.isArray(items)) {
       items.forEach(item => {
+        this.idUniqValid(item.id);
         this._map.set(item.id, item);
       });
     }

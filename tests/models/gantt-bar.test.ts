@@ -3,16 +3,25 @@ import { GanttConfig } from '@/models/gantt-config';
 import { GanttGroup } from '@/models/gantt-group';
 import { GanttGroupWorkTime } from '@/models/gantt-group-work-time';
 import { GanttGroupWorkTimes } from '@/models/gantt-group-work-times';
+import { GanttLayoutConfig } from '@/models/gantt-layout-config';
 
 describe('gantt-bar', () => {
+  const layoutConfig = new GanttLayoutConfig({ });
+  const config = new GanttConfig({
+    endDate: '',
+    layoutConfig,
+    startDate: ''
+  });
   test('base', () => {
     const gb = new GanttBar({
       id: 1,
-      config: new GanttConfig({
-        startDate: '',
-        endDate: '' 
+      layoutConfig,
+      config: config,
+      group: new GanttGroup({
+        id: 1,
+        config,
+        layoutConfig 
       }),
-      group: new GanttGroup({ id: 1 }),
       duration: 100,
       start: '2025-01-01 00:00:00',
       end: null
@@ -29,13 +38,13 @@ describe('gantt-bar', () => {
     }));
     const gb = new GanttBar({
       id: 1,
-      config: new GanttConfig({
-        startDate: '',
-        endDate: '' 
-      }),
+      layoutConfig,
+      config,
       group: new GanttGroup({
         id: 1,
-        workTimes: ggwts
+        workTimes: ggwts,
+        config,
+        layoutConfig
       }),
       duration: 100,
       start: '2025-01-01 00:00:00',

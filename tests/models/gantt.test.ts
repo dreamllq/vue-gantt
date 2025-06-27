@@ -1,6 +1,37 @@
 import { Gantt } from '@/models/gantt';
+import { GanttConfig } from '@/models/gantt-config';
+import { GanttLayoutConfig } from '@/models/gantt-layout-config';
 
 describe('gantt', () => {
+  const layoutConfig = new GanttLayoutConfig({ });
+  const config = new GanttConfig({
+    endDate: '',
+    layoutConfig,
+    startDate: ''
+  });
+  test('batchAddGroup 层级数据乱序', () => {
+    const gantt = new Gantt({
+      config,
+      layoutConfig
+    });
+
+    gantt.batchAddGroup([
+      {
+        id: '1-1-1',
+        parentId: '1-1' 
+      },
+      {
+        id: '1-1',
+        parentId: '1'
+      },
+      { id: '2' },
+      { id: '1' }
+    ]);
+
+    expect(gantt.groups.getById('1-1')?.parent?.id).toBe('1');
+    expect(gantt.groups.getById('1-1-1')?.parent?.id).toBe('1-1');
+  });
+
   test('fromJson', () => {
     const gantt = Gantt.fromJson({
       config: {

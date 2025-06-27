@@ -10,7 +10,7 @@ import { GanttGroupWorkTimes } from './gantt-group-work-times';
 import { GanttGroupAddParams } from '@/types/gantt-group';
 import { GanttBarAddParams } from '@/types/gantt-bar';
 import { GanttLinkAddParams, GanttLinkType, LinkShowStrategy } from '@/types/gantt-link';
-import { GanttClassConstructor, GanttJsonData } from '@/types/gantt';
+import { GanttClassConstructor, GanttJsonData, GanttJsonDataBar, GanttJsonDataGroup, GanttJsonDataLink } from '@/types/gantt';
 import { GanttGroupWorkTime } from './gantt-group-work-time';
 import { GanttLayoutConfig } from './gantt-layout-config';
 import { Unit } from '@/types/unit';
@@ -80,6 +80,69 @@ export class Gantt extends EventEmitter {
     });
   }
 
+  batchAddGroup(groups:GanttJsonDataGroup[]) {
+    groups.forEach(groupJson => {
+      let workTimes: GanttGroupWorkTimes | undefined;
+      if (Array.isArray(groupJson.workTimes)) {
+        workTimes = new GanttGroupWorkTimes();
+        groupJson.workTimes.forEach(wt => {
+          workTimes!.push(new GanttGroupWorkTime(wt));
+        });
+      }
+
+      this.addGroup({
+        id: groupJson.id,
+        workTimes: workTimes,
+        isExpand: groupJson.isExpand,
+        barOverlap: groupJson.barOverlap
+      });
+    });
+
+    groups.forEach(groupJson => {
+      let parentGroup: GanttGroup | null = null;
+
+      if (groupJson.parentId) {
+        parentGroup = this.groups.getById(groupJson.parentId)!;
+        this.groups.getById(groupJson.id)!.parent = parentGroup;
+      }
+    });
+
+    this.groups.calculateExpandedGroups();
+  }
+
+  batchAddBar(bars:GanttJsonDataBar[]) {
+    bars.forEach(barJson => {
+      const group = this.groups.getById(barJson.groupId);
+      if (group) {
+        this.addBar({
+          id: barJson.id,
+          duration: barJson.duration,
+          start: barJson.start,
+          end: barJson.end,
+          group: group,
+          schedulingMode: barJson.schedulingMode ? SchedulingMode[barJson.schedulingMode] : undefined
+        });
+      }
+    });
+  }
+
+  batchAddLink(links:GanttJsonDataLink[]) {
+    links.forEach(linkJson => {
+      const sourceBar = this.bars.getById(linkJson.sourceId);
+      const targetBar = this.bars.getById(linkJson.targetId);
+      if (sourceBar && targetBar) {
+        this.addLink({
+          id: linkJson.id,
+          source: sourceBar,
+          target: targetBar,
+          linkType: linkJson.linkType ? GanttLinkType[linkJson.linkType] : undefined
+        });
+      }
+    });
+    this.links.calculate();
+    this.links.calculateLinkGroupMap();
+  }
+
   static fromJson(data: GanttJsonData) {
     const layoutConfig = new GanttLayoutConfig(data.layoutConfig || {});
     const config = new GanttConfig({
@@ -104,61 +167,9 @@ export class Gantt extends EventEmitter {
       layoutConfig 
     });
 
-    data.groups.forEach(groupJson => {
-      let parentGroup: GanttGroup | null = null;
-
-      if (groupJson.parentId) {
-        parentGroup = gantt.groups.getById(groupJson.parentId) || null;
-      }
-      
-      let workTimes: GanttGroupWorkTimes | undefined;
-
-      if (Array.isArray(groupJson.workTimes)) {
-        workTimes = new GanttGroupWorkTimes();
-
-        groupJson.workTimes.forEach(wt => {
-          workTimes!.push(new GanttGroupWorkTime(wt));
-        });
-      }
-
-      gantt.addGroup({
-        id: groupJson.id,
-        parent: parentGroup,
-        workTimes: workTimes,
-        isExpand: groupJson.isExpand,
-        barOverlap: groupJson.barOverlap
-      });
-    });
-    gantt.groups.calculateExpandedGroups();
-
-    data.bars.forEach(barJson => {
-      const group = gantt.groups.getById(barJson.groupId);
-      if (group) {
-        gantt.addBar({
-          id: barJson.id,
-          duration: barJson.duration,
-          start: barJson.start,
-          end: barJson.end,
-          group: group,
-          schedulingMode: barJson.schedulingMode ? SchedulingMode[barJson.schedulingMode] : undefined
-        });
-      }
-    });
-
-    data.links.forEach(linkJson => {
-      const sourceBar = gantt.bars.getById(linkJson.sourceId);
-      const targetBar = gantt.bars.getById(linkJson.targetId);
-      if (sourceBar && targetBar) {
-        gantt.addLink({
-          id: linkJson.id,
-          source: sourceBar,
-          target: targetBar,
-          linkType: linkJson.linkType ? GanttLinkType[linkJson.linkType] : undefined
-        });
-      }
-    });
-    gantt.links.calculate();
-    gantt.links.calculateLinkGroupMap();
+    gantt.batchAddGroup(data.groups);
+    gantt.batchAddBar(data.bars);
+    gantt.batchAddLink(data.links);
 
     return gantt;
   }

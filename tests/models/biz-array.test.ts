@@ -1,8 +1,9 @@
 import { BizArray } from '@/models/biz-array';
+import { Id } from '@/types';
 
 describe('biz-array', () => {
   test('getById', () => {
-    const ba = new BizArray();
+    const ba = new BizArray<{id: Id, a: string}>();
     ba.push({
       id: 1,
       a: 'a' 
@@ -19,7 +20,7 @@ describe('biz-array', () => {
   });
 
   test('removeById', () => {
-    const ba = new BizArray();
+    const ba = new BizArray<{id: Id, a: string}>();
     ba.push({
       id: 1,
       a: 'a' 

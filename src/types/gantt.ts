@@ -36,7 +36,7 @@ export type GanttJsonDataGroupWorkTime = {
 
 export type GanttJsonDataGroup = {
   id: Id, 
-  parentId:Id | null, 
+  parentId?:Id, 
   isExpand?: boolean,
   workTimes?:GanttJsonDataGroupWorkTime[],
   barOverlap?: boolean
