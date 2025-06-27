@@ -2,7 +2,7 @@ import { useMouseInElement } from '@vueuse/core';
 import { computed, ref, Ref, watch, watchEffect } from 'vue';
 import { useStore } from '../store';
 import { useTimerHook } from './timer-hook';
-import { Events } from '@/types';
+import { Events } from '@/types/events';
 import { useAutoScrollHook } from './auto-scroll-hook';
 
 export const useTopHook = (htmlRef: Ref<HTMLElement | undefined>) => {

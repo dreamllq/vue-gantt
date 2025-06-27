@@ -4,7 +4,7 @@ import { useLayout } from './layout';
 import { computed, ref, watch } from 'vue';
 import { debounce, max, min } from 'lodash';
 import { useBus } from './bus';
-import { Events } from '@/types';
+import { Events } from '@/types/events';
 
 export const useLazy = (ganttEntity: Gantt, store:{
   scroll: ReturnType<typeof useScroll>;

@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import { Gantt } from '@/models/gantt';
 import { useBus } from './bus';
-import { Events } from '@/types';
+import { Events } from '@/types/events';
 
 export const useContainer = (ganttEntity: Gantt, store:{
   bus: ReturnType<typeof useBus>

@@ -75,6 +75,7 @@ const renderLink = () => {
   const _svg = d3Select(svgId);
   if (_svg === null) return;
   cp = _svg.append('path');
+  // @ts-ignore
   cp.attr('d', p.toString())
     .style('fill', 'none')
     .style('stroke', 'var(--link-color)')

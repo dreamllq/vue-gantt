@@ -1,7 +1,7 @@
 import { Gantt } from '@/models/gantt';
 import { useBus } from './bus';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import { Events } from '@/types';
+import { Events } from '@/types/events';
 
 export const useDrag = (ganttEntity: Gantt, store:{
   bus: ReturnType<typeof useBus>

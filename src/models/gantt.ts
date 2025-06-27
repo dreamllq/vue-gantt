@@ -24,7 +24,7 @@ export class Gantt extends EventEmitter {
   config: GanttConfig;
   groups: GanttGroups;
   bars: GanttBars;
-  links: GanttLinks = new GanttLinks();
+  links: GanttLinks;
   bus: GanttBus = new GanttBus();
 
   constructor(data:GanttClassConstructor) {
@@ -49,6 +49,11 @@ export class Gantt extends EventEmitter {
       config: this.config,
       container: this.container,
       groups: this.groups
+    });
+
+    this.links = new GanttLinks({
+      bars: this.bars,
+      bus: this.bus
     });
   }
 

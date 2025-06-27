@@ -5,6 +5,7 @@ export class GanttGroupView extends GanttGroup {
   _isExpand = false;
   barOverlap = false;
   rows = 1;
+  isShow = true;
 
   constructor(data: GanttGroupViewClassConstructor) {
     super(data);

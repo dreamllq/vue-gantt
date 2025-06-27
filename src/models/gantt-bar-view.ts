@@ -1,4 +1,4 @@
-import { GanttBarViewClassConstructor } from '@/types/gantt-bar';
+import { BarId, GanttBarViewClassConstructor } from '@/types/gantt-bar';
 import { GanttBar } from './gantt-bar';
 import { GanttGroups } from './gantt-groups';
 import { computeTimeSecond } from '@/utils/compute-time-second';
@@ -6,7 +6,6 @@ import moment from 'moment';
 import { GanttBars } from './gantt-bars';
 import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { max } from 'lodash';
-import { Id } from '@/types';
 import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
 
@@ -26,7 +25,8 @@ export class GanttBarView extends GanttBar {
   bars: GanttBars;
   rowIndex = 0;
   bus:GanttBus;
-  overlapBarIds:Id[] = [];
+  overlapBarIds:BarId[] = [];
+  isShow = true;
   
   constructor(data:GanttBarViewClassConstructor) {
     super(data);
@@ -45,6 +45,7 @@ export class GanttBarView extends GanttBar {
 
   calculate() {
     if (this.isClone) return;
+    if (!this.isShow) return;
     this.calculatePos();
     this.calculateOverlap();
   }

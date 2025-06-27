@@ -6,7 +6,7 @@ import { GanttBase } from './gantt-base';
 import { max, min } from 'lodash';
 import { GanttConfig } from './gantt-config';
 import { GanttLayoutConfig } from './gantt-layout-config';
-import { GanttBaseClassConstructor } from '@/types';
+import { GanttBaseClassConstructor } from '@/types/gantt-base';
 
 export class GanttGroups extends BizArray<GanttGroupView> {
   expandedGroups: GanttGroupView[] = [];
@@ -56,6 +56,7 @@ export class GanttGroups extends BizArray<GanttGroupView> {
     this.forEach(item => {
       if (!item.parent) {
         list.push(item);
+        item.isShow = true;
       } else {
         let expanded = true;
         let temp = item;
@@ -66,6 +67,9 @@ export class GanttGroups extends BizArray<GanttGroupView> {
 
         if (expanded === true) {
           list.push(item);
+          item.isShow = true;
+        } else {
+          item.isShow = false;
         }
       }
     });

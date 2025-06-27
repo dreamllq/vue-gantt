@@ -3,19 +3,21 @@ import { Id } from './id';
 import { GanttGroupWorkTimes } from '@/models/gantt-group-work-times';
 import { GanttBaseClassConstructor } from './gantt-base';
 
+export type GroupId = Id;
+
 export type GanttGroupViewClassConstructor = GanttGroupClassConstructor & {
   isExpand?: boolean, 
   barOverlap?:boolean
 }
 
 export type GanttGroupClassConstructor = {
-  id: Id, 
+  id: GroupId, 
   parent?:GanttGroup | null, 
   workTimes?:GanttGroupWorkTimes,
 } & GanttBaseClassConstructor;
 
 export type GanttGroupAddParams = {
-  id: Id, 
+  id: GroupId, 
   isExpand?: boolean,
   parent?:GanttGroup | null, 
   workTimes?:GanttGroupWorkTimes,

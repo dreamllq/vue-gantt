@@ -45,7 +45,7 @@ import { onBeforeMount, onMounted, ref, watch, watchPostEffect } from 'vue';
 import { useStore } from '../store';
 import { max } from 'lodash';
 import { useSizeHook } from './size-hook';
-import { Events } from '@/types';
+import { Events } from '@/types/events';
 import { useMouseInElement } from '@vueuse/core';
 
 const { ganttEntity, scroll, layout, bus } = useStore()!;

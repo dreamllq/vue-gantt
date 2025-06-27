@@ -1,3 +1,5 @@
+import { BarId } from './gantt-bar';
+import { GroupId } from './gantt-group';
 import { Id } from './id';
 export enum GanttBusEvents {
   GROUP_ROWS_CHANGE='GROUP_ROWS_CHANGE',
@@ -7,13 +9,13 @@ export enum GanttBusEvents {
 
 export interface GanttBusEventsInterface {
   [GanttBusEvents.GROUP_ROWS_CHANGE]: (data: {
-    groupId: Id,
-    effectGroupIds: Id[],
-    effectBarIds: Id[]
+    groupId: GroupId,
+    effectGroupIds: GroupId[],
+    effectBarIds: BarId[]
   })=> void,
-  [GanttBusEvents.BAR_POS_CHANGE]:(barIds:Id[])=>void,
+  [GanttBusEvents.BAR_POS_CHANGE]:(barIds:BarId[])=>void,
   [GanttBusEvents.GROUP_OVERLAP_CHANGE]:(data:{
-    groupId: Id,
-    barId:Id
+    groupId: GroupId,
+    barId: BarId
   })=>void
 }

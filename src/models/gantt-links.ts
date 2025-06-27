@@ -1,20 +1,37 @@
 import { GanttLinkViewClassConstructor } from '@/types/gantt-link';
 import { BizArray } from './biz-array';
 import { GanttLinkView } from './gantt-link-view';
-import { Id } from '@/types/id';
 import { v4 as uuidv4 } from 'uuid';
+import { GanttBars } from './gantt-bars';
+import { BarId } from '@/types/gantt-bar';
+import { GanttLinksClassConstructor } from '@/types/gantt-links';
+import { GanttBus } from './gantt-bus';
 
 export class GanttLinks extends BizArray<GanttLinkView> {
 
   linkGroupMap: Record<string, GanttLinkView[]> = {};
+  bars: GanttBars;
+  bus: GanttBus;
+
+  constructor(data:GanttLinksClassConstructor) {
+    super();
+    this.bars = data.bars;
+    this.bus = data.bus;
+  }
   add(data:GanttLinkViewClassConstructor) {
     this.push(new GanttLinkView(data));
   }
 
-  getLinksByBarId(id:Id) {
+  getLinksByBarId(id:BarId) {
     return this.filter(link => link.target.id === id || link.source.id === id);
   }
 
+  updateShow() {
+    this.forEach(item => {
+      item.isShow = item.sourceBar!.isShow && item.targetBar!.isShow;
+    });
+  }
+  
   calculate() {
     this.forEach(item => item.calculate());
   }

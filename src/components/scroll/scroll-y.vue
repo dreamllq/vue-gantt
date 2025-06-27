@@ -12,7 +12,7 @@
 import { debounce } from 'lodash';
 import { useStore } from '../store';
 import { onBeforeMount, onMounted, ref, watch } from 'vue';
-import { Events } from '@/types';
+import { Events } from '@/types/events';
 
 const { ganttEntity, scroll, bus } = useStore()!;
 const { scrollTop } = scroll;

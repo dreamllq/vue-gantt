@@ -3,12 +3,12 @@ import { useStore } from '../store';
 import { GanttLinkView } from '@/models/gantt-link-view';
 import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { max, min, uniq } from 'lodash';
-import { Id } from '@/types/id';
-import { Events } from '@/types';
+import { Events } from '@/types/events';
+import { BarId } from '@/types/gantt-bar';
 
 export const useShowSelectedAllHook = () => {
   const lazyLinkGrid: ShallowRef<ReturnType<typeof GanttLinkView.prototype.toJSON>[]> = shallowRef([]);
-  const draggingBarIds = ref<Id[]>([]);
+  const draggingBarIds = ref<BarId[]>([]);
   const { ganttEntity, lazy, bus } = useStore()!;
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
   const lazyCalculate = () => {
@@ -18,6 +18,7 @@ export const useShowSelectedAllHook = () => {
       .map(item => item.linkGroup);
 
     lazyLinkGrid.value = ganttEntity.links
+      .filter(link => link.isShow)
       .filter(link => linkGroups.includes(link.linkGroup))
       .filter(link => isRectanglesOverlap({
         x1: visibleAreaStartX.value,
@@ -36,7 +37,7 @@ export const useShowSelectedAllHook = () => {
     lazyCalculate();
   }
 
-  const onBarDraggingChange = (ids:Id[], dragging: boolean) => {
+  const onBarDraggingChange = (ids:BarId[], dragging: boolean) => {
     if (dragging) {
       draggingBarIds.value = ids;
     } else {
@@ -55,7 +56,7 @@ export const useShowSelectedAllHook = () => {
     lazyCalculate();
   };
 
-  const onBarPosChange = (ids:Id[]) => {
+  const onBarPosChange = (ids:BarId[]) => {
     const links = uniq(ids.reduce<GanttLinkView[]>((acc, id) => {
       const links = ganttEntity.links.getLinksByBarId(id);
       return [...acc, ...links];
@@ -64,12 +65,18 @@ export const useShowSelectedAllHook = () => {
     lazyCalculate();
   };
 
+  const onBarVisibleChange = () => {
+    ganttEntity.links.updateShow();
+    ganttEntity.links.calculate();
+    lazyCalculate();
+  };
   
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.on(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
     bus.on(Events.BAR_SELECT_CHANGE, onVisibleAreaChange);
     bus.on(Events.BAR_POS_CHANGE, onBarPosChange);
+    bus.on(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
   });
     
   onBeforeUnmount(() => {
@@ -77,6 +84,7 @@ export const useShowSelectedAllHook = () => {
     bus.off(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
     bus.off(Events.BAR_SELECT_CHANGE, onVisibleAreaChange);
     bus.off(Events.BAR_POS_CHANGE, onBarPosChange);
+    bus.off(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
   });
 
   return {

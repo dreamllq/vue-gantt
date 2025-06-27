@@ -10,8 +10,17 @@ export class BizArray<T> extends Array<T & {id: Id}> {
       throw new Error(`id重复: ${id}`);
     }
   }
+
+  isExist(id:Id) {
+    return this._map.has(id);
+  }
+
   getById(id: Id) {
     return this._map.get(id);
+  }
+
+  getIds() {
+    return this.map(item => item.id);
   }
 
   removeById(id: Id) {
@@ -75,6 +84,15 @@ export class BizArray<T> extends Array<T & {id: Id}> {
       if (fn(item)) {
         list.push(item);
       }
+    });
+    return list;
+  }
+
+  map<U>(callbackfn: (value: (T & {id: Id}), index: number, array: (T & {id: Id})[]) => U, thisArg?: any): U[];
+  map(fn:any) {
+    const list:(T & {id: Id})[] = [];
+    this.forEach(item => {
+      list.push(fn(item));
     });
     return list;
   }

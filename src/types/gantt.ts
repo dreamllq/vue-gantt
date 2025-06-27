@@ -4,9 +4,11 @@ import { Id } from './id';
 import { Unit } from './unit';
 import { GanttLayoutConfig } from '@/models/gantt-layout-config';
 import { GanttLayoutConfigClassConstructor } from './gantt-layout-config';
-import { GanttLinkType, LinkShowStrategy } from './gantt-link';
+import { GanttLinkType, LinkId, LinkShowStrategy } from './gantt-link';
 import { SchedulingMode } from './gantt-config';
 import { menusItemType } from './contextmenu-menus';
+import { GroupId } from './gantt-group';
+import { BarId } from './gantt-bar';
 
 export type GanttClassConstructor = { config: GanttConfig, layoutConfig: GanttLayoutConfig}
 
@@ -35,16 +37,16 @@ export type GanttJsonDataGroupWorkTime = {
 }
 
 export type GanttJsonDataGroup = {
-  id: Id, 
-  parentId?:Id, 
+  id: GroupId, 
+  parentId?: GroupId, 
   isExpand?: boolean,
   workTimes?:GanttJsonDataGroupWorkTime[],
   barOverlap?: boolean
 };
 
 export type GanttJsonDataBar = {
-  id: Id,
-  groupId:Id,
+  id: BarId,
+  groupId:GroupId,
   start: DateTimeString | null,
   end: DateTimeString | null,
   duration: number | null
@@ -52,9 +54,9 @@ export type GanttJsonDataBar = {
 };
 
 export type GanttJsonDataLink = {
-  id: Id,
-  sourceId: Id,
-  targetId: Id,
+  id: LinkId,
+  sourceId: BarId,
+  targetId: BarId,
   linkType?: keyof typeof GanttLinkType;
 };
 

@@ -1,11 +1,12 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { useStore } from '../store';
-import { Events, Id } from '@/types';
+import { Events } from '@/types/events';
+import { BarId } from '@/types/gantt-bar';
 
 export const useAutoScrollHook = () => {
   const { bus } = useStore()!;
   const dragging = ref(false);
-  const onDraggingChange = (ids:Id[], _dragging:boolean) => {
+  const onDraggingChange = (ids:BarId[], _dragging:boolean) => {
     dragging.value = _dragging;
   };
 

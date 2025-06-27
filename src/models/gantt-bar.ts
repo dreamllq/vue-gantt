@@ -1,15 +1,14 @@
 import { DateTimeString } from '@/types/date';
-import { Id } from '@/types/id';
 import { GanttGroup } from './gantt-group';
 import TimeRange from '@/utils/time-range/index.ts';
-import { GanttBarClassConstructor } from '@/types/gantt-bar';
+import { BarId, GanttBarClassConstructor } from '@/types/gantt-bar';
 import { GanttBase } from './gantt-base';
 import { SchedulingMode } from '@/types/gantt-config';
 import { cloneDeep } from 'lodash';
 import moment from 'moment';
 
 export class GanttBar extends GanttBase {
-  id: Id;
+  id: BarId;
   start: DateTimeString | null = null;
   end: DateTimeString | null = null;
   duration: number | null = null;

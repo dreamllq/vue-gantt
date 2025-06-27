@@ -1,5 +1,5 @@
+import { Id } from '@/index';
 import { BizArray } from '@/models/biz-array';
-import { Id } from '@/types';
 
 describe('biz-array', () => {
   test('getById', () => {

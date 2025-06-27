@@ -1,10 +1,9 @@
-import { Id } from '@/types/id';
 import { GanttGroupWorkTimes } from './gantt-group-work-times';
-import { GanttGroupClassConstructor } from '@/types/gantt-group';
+import { GanttGroupClassConstructor, GroupId } from '@/types/gantt-group';
 import { GanttBase } from './gantt-base';
 
 export class GanttGroup extends GanttBase {
-  id: Id;
+  id: GroupId;
   _parent:GanttGroup | null;
   children: GanttGroup[] = [];
   workTimes: GanttGroupWorkTimes;

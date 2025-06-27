@@ -1,8 +1,6 @@
-import { GanttBarClassConstructor, GanttBarViewClassConstructor } from '@/types/gantt-bar';
+import { BarId, GanttBarClassConstructor, GanttBarViewClassConstructor } from '@/types/gantt-bar';
 import { BizArray } from './biz-array';
-import { GanttBar } from './gantt-bar';
 import { GanttBarView } from './gantt-bar-view';
-import { Id } from '@/types';
 import { GanttBarsClassConstructor } from '@/types/gantt-bars';
 import { GanttConfig } from './gantt-config';
 import { GanttLayoutConfig } from './gantt-layout-config';
@@ -10,6 +8,7 @@ import { GanttGroups } from './gantt-groups';
 import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { max, min } from 'lodash';
+import { GroupId } from '@/types/gantt-group';
 
 export class GanttBars extends BizArray<GanttBarView> {
   config: GanttConfig;
@@ -33,13 +32,19 @@ export class GanttBars extends BizArray<GanttBarView> {
     bar.calculate();
   }
 
+  updateShow() {
+    this.forEach(bar => {
+      bar.isShow = this.groups.getById(bar.group.id)!.isShow;
+    });
+  }
+
   calculate() {
-    this.forEach(item => item.calculate());
+    this.forEach(bar => bar.calculate());
   }
 
   calculateGroupOverlap(data:{
-    groupId: Id,
-    barId?:Id
+    groupId: GroupId,
+    barId?:BarId
   }) {
     const group = this.groups.getById(data.groupId)!;
     if (group.barOverlap) return;
@@ -51,7 +56,7 @@ export class GanttBars extends BizArray<GanttBarView> {
    * 计算指定group下的bar的rowIndex属性
    * @param groupId 分组id
    */
-  calculateGroupBarsRowIndex(groupId: Id, barId?: Id) {
+  calculateGroupBarsRowIndex(groupId: GroupId, barId?: BarId) {
     const group = this.groups.getById(groupId)!;
     if (group.barOverlap) return;
     const groupBars = this.filter(item => item.group.id === groupId).toSorted((a, b) => {
@@ -76,7 +81,7 @@ export class GanttBars extends BizArray<GanttBarView> {
       }
     });
 
-    const changeIds:Id[] = [];
+    const changeIds:BarId[] = [];
     
     groupBars.forEach(bar => {
       const rowIndexList = bar.overlapBarIds.map(id => this.getById(id)!.rowIndex);
@@ -100,11 +105,11 @@ export class GanttBars extends BizArray<GanttBarView> {
    * 根据bar的rowIndex更新指定group及之后group下的bar的位置信息-- _sy\sy属性
    * @param groupId 分组id
    */
-  updateCurrentAndAfterGroupBarsPositionByRowIndex(groupId: Id) {
+  updateCurrentAndAfterGroupBarsPositionByRowIndex(groupId: GroupId) {
     const group = this.groups.getById(groupId)!;
     if (group.barOverlap) return;
-    const effectGroupIds:Id[] = [];
-    const effectBarIds: Id[] = [];
+    const effectGroupIds:GroupId[] = [];
+    const effectBarIds: BarId[] = [];
     const groupIndex = this.groups.getGroupIndex(this.groups.getById(groupId)!);
     const groupBars = this.filter(item => item.group.id === groupId);
     groupBars.forEach(item => {
@@ -114,7 +119,7 @@ export class GanttBars extends BizArray<GanttBarView> {
     const rows = max(groupBars.map(item => item.rowIndex + 1)) || 1;
     if (group.rows !== rows) {
       group.rows = rows;
-      const ids:Id[] = [];
+      const ids:GroupId[] = [];
       for (let i = groupIndex + 1; i < this.groups.expandedGroups.length; i++) {
         ids.push(this.groups.expandedGroups[i].id);
         effectGroupIds.push(this.groups.expandedGroups[i].id);
@@ -131,5 +136,22 @@ export class GanttBars extends BizArray<GanttBarView> {
       effectGroupIds: effectGroupIds,
       effectBarIds: effectBarIds
     });
+  }
+
+  updateGroupExpandChangeEffectBar(groupId: GroupId) {
+    const effectBarIds: BarId[] = [];
+    const groupIndex = this.groups.getGroupIndex(this.groups.getById(groupId)!);
+    const ids:GroupId[] = [];
+    for (let i = groupIndex + 1; i < this.groups.expandedGroups.length; i++) {
+      ids.push(this.groups.expandedGroups[i].id);
+    }
+    const bars = this.filter(item => ids.includes(item.group.id));
+    
+    bars.forEach(item => {
+      item.changeY();
+      effectBarIds.push(item.id);
+    });
+
+    return effectBarIds;
   }
 }

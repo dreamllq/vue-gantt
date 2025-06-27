@@ -3,7 +3,7 @@ import { useStore } from '../store';
 import moment from 'moment';
 import { cloneDeep } from 'lodash';
 import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
-import { Events } from '@/types';
+import { Events } from '@/types/events';
 
 type GridItem = {
   index: number,

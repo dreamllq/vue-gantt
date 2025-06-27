@@ -33,7 +33,10 @@ describe('gantt-links 合并', () => {
     workTimes: []
   });
 
-  const link = new GanttLinks();
+  const link = new GanttLinks({
+    bars: bars,
+    bus: bus
+  });
 
   link.add({
     id: 'l1',
@@ -181,7 +184,10 @@ describe('gantt-links 合并2', () => {
     workTimes: []
   });
 
-  const link = new GanttLinks();
+  const link = new GanttLinks({
+    bars: bars,
+    bus: bus
+  });
 
   link.add({
     id: 'l1',
@@ -355,7 +361,10 @@ describe('gantt-links 分叉', () => {
     workTimes: []
   });
 
-  const link = new GanttLinks();
+  const link = new GanttLinks({
+    bars: bars,
+    bus: bus
+  });
 
   link.add({
     id: 'l1',
@@ -503,7 +512,10 @@ describe('gantt-links 分叉2', () => {
     workTimes: []
   });
 
-  const link = new GanttLinks();
+  const link = new GanttLinks({
+    bars: bars,
+    bus: bus
+  });
 
   link.add({
     id: 'l1',
@@ -654,7 +666,10 @@ describe('gantt-links 多条单链', () => {
     workTimes: []
   });
 
-  const link = new GanttLinks();
+  const link = new GanttLinks({
+    bars: bars,
+    bus: bus
+  });
 
   link.add({
     id: 'l1',
@@ -807,7 +822,10 @@ describe('gantt-links 菱形', () => {
     workTimes: []
   });
 
-  const link = new GanttLinks();
+  const link = new GanttLinks({
+    bars: bars,
+    bus: bus
+  });
 
   link.add({
     id: 'l1',
@@ -956,7 +974,10 @@ describe('gantt-links 菱形', () => {
     workTimes: []
   });
 
-  const link = new GanttLinks();
+  const link = new GanttLinks({
+    bars: bars,
+    bus: bus
+  });
 
   link.add({
     id: 'l1',

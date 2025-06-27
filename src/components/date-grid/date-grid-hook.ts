@@ -3,7 +3,7 @@ import { useStore } from '../store';
 import { onBeforeUnmount, onMounted, ref, shallowRef } from 'vue';
 import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { cloneDeep } from 'lodash';
-import { Events } from '@/types';
+import { Events } from '@/types/events';
 
 type GridItem = {
   index: number,

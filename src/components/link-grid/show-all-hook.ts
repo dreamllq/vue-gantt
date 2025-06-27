@@ -3,12 +3,12 @@ import { useStore } from '../store';
 import { GanttLinkView } from '@/models/gantt-link-view';
 import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { max, min, uniq } from 'lodash';
-import { Id } from '@/types/id';
-import { Events } from '@/types';
+import { Events } from '@/types/events';
+import { BarId } from '@/types/gantt-bar';
 
 export const useShowAllHook = () => {
   const lazyLinkGrid: Ref<ReturnType<typeof GanttLinkView.prototype.toJSON>[]> = ref([]);
-  const draggingBarIds = ref<Id[]>([]);
+  const draggingBarIds = ref<BarId[]>([]);
   const { ganttEntity, lazy, bus } = useStore()!;
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
   const lazyCalculate = () => {
@@ -29,7 +29,7 @@ export const useShowAllHook = () => {
     lazyCalculate();
   }
 
-  const onBarDraggingChange = (ids:Id[], dragging: boolean) => {
+  const onBarDraggingChange = (ids:BarId[], dragging: boolean) => {
     if (dragging) {
       draggingBarIds.value = ids;
     } else {
@@ -48,7 +48,7 @@ export const useShowAllHook = () => {
     lazyCalculate();
   };
 
-  const onBarPosChange = (ids:Id[]) => {
+  const onBarPosChange = (ids:BarId[]) => {
     const links = uniq(ids.reduce<GanttLinkView[]>((acc, id) => {
       const links = ganttEntity.links.getLinksByBarId(id);
       return [...acc, ...links];
@@ -56,17 +56,25 @@ export const useShowAllHook = () => {
     links.forEach(link => link.calculate());
     lazyCalculate();
   };
+
+  const onBarVisibleChange = () => {
+    ganttEntity.links.updateShow();
+    ganttEntity.links.calculate();
+    lazyCalculate();
+  };
   
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.on(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
     bus.on(Events.BAR_POS_CHANGE, onBarPosChange);
+    bus.on(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
   });
     
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.off(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
     bus.off(Events.BAR_POS_CHANGE, onBarPosChange);
+    bus.off(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
   });
 
   return {

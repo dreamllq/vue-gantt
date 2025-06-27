@@ -15,7 +15,7 @@
 import { useResizeObserver, useMouseInElement } from '@vueuse/core';
 import { onMounted, ref, watch } from 'vue';
 import { useStore } from './store';
-import { Events } from '@/types';
+import { Events } from '@/types/events';
 
 const containerRef = ref();
 const { container, scroll, drag, bus } = useStore()!;

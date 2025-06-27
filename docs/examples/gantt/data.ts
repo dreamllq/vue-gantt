@@ -24,12 +24,11 @@ export const data:GanttJsonData = {
     'ROW_HEIGHT': 40,
     'BAR_HEIGHT': 30,
     'BAR_CENTER_TOP': 20,
-    'GRID_CELL_WIDTH': 100
+    'GRID_CELL_WIDTH': 200
   },
   'groups': [
     {
       'id': 1,
-      'parentId': null,
       'workTimes': [
         {
           'start': '2024-01-01 00:00:00',
@@ -64,7 +63,6 @@ export const data:GanttJsonData = {
     },
     {
       'id': 2,
-      'parentId': null,
       'workTimes': [
         {
           'start': '2024-01-01 00:00:00',
@@ -74,7 +72,6 @@ export const data:GanttJsonData = {
     },
     {
       'id': 3,
-      'parentId': null,
       'workTimes': [
         {
           'start': '2024-01-01 00:00:00',
@@ -85,7 +82,6 @@ export const data:GanttJsonData = {
     },
     {
       'id': 4,
-      'parentId': null,
       'workTimes': [
         {
           'start': '2024-01-01 00:00:00',
@@ -94,38 +90,14 @@ export const data:GanttJsonData = {
       ],
       'barOverlap': true
     },
-    {
-      'id': 5,
-      'parentId': null
-    },
-    {
-      'id': 6,
-      'parentId': null
-    },
-    {
-      'id': 7,
-      'parentId': null
-    },
-    {
-      'id': 8,
-      'parentId': null
-    },
-    {
-      'id': 9,
-      'parentId': null
-    },
-    {
-      'id': 10,
-      'parentId': null
-    },
-    {
-      'id': 11,
-      'parentId': null
-    },
-    {
-      'id': 12,
-      'parentId': null
-    }
+    { 'id': 5 },
+    { 'id': 6 },
+    { 'id': 7 },
+    { 'id': 8 },
+    { 'id': 9 },
+    { 'id': 10 },
+    { 'id': 11 },
+    { 'id': 12 }
   ],
   'bars': [
     {

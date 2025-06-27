@@ -52,7 +52,7 @@ const { draggingBar, shadowDraggingBar } = useSingleDraggingHook();
     border: 2px dashed var(--el-color-primary);
     top: 0;
     left: 0;
-    transition: transform 0.3s linear
+    transition: transform 0.1s linear
   }
 }
 </style>

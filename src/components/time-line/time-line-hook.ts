@@ -4,7 +4,7 @@ import { computeDayList } from '@/utils/computeDayList';
 import { ref } from 'vue';
 import { ct } from '@/locales';
 import { cloneDeep } from 'lodash';
-import { Events } from '@/types';
+import { Events } from '@/types/events';
 
 export const useTimeLineHook = () => {
   const { bus, lazy, ganttEntity } = useStore()!;

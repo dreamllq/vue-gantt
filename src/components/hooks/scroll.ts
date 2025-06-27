@@ -1,7 +1,7 @@
 import { Gantt } from '@/models/gantt';
 import { ref } from 'vue';
 import { useBus } from './bus';
-import { Events } from '@/types';
+import { Events } from '@/types/events';
 
 export const useScroll = (ganttEntity:Gantt, store:{
     bus: ReturnType<typeof useBus>;

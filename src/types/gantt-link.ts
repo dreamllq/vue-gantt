@@ -5,16 +5,17 @@ import { GanttBars } from '@/models/gantt-bars';
 import { GanttLayoutConfig } from '@/models/gantt-layout-config';
 
 export type GanttLinkViewClassConstructor = GanttLinkClassConstructor & {bars: GanttBars}
+export type LinkId = Id;
 
 export type GanttLinkClassConstructor = {
-  id: Id;
+  id: LinkId;
   source: GanttBar;
   target: GanttBar;
   linkType?: GanttLinkType;
 } & GanttBaseClassConstructor;
 
 export type GanttLinkAddParams = {
-  id: Id;
+  id: LinkId;
   source: GanttBar;
   target: GanttBar;
   linkType?: GanttLinkType;

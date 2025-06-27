@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 import SelectRender from './render.vue';
-import { Events } from '@/types';
+import { Events } from '@/types/events';
 import { useStore } from '../store';
 
 const { bus } = useStore()!;

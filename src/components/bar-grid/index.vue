@@ -20,13 +20,13 @@
 </template>
 
 <script setup lang="ts">
-import { Id } from '@/types/id';
 import { useBarGridHook } from './bar-grid-hook';
 import { useStore } from '../store';
+import { BarId } from '@/types/gantt-bar';
 
 const { barHtmlClass } = useStore()!;
 const { lazyBarGrid } = useBarGridHook();
-const getIdType = (id:Id) => (typeof id);
+const getIdType = (id:BarId) => (typeof id);
 </script>
 
 <style scoped lang="scss">

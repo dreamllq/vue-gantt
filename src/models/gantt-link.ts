@@ -1,10 +1,9 @@
-import { Id } from '@/types/id';
 import { GanttBar } from './gantt-bar';
-import { GanttLinkClassConstructor, GanttLinkType } from '@/types/gantt-link';
+import { GanttLinkClassConstructor, GanttLinkType, LinkId } from '@/types/gantt-link';
 import { GanttBase } from './gantt-base';
 
 export class GanttLink extends GanttBase {
-  id: Id;
+  id: LinkId;
   source: GanttBar;
   target: GanttBar;
   linkType: GanttLinkType;

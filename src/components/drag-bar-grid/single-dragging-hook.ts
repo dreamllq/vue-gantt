@@ -1,13 +1,14 @@
-import { Id } from '@/types/id';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { useStore } from '../store';
 import dom from '@/utils/dom';
-import { Events } from '@/types';
+import { Events } from '@/types/events';
 import { max } from 'lodash';
 import { GanttBarView } from '@/models/gantt-bar-view';
+import { GroupId } from '@/types/gantt-group';
+import { BarId } from '@/types/gantt-bar';
 
 type DraggingBar = {
-  id: Id,
+  id: BarId,
   sx :number;
   sy :number;
   width :number;
@@ -34,7 +35,7 @@ export const useSingleDraggingHook = () => {
     const barTarget = domPath.find(p => p.classList && p.classList.contains(barHtmlClass)) as HTMLElement;
     if (barTarget) {
       const type = barTarget.dataset.type as string;
-      const id = type === 'number' ? Number(barTarget.dataset.id) : barTarget.dataset.id as Id;
+      const id = type === 'number' ? Number(barTarget.dataset.id) : barTarget.dataset.id as BarId;
       const bar = ganttEntity.bars.getById(id);
       
       if (bar) {
@@ -107,7 +108,7 @@ export const useSingleDraggingHook = () => {
     const dropRowIndex = max([Math.floor((dropY - top) / ganttEntity.layoutConfig.ROW_HEIGHT), 0])!;
 
     const bar = ganttEntity.bars.getById(draggingBar.value.id)!;
-    let recentGroupId:Id|null = null;
+    let recentGroupId:GroupId|null = null;
     if (bar.group.id !== group.id) {
       recentGroupId = bar.group.id;
       bar.group = group;

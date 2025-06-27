@@ -19,6 +19,7 @@ export class GanttLinkView extends GanttLink {
   path: LinkPath = [];
   arrow?: Arrow;
   bars: GanttBars;
+  isShow = true;
   constructor(data: GanttLinkViewClassConstructor) {
     super(data);
     this.bars = data.bars;
@@ -69,6 +70,7 @@ export class GanttLinkView extends GanttLink {
   }
 
   calculate() {
+    if (!this.isShow) return;
     const data = calculateFunction[this.linkType]({
       layoutConfig: this.layoutConfig,
       sourceFinishX: this.sourceFinishX!,

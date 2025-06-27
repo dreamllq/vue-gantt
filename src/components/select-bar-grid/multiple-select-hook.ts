@@ -2,7 +2,8 @@ import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useStore } from '../store';
 import dom from '@/utils/dom';
 import { GanttBarView } from '@/models/gantt-bar-view';
-import { Events, Id } from '@/types';
+import { Events } from '@/types/events';
+import { BarId } from '@/types/gantt-bar';
 
 export const useMultipleSelectHook = () => {
   const { bus, ganttEntity, barHtmlClass } = useStore()!;
@@ -16,11 +17,11 @@ export const useMultipleSelectHook = () => {
     const barTarget = domPath.find(p => p.classList && p.classList.contains(barHtmlClass)) as HTMLElement;
     if (barTarget) {
       const type = barTarget.dataset.type as string;
-      const id = type === 'number' ? Number(barTarget.dataset.id) : barTarget.dataset.id as Id;
+      const id = (type === 'number' ? Number(barTarget.dataset.id) : barTarget.dataset.id) as BarId;
       const bar = ganttEntity.bars.getById(id);
             
       if (bar) {
-        const barIds:Id[] = [];
+        const barIds:BarId[] = [];
         if (e.altKey || e.metaKey) {
           if (selectedBars.value.some(item => item.id === bar.id)) {
             bar.selected = false;
