@@ -4,6 +4,9 @@
       <template #aside-header>
         <slot name='aside-header' />
       </template>
+      <template #group='slotProps'>
+        <slot name='group' v-bind='slotProps' />
+      </template>
       <template #bar='slotProps'>
         <slot name='bar' v-bind='slotProps' />
       </template>

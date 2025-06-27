@@ -20,6 +20,14 @@ export class GanttGroup extends GanttBase {
     }
   }
 
+  get deep() {
+    if (this._parent) {
+      return this._parent.deep + 1;
+    } else {
+      return 0;
+    }
+  }
+
   removeChild(child: GanttGroup) {
     this.children = this.children.filter(item => item.id !== child.id);
   }

@@ -8,7 +8,7 @@
           top: `${ganttEntity.groups.getGroupTopByIndex(item.index)}px`
         }'
       >
-        <slot :data='item.group'>
+        <slot :group='item.group'>
           {{ item.group.id }}
         </slot>
       </div>

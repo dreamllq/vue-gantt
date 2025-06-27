@@ -6,6 +6,7 @@ import { GanttLayoutConfig } from '@/models/gantt-layout-config';
 import { GanttLayoutConfigClassConstructor } from './gantt-layout-config';
 import { GanttLinkType, LinkShowStrategy } from './gantt-link';
 import { SchedulingMode } from './gantt-config';
+import { menusItemType } from './contextmenu-menus';
 
 export type GanttClassConstructor = { config: GanttConfig, layoutConfig: GanttLayoutConfig}
 
@@ -22,6 +23,7 @@ export type GanttJsonDataConfig = {
   checkable?:boolean,
   multipleDraggable?:boolean,
   contextMenuEnable?:boolean,
+  contextMenuMenus?:menusItemType[],
   linkShowStrategy?: keyof typeof LinkShowStrategy
 };
 

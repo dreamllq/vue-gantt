@@ -4,6 +4,7 @@ import { useStore } from '../store';
 import dom from '@/utils/dom';
 import { Events } from '@/types';
 import { max } from 'lodash';
+import { GanttBarView } from '@/models/gantt-bar-view';
 
 type DraggingBar = {
   id: Id,
@@ -14,6 +15,8 @@ type DraggingBar = {
 }
 export const useSingleDraggingHook = () => {
   const draggingBar = ref<DraggingBar>();
+  const shadowDraggingBar = ref<DraggingBar>();
+  const barClone = ref<GanttBarView>();
   const dragging = ref({
     startX: 0,
     startY: 0,
@@ -50,12 +53,23 @@ export const useSingleDraggingHook = () => {
         dragging.value.startBarY = bar.sy;
         dragging.value.startScrollLeft = scrollLeft.value;
         dragging.value.startScrollTop = scrollTop.value;
+
+        barClone.value = bar.clone();
+        calculateBarClone();
+        shadowDraggingBar.value = {
+          height: barClone.value.height,
+          id: barClone.value.id,
+          sx: barClone.value.sx,
+          sy: barClone.value.sy,
+          width: barClone.value.width
+        };
       }
     }
   };
 
   const onDrag = (e:MouseEvent) => {
     if (draggingBar.value === undefined) return;
+    if (!barClone.value) return;
     const offsetX = e.x - dragging.value.startX;
     const offsetY = e.y - dragging.value.startY;
 
@@ -65,6 +79,14 @@ export const useSingleDraggingHook = () => {
     draggingBar.value.sx = tempX;
     draggingBar.value.sy = tempY;
     bus.emit(Events.BAR_DRAGGING, [draggingBar.value.id]);
+    calculateBarClone();
+    shadowDraggingBar.value = {
+      height: barClone.value.height,
+      id: barClone.value.id,
+      sx: barClone.value.sx,
+      sy: barClone.value.sy,
+      width: barClone.value.width
+    };
   };
   const onDragEnd = () => {
     if (draggingBar.value === undefined) return;
@@ -95,6 +117,23 @@ export const useSingleDraggingHook = () => {
     bus.emit(Events.BAR_CHANGE, [bar.id]);
     bus.emit(Events.BAR_DRAGGING_CHANGE, [bar.id], false);
     draggingBar.value = undefined;
+    barClone.value = undefined;
+    shadowDraggingBar.value = undefined;
+  };
+
+  const calculateBarClone = () => {
+    if (draggingBar.value === undefined) return;
+    if (!barClone.value) return;
+    const startTime = ganttEntity.config.startDate.add(Math.floor(draggingBar.value.sx / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
+    const endTime = ganttEntity.config.startDate.add(Math.floor((draggingBar.value.sx + draggingBar.value.width) / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
+    const index = ganttEntity.groups.getGroupIndexByTop(draggingBar.value!.sy);
+    const group = ganttEntity.groups.expandedGroups[index];
+    barClone.value.group = group;
+    barClone.value.resetTimeRange({
+      start: startTime,
+      end: endTime
+    });
+    barClone.value.calculatePos();
   };
 
   const onMouseOutSide = () => {
@@ -113,5 +152,8 @@ export const useSingleDraggingHook = () => {
     bus.off(Events.DRAGEND, onDragEnd);
   });
 
-  return { draggingBar };
+  return {
+    draggingBar,
+    shadowDraggingBar 
+  };
 };

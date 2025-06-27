@@ -10,7 +10,8 @@ import { GanttBus } from '@/models/gantt-bus';
 export type GanttBarViewClassConstructor = GanttBarClassConstructor & {
   groups: GanttGroups
   bars: GanttBars
-  bus: GanttBus
+  bus: GanttBus,
+  isClone?:boolean
 }
 
 export type GanttBarClassConstructor = {

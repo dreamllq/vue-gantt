@@ -1,12 +1,14 @@
 import { onBeforeUnmount, onMounted } from 'vue';
 import { useStore } from '../store';
-import { Events } from '@/types';
+import { Events, Id } from '@/types';
 import dom from '@/utils/dom';
 
 export const useContextmenuHook = () => {
   const { bus, barHtmlClass, ganttEntity } = useStore()!;
 
   const onContextmenu = (e:MouseEvent) => {
+    console.log(Events.CONTEXTMENU);
+    
     const domPath = dom.getPath(e.target as HTMLElement);
     const barTarget = domPath.find(p => p.classList && p.classList.contains(barHtmlClass)) as HTMLElement;
     if (barTarget) {
@@ -15,7 +17,7 @@ export const useContextmenuHook = () => {
       const bar = ganttEntity.bars.getById(id);
               
       if (bar) {
-        bus.emit(Events.BAR_CONTEXTMENU, { barId: bar.id });
+        bus.emit(Events.BAR_CONTEXTMENU, { barId: bar.id }, e);
       } 
     }
   };

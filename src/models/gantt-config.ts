@@ -5,6 +5,7 @@ import { GanttLayoutConfig } from './gantt-layout-config';
 import moment from 'moment';
 import { LinkShowStrategy } from '@/types/gantt-link';
 import EventEmitter from '@/utils/eventemitter';
+import { menusItemType } from '@/types/contextmenu-menus';
 
 export class GanttConfig extends EventEmitter {
   static EVENTS = {
@@ -27,6 +28,7 @@ export class GanttConfig extends EventEmitter {
   multipleDraggable = false;
   contextMenuEnable = false;
   linkShowStrategy:LinkShowStrategy;
+  contextMenuMenus?:menusItemType[];
 
   constructor(data:GanttConfigClassConstructor) {
     super();
@@ -43,6 +45,7 @@ export class GanttConfig extends EventEmitter {
     this._checkable = !!data.checkable;
     this.multipleDraggable = !!data.multipleDraggable;
     this.contextMenuEnable = !!data.contextMenuEnable;
+    this.contextMenuMenus = data.contextMenuMenus;
     this.linkShowStrategy = data.linkShowStrategy || LinkShowStrategy.NONE;
   }
 

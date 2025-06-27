@@ -23,11 +23,12 @@ export const useDrag = (ganttEntity: Gantt, store:{
     }
   };
   const onMouseUp = (e:MouseEvent) => {
-    if (mousedown.value === false) return;
     if (e.button === 2) {
       // 右键
       store.bus.emit(Events.CONTEXTMENU, e);
+      return;
     }
+    if (mousedown.value === false) return;
     if (isDragging.value === false) {
       store.bus.emit(Events.CLICK, e);
     } else {
@@ -64,12 +65,12 @@ export const useDrag = (ganttEntity: Gantt, store:{
   };
 
   onMounted(() => {
-    store.bus.on(Events.MOUSE_CONTAINER_OUTSIDE, onMouseOutside);
+    store.bus.on(Events.MOUSE_MAIN_OUTSIDE, onMouseOutside);
     store.bus.on(Events.AUTO_SCROLL_CHANGE, updateDragging);
   });
 
   onBeforeUnmount(() => {
-    store.bus.off(Events.MOUSE_CONTAINER_OUTSIDE, onMouseOutside);
+    store.bus.off(Events.MOUSE_MAIN_OUTSIDE, onMouseOutside);
     store.bus.off(Events.AUTO_SCROLL_CHANGE, updateDragging);
   });
 

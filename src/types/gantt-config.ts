@@ -2,6 +2,7 @@ import { GanttLayoutConfig } from '@/models/gantt-layout-config';
 import { DateString, SplitTimeString } from './date';
 import { Unit } from './unit';
 import { LinkShowStrategy } from './gantt-link';
+import { menusItemType } from './contextmenu-menus';
 
 export enum SchedulingMode {
   FORWARD='FORWARD',
@@ -22,5 +23,6 @@ export type GanttConfigClassConstructor = {
   checkable?:boolean,
   multipleDraggable?:boolean,
   contextMenuEnable?:boolean,
+  contextMenuMenus?:menusItemType[],
   linkShowStrategy?:LinkShowStrategy
 } 

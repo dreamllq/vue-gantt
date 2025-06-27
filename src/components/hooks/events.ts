@@ -3,6 +3,9 @@ import { useBus } from './bus';
 import { GanttConfig } from '@/models/gantt-config';
 import { Events } from '@/types/events';
 import { GanttBusEvents } from '@/types/gantt-bus';
+import { Id } from '@/types';
+import { flatten, uniq } from 'lodash';
+import asyncFragmentation from 'simple-async-fragmentation';
 
 export const useEvents = (ganttEntity: Gantt, store:{
   bus: ReturnType<typeof useBus>
@@ -33,4 +36,10 @@ export const useEvents = (ganttEntity: Gantt, store:{
   ganttEntity.config.on(GanttConfig.EVENTS.CHECKABLE_CHANGE, (val) => {
     store.bus.emit(Events.CHECKABLE_CHANGE, val);
   });
+
+  store.bus.on(Events.BAR_CHANGE, asyncFragmentation<Id[]>(async (options:Id[][]) => {
+    const ids = uniq(flatten(options));
+    store.bus.emit(Events.BAR_CHANGE_FRAGMENTATION, ids);
+    return [];
+  }));
 };

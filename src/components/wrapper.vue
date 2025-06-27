@@ -7,7 +7,11 @@
         </slot>
       </template>
       <template #aside-main>
-        <group />
+        <group>
+          <template #default='slotProps'>
+            <slot name='group' v-bind='slotProps' />
+          </template>
+        </group>
       </template>
       <template #main-header>
         <time-line />

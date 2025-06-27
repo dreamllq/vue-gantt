@@ -44,6 +44,7 @@ export class GanttBarView extends GanttBar {
   }
 
   calculate() {
+    if (this.isClone) return;
     this.calculatePos();
     this.calculateOverlap();
   }
@@ -75,6 +76,7 @@ export class GanttBarView extends GanttBar {
   }
 
   calculateOverlap() {
+    if (this.isClone) return;
     const group = this.groups.getById(this.group.id)!;
     this.overlapBarIds.forEach(id => {
       this.bars.getById(id)!.overlapBarIds = this.bars.getById(id)!.overlapBarIds.filter(oid => oid !== this.id);
@@ -89,6 +91,7 @@ export class GanttBarView extends GanttBar {
     }
   }
   calculateOverlapBarIds() {
+    if (this.isClone) return;
     const groupBars = this.bars.filter(item => item.group.id === this.group.id);
     const overlapBars = groupBars.filter(bar => bar.id === this.id ? false : isRectanglesOverlap({
       x1: this.sx,
@@ -109,6 +112,7 @@ export class GanttBarView extends GanttBar {
   }
 
   changeY() {
+    if (this.isClone) return;
     const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
     const barCenterTop = this.layoutConfig.BAR_CENTER_TOP;
     const height = this.layoutConfig.BAR_HEIGHT;
@@ -119,6 +123,23 @@ export class GanttBarView extends GanttBar {
     this._sy = _sy;
     this.sy = sy;
     this.ey = ey;
+  }
+
+  clone() {
+    return new GanttBarView({
+      config: this.config,
+      duration: this.duration,
+      end: this.end,
+      group: this.group,
+      id: this.id,
+      layoutConfig: this.layoutConfig,
+      start: this.start,
+      schedulingMode: this.schedulingMode,
+      bars: this.bars,
+      bus: this.bus,
+      groups: this.groups,
+      isClone: true
+    });
   }
 
   toJSON() {

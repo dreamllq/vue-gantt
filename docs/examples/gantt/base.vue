@@ -10,6 +10,9 @@
       <template #aside-header>
         aaa
       </template>
+      <template #group='{group}'>
+        {{ group.id }} / {{ group.deep }}
+      </template>
       <template #bar='{bar}'>
         {{ bar.id }} \ {{ bar.selected }} \ {{ bar.rowIndex }}
       </template>

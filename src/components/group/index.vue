@@ -1,7 +1,9 @@
 <template>
   <div class='gantt-group'>
-    <group-layout v-slot='{data}'>
-      <slot :data='data' />
+    <group-layout>
+      <template #default='slotProps'>
+        <slot v-bind='slotProps' />
+      </template>
     </group-layout>
   </div>
 </template>

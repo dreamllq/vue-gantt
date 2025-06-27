@@ -62,7 +62,7 @@ const { isOutside } = useMouseInElement(mainContainerRef);
 
 watch(isOutside, () => {
   if (isOutside.value === true) {
-    bus.emit(Events.MOUSE_CONTAINER_OUTSIDE);
+    bus.emit(Events.MOUSE_MAIN_OUTSIDE);
   }
 }, { immediate: true });
 

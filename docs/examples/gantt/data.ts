@@ -9,7 +9,16 @@ export const data:GanttJsonData = {
     'selectable': true,
     'checkable': true,
     'contextMenuEnable': true,
-    'linkShowStrategy': 'SELECTED_ALL'
+    'linkShowStrategy': 'SELECTED_ALL',
+    contextMenuMenus: [
+      {
+        label: '返回(B)',
+        tip: 'Alt+向左箭头',
+        click: (a, b) => {
+          console.log(a, b.barId);
+        }
+      }
+    ]
   },
   'layoutConfig': {
     'ROW_HEIGHT': 40,
@@ -21,6 +30,30 @@ export const data:GanttJsonData = {
     {
       'id': 1,
       'parentId': null,
+      'workTimes': [
+        {
+          'start': '2024-01-01 00:00:00',
+          'end': '2024-02-01 12:00:00'
+        }
+      ],
+      'barOverlap': true,
+      isExpand: true
+    },
+    {
+      'id': 11,
+      'parentId': 1,
+      'workTimes': [
+        {
+          'start': '2024-01-01 00:00:00',
+          'end': '2024-02-01 12:00:00'
+        }
+      ],
+      'barOverlap': true,
+      isExpand: true
+    },
+    {
+      'id': 111,
+      'parentId': 11,
       'workTimes': [
         {
           'start': '2024-01-01 00:00:00',
