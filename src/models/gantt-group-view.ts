@@ -1,4 +1,4 @@
-import { GanttGroupViewClassConstructor } from '@/types/gantt-group';
+import { GanttGroupViewClassConstructor, GroupId } from '@/types/gantt-group';
 import { GanttGroup } from './gantt-group';
 
 export class GanttGroupView extends GanttGroup {

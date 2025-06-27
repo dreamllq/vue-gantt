@@ -53,25 +53,27 @@ export class GanttGroups extends BizArray<GanttGroupView> {
 
   calculateExpandedGroups() {
     const list:GanttGroupView[] = [];
-    this.forEach(item => {
-      if (!item.parent) {
-        list.push(item);
-        item.isShow = true;
+    const walk = (group:GanttGroupView, cb:(data: GanttGroupView)=>void) => {
+      cb(group);
+      if (group.isExpand) {
+        group.children.forEach(item => {
+          walk(this.getById(item.id)!, cb);
+        });
       } else {
-        let expanded = true;
-        let temp = item;
-        while (temp.parent && expanded) {
-          expanded = expanded && this.getById(temp.parent.id)!.isExpand;
-          temp = this.getById(temp.parent.id)!;
-        }
-
-        if (expanded === true) {
-          list.push(item);
-          item.isShow = true;
-        } else {
-          item.isShow = false;
-        }
+        group.children.forEach(item => {
+          walk(this.getById(item.id)!, (data) => {
+            data.isShow = false;
+          });
+        });
       }
+    };
+
+    this.forEach(group => {
+      if (group.parent) return;
+      walk(group, (data) => {
+        data.isShow = true;
+        list.push(data);
+      });
     });
 
     this.expandedGroups = list;
