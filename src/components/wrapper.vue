@@ -20,6 +20,7 @@
         <date-grid-bg />
         <work-time-grid />
         <date-grid />
+        <current-time v-if='ganttEntity.config.showCurrentTimeLine' />
         <bar-grid>
           <template #default='slotProps'>
             <slot name='bar' v-bind='slotProps' />
@@ -52,6 +53,7 @@ import DateGridBg from './date-grid/bg.vue';
 import DateGrid from './date-grid/index.vue';
 import Group from './group/index.vue';
 import WorkTimeGrid from './work-time-grid/index.vue';
+import CurrentTime from './current-time/index.vue';
 import BarGrid from './bar-grid/index.vue';
 import DragBarGrid from './drag-bar-grid/index.vue';
 import SelectBarGrid from './select-bar-grid/index.vue';

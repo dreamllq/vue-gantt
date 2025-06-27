@@ -26,7 +26,8 @@ export type GanttJsonDataConfig = {
   multipleDraggable?:boolean,
   contextMenuEnable?:boolean,
   contextMenuMenus?:menusItemType[],
-  linkShowStrategy?: keyof typeof LinkShowStrategy
+  linkShowStrategy?: keyof typeof LinkShowStrategy,
+  showCurrentTimeLine?:boolean
 };
 
 export type GanttJsonDataLayoutConfig=GanttLayoutConfigClassConstructor;

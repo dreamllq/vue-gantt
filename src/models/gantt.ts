@@ -165,7 +165,8 @@ export class Gantt extends EventEmitter {
       multipleDraggable: data.config.multipleDraggable,
       contextMenuEnable: data.config.contextMenuEnable,
       contextMenuMenus: data.config.contextMenuMenus,
-      linkShowStrategy: data.config.linkShowStrategy ? LinkShowStrategy[data.config.linkShowStrategy] : undefined
+      linkShowStrategy: data.config.linkShowStrategy ? LinkShowStrategy[data.config.linkShowStrategy] : undefined,
+      showCurrentTimeLine: data.config.showCurrentTimeLine
     });
     const gantt = new Gantt({
       config,

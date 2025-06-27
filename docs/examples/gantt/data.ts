@@ -2,7 +2,7 @@ import { GanttJsonData } from '@/index.ts';
 
 export const data:GanttJsonData = {
   'config': {
-    'endDate': '2024-06-14',
+    'endDate': '2025-08-14',
     'startDate': '2024-01-01',
     'durationUnit': 'SECOND',
     'draggable': true,
@@ -18,7 +18,8 @@ export const data:GanttJsonData = {
           console.log(a, b.barId);
         }
       }
-    ]
+    ],
+    showCurrentTimeLine: true
   },
   'layoutConfig': {
     'ROW_HEIGHT': 40,

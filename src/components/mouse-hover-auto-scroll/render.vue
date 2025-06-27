@@ -58,7 +58,7 @@ const bottomRef = ref<HTMLElement>();
 const leftRef = ref<HTMLElement>();
 const rightRef = ref<HTMLElement>();
 
-const style = ref({ '--size': `${ganttEntity.layoutConfig.AU_TO_SCROLL_AREA_SIZE}px` });
+const style = ref({ '--size': `${ganttEntity.layoutConfig.AUTO_SCROLL_AREA_SIZE}px` });
 
 const { isShow: isShowTop } = useTopHook(topRef);
 const { isShow: isShowBottom } = useBottomHook(bottomRef);

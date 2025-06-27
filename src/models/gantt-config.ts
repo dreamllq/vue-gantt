@@ -29,6 +29,7 @@ export class GanttConfig extends EventEmitter {
   contextMenuEnable = false;
   linkShowStrategy:LinkShowStrategy;
   contextMenuMenus?:menusItemType[];
+  showCurrentTimeLine: boolean;
 
   constructor(data:GanttConfigClassConstructor) {
     super();
@@ -47,6 +48,7 @@ export class GanttConfig extends EventEmitter {
     this.contextMenuEnable = !!data.contextMenuEnable;
     this.contextMenuMenus = data.contextMenuMenus;
     this.linkShowStrategy = data.linkShowStrategy || LinkShowStrategy.NONE;
+    this.showCurrentTimeLine = !!data.showCurrentTimeLine; 
   }
 
   get draggable() {
