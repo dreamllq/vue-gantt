@@ -10,12 +10,14 @@ import { GanttGroupWorkTimes } from './gantt-group-work-times';
 import { GanttGroupAddParams } from '@/types/gantt-group';
 import { GanttBarAddParams } from '@/types/gantt-bar';
 import { GanttLinkAddParams, GanttLinkType, LinkShowStrategy } from '@/types/gantt-link';
-import { GanttClassConstructor, GanttJsonData, GanttJsonDataBar, GanttJsonDataGroup, GanttJsonDataLink } from '@/types/gantt';
+import { GanttClassConstructor, GanttJsonData, GanttJsonDataAttachedBar, GanttJsonDataBar, GanttJsonDataGroup, GanttJsonDataLink } from '@/types/gantt';
 import { GanttGroupWorkTime } from './gantt-group-work-time';
 import { GanttLayoutConfig } from './gantt-layout-config';
 import { Unit } from '@/types/unit';
 import { SchedulingMode } from '@/types/gantt-config';
 import { GanttBus } from './gantt-bus';
+import { GanttAttachedBars } from './gantt-attached-bars';
+import { GanttAttachedBarAddParams } from '@/types/gantt-attached-bar';
 
 export class Gantt extends EventEmitter {
   container: GanttContainer = new GanttContainer();
@@ -24,6 +26,7 @@ export class Gantt extends EventEmitter {
   config: GanttConfig;
   groups: GanttGroups;
   bars: GanttBars;
+  attachedBars: GanttAttachedBars;
   links: GanttLinks;
   bus: GanttBus = new GanttBus();
 
@@ -43,6 +46,8 @@ export class Gantt extends EventEmitter {
       groups: this.groups,
       bus: this.bus
     });
+
+    this.attachedBars = new GanttAttachedBars();
 
     this.scroll = new GanttScroll({
       layoutConfig: this.layoutConfig,
@@ -73,6 +78,17 @@ export class Gantt extends EventEmitter {
       groups: this.groups,
       bars: this.bars,
       bus: this.bus
+    });
+  }
+
+  addAttachedBar(data: GanttAttachedBarAddParams) {
+    this.attachedBars.add({
+      ...data,
+      config: this.config,
+      layoutConfig: this.layoutConfig,
+      groups: this.groups,
+      bus: this.bus,
+      attachedBars: this.attachedBars
     });
   }
 
@@ -131,6 +147,20 @@ export class Gantt extends EventEmitter {
     });
   }
 
+  batchAddAttachedBar(attachedBars: GanttJsonDataAttachedBar[]) {
+    attachedBars.forEach(barJson => {
+      const group = this.groups.getById(barJson.groupId);
+      if (group) {
+        this.addAttachedBar({
+          id: barJson.id,
+          start: barJson.start,
+          end: barJson.end,
+          group: group
+        });
+      }
+    });
+  }
+
   batchAddLink(links:GanttJsonDataLink[]) {
     links.forEach(linkJson => {
       const sourceBar = this.bars.getById(linkJson.sourceId);
@@ -166,7 +196,8 @@ export class Gantt extends EventEmitter {
       contextMenuEnable: data.config.contextMenuEnable,
       contextMenuMenus: data.config.contextMenuMenus,
       linkShowStrategy: data.config.linkShowStrategy ? LinkShowStrategy[data.config.linkShowStrategy] : undefined,
-      showCurrentTimeLine: data.config.showCurrentTimeLine
+      showCurrentTimeLine: data.config.showCurrentTimeLine,
+      showAttachedBar: data.config.showAttachedBar
     });
     const gantt = new Gantt({
       config,
@@ -175,7 +206,8 @@ export class Gantt extends EventEmitter {
 
     gantt.batchAddGroup(data.groups);
     gantt.batchAddBar(data.bars);
-    gantt.batchAddLink(data.links);
+    gantt.batchAddAttachedBar(data.attachedBars || []);
+    gantt.batchAddLink(data.links || []);
 
     return gantt;
   }

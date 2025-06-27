@@ -12,8 +12,7 @@ export type BarId = Id;
 export type GanttBarViewClassConstructor = GanttBarClassConstructor & {
   groups: GanttGroups
   bars: GanttBars
-  bus: GanttBus,
-  isClone?:boolean
+  bus: GanttBus
 }
 
 export type GanttBarClassConstructor = {

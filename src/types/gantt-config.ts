@@ -25,5 +25,6 @@ export type GanttConfigClassConstructor = {
   contextMenuEnable?:boolean,
   contextMenuMenus?:menusItemType[],
   linkShowStrategy?:LinkShowStrategy,
-  showCurrentTimeLine?:boolean
+  showCurrentTimeLine?:boolean,
+  showAttachedBar?:boolean
 } 

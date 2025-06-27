@@ -9,7 +9,7 @@ import { useStore } from '../store';
 
 const { ganttEntity } = useStore()!;
 
-const style = ref(() => ({ left: `${moment().diff(ganttEntity.config.startDate, 'second') * ganttEntity.config.secondWidth}px` }));
+const style = ref({ left: `${moment().diff(ganttEntity.config.startDate, 'second') * ganttEntity.config.secondWidth}px` });
 
 </script>
 

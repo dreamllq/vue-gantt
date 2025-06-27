@@ -9,6 +9,7 @@ import { SchedulingMode } from './gantt-config';
 import { menusItemType } from './contextmenu-menus';
 import { GroupId } from './gantt-group';
 import { BarId } from './gantt-bar';
+import { AttachedBarId } from './gantt-attached-bar';
 
 export type GanttClassConstructor = { config: GanttConfig, layoutConfig: GanttLayoutConfig}
 
@@ -27,7 +28,8 @@ export type GanttJsonDataConfig = {
   contextMenuEnable?:boolean,
   contextMenuMenus?:menusItemType[],
   linkShowStrategy?: keyof typeof LinkShowStrategy,
-  showCurrentTimeLine?:boolean
+  showCurrentTimeLine?:boolean,
+  showAttachedBar?:boolean
 };
 
 export type GanttJsonDataLayoutConfig=GanttLayoutConfigClassConstructor;
@@ -54,6 +56,13 @@ export type GanttJsonDataBar = {
   schedulingMode?: keyof typeof SchedulingMode
 };
 
+export type GanttJsonDataAttachedBar = {
+  id: AttachedBarId,
+  groupId:GroupId,
+  start: DateTimeString | null,
+  end: DateTimeString | null,
+}
+
 export type GanttJsonDataLink = {
   id: LinkId,
   sourceId: BarId,
@@ -66,5 +75,6 @@ export type GanttJsonData = {
   layoutConfig?: GanttJsonDataLayoutConfig,
   groups: GanttJsonDataGroup[],
   bars: GanttJsonDataBar[],
-  links: GanttJsonDataLink[]
+  attachedBars?: GanttJsonDataAttachedBar[],
+  links?: GanttJsonDataLink[]
 }
