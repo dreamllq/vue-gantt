@@ -23,7 +23,9 @@ export const useSingleDraggingHook = () => {
     startBarX: 0,
     startBarY: 0,
     startScrollLeft: 0,
-    startScrollTop: 0
+    startScrollTop: 0,
+    offsetX: 0,
+    offsetY: 0
   });
   const { bus, ganttEntity, scroll, barHtmlClass } = useStore()!;
   const { scrollLeft, scrollTop } = scroll;
@@ -53,6 +55,10 @@ export const useSingleDraggingHook = () => {
         dragging.value.startBarY = bar.sy;
         dragging.value.startScrollLeft = scrollLeft.value;
         dragging.value.startScrollTop = scrollTop.value;
+        dragging.value.offsetX = scrollLeft.value;
+        dragging.value.offsetY = scrollTop.value;
+
+
 
         barClone.value = bar.clone();
         calculateBarClone();
@@ -90,13 +96,15 @@ export const useSingleDraggingHook = () => {
   };
   const onDragEnd = () => {
     if (draggingBar.value === undefined) return;
-    const startTime = ganttEntity.config.startDate.add(Math.floor(draggingBar.value.sx / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
-    const endTime = ganttEntity.config.startDate.add(Math.floor((draggingBar.value.sx + draggingBar.value.width) / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
+    const dropX = draggingBar.value.sx;
+    const dropY = draggingBar.value.sy + ganttEntity.layoutConfig.BAR_CENTER_TOP;
+    const startTime = ganttEntity.config.startDate.add(Math.floor(dropX / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
+    const endTime = ganttEntity.config.startDate.add(Math.floor((dropX + draggingBar.value.width) / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
 
-    const index = ganttEntity.groups.getGroupIndexByTop(draggingBar.value.sy);
+    const index = ganttEntity.groups.getGroupIndexByTop(dropY);
     const group = ganttEntity.groups.expandedGroups[index];
     const top = ganttEntity.groups.getGroupTopByIndex(index);
-    const dropRowIndex = max([Math.floor((draggingBar.value.sy - top) / ganttEntity.layoutConfig.ROW_HEIGHT), 0])!;
+    const dropRowIndex = max([Math.floor((dropY - top) / ganttEntity.layoutConfig.ROW_HEIGHT), 0])!;
 
     const bar = ganttEntity.bars.getById(draggingBar.value.id)!;
     let recentGroupId:Id|null = null;
@@ -124,9 +132,12 @@ export const useSingleDraggingHook = () => {
   const calculateBarClone = () => {
     if (draggingBar.value === undefined) return;
     if (!barClone.value) return;
-    const startTime = ganttEntity.config.startDate.add(Math.floor(draggingBar.value.sx / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
-    const endTime = ganttEntity.config.startDate.add(Math.floor((draggingBar.value.sx + draggingBar.value.width) / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
-    const index = ganttEntity.groups.getGroupIndexByTop(draggingBar.value!.sy);
+    const dropX = draggingBar.value.sx;
+    const dropY = draggingBar.value.sy + ganttEntity.layoutConfig.BAR_CENTER_TOP;
+    
+    const startTime = ganttEntity.config.startDate.add(Math.floor(dropX / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
+    const endTime = ganttEntity.config.startDate.add(Math.floor((dropX + draggingBar.value.width) / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
+    const index = ganttEntity.groups.getGroupIndexByTop(dropY);
     const group = ganttEntity.groups.expandedGroups[index];
     barClone.value.group = group;
     barClone.value.resetTimeRange({

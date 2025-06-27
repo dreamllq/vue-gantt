@@ -40,7 +40,7 @@ export const data:GanttJsonData = {
       isExpand: true
     },
     {
-      'id': 11,
+      'id': 911,
       'parentId': 1,
       'workTimes': [
         {
@@ -52,8 +52,8 @@ export const data:GanttJsonData = {
       isExpand: true
     },
     {
-      'id': 111,
-      'parentId': 11,
+      'id': 9111,
+      'parentId': 911,
       'workTimes': [
         {
           'start': '2024-01-01 00:00:00',

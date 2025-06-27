@@ -53,7 +53,6 @@ export class GanttGroups extends BizArray<GanttGroupView> {
 
   calculateExpandedGroups() {
     const list:GanttGroupView[] = [];
-
     this.forEach(item => {
       if (!item.parent) {
         list.push(item);
