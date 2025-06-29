@@ -115,7 +115,7 @@ export class GanttBarView extends GanttBar {
   changeY() {
     if (this.isClone) return;
     const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
-    const barCenterTop = this.layoutConfig.BAR_CENTER_TOP;
+    const barCenterTop = this.config.showAttachedBar ? this.layoutConfig.SHOW_ATTACHED_BAR_BAR_CENTER_TOP : this.layoutConfig.BAR_CENTER_TOP;
     const height = this.layoutConfig.BAR_HEIGHT;
     const _sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
     const sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2) + (this.rowIndex * this.layoutConfig.ROW_HEIGHT);

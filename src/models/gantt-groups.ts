@@ -7,26 +7,29 @@ import { max, min } from 'lodash';
 import { GanttConfig } from './gantt-config';
 import { GanttLayoutConfig } from './gantt-layout-config';
 import { GanttBaseClassConstructor } from '@/types/gantt-base';
+import { GanttBarView } from './gantt-bar-view';
+import { BarId } from '@/types/gantt-bar';
+import { GanttAttachedBarView } from './gantt-attached-bar-view';
 
 export class GanttGroups extends BizArray<GanttGroupView> {
   expandedGroups: GanttGroupView[] = [];
   config: GanttConfig;
   layoutConfig: GanttLayoutConfig;
-  
   constructor(data : GanttBaseClassConstructor) {
     super();
     this.config = data.config;
     this.layoutConfig = data.layoutConfig;
   }
   add(data:GanttGroupViewClassConstructor) {
-    this.push(new GanttGroupView(data));
+    super.push(new GanttGroupView(data));
   }
 
   getGroupIndexByTop(top:number) {
     let index = 0;
     let tempTop = 0;
-    while (index < this.expandedGroups.length - 1 && tempTop + (this.expandedGroups[index].rows * this.layoutConfig.ROW_HEIGHT) < top) {
-      tempTop += this.expandedGroups[index].rows * this.layoutConfig.ROW_HEIGHT;
+    
+    while (index < this.expandedGroups.length - 1 && tempTop + this.expandedGroups[index].height < top) {
+      tempTop += this.expandedGroups[index].height;
       index++;
     }
     return index;
@@ -38,7 +41,7 @@ export class GanttGroups extends BizArray<GanttGroupView> {
     }
     let top = 0;
     for (let i = 0; i < index; i++) {
-      top += this.expandedGroups[i].rows * this.layoutConfig.ROW_HEIGHT;
+      top += this.expandedGroups[i].height;
     }
     return top;
   }
@@ -48,7 +51,7 @@ export class GanttGroups extends BizArray<GanttGroupView> {
   }
 
   getGroupHeight() {
-    return this.expandedGroups.reduce((acc, item) => acc + (item.rows * this.layoutConfig.ROW_HEIGHT), 0);
+    return this.expandedGroups.reduce((acc, item) => acc + item.height, 0);
   }
 
   calculateExpandedGroups() {
@@ -77,5 +80,11 @@ export class GanttGroups extends BizArray<GanttGroupView> {
     });
 
     this.expandedGroups = list;
+  }
+
+  calculate() {
+    this.forEach(item => {
+      item.calculate();
+    });
   }
 }

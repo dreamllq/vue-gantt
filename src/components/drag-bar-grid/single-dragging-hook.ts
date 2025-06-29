@@ -98,7 +98,7 @@ export const useSingleDraggingHook = () => {
   const onDragEnd = () => {
     if (draggingBar.value === undefined) return;
     const dropX = draggingBar.value.sx;
-    const dropY = draggingBar.value.sy + ganttEntity.layoutConfig.BAR_CENTER_TOP;
+    const dropY = draggingBar.value.sy + (ganttEntity.layoutConfig.BAR_HEIGHT / 2);
     const startTime = ganttEntity.config.startDate.add(Math.floor(dropX / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
     const endTime = ganttEntity.config.startDate.add(Math.floor((dropX + draggingBar.value.width) / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
 
@@ -134,7 +134,7 @@ export const useSingleDraggingHook = () => {
     if (draggingBar.value === undefined) return;
     if (!barClone.value) return;
     const dropX = draggingBar.value.sx;
-    const dropY = draggingBar.value.sy + ganttEntity.layoutConfig.BAR_CENTER_TOP;
+    const dropY = draggingBar.value.sy + (ganttEntity.layoutConfig.BAR_HEIGHT / 2);
     
     const startTime = ganttEntity.config.startDate.add(Math.floor(dropX / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
     const endTime = ganttEntity.config.startDate.add(Math.floor((dropX + draggingBar.value.width) / ganttEntity.config.secondWidth), 'second').format('YYYY-MM-DD HH:mm:ss');
