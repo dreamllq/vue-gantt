@@ -8,6 +8,7 @@ import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { max } from 'lodash';
 import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
+import { GanttGroup } from './gantt-group';
 
 export class GanttBarView extends GanttBar {
   sx = 0;
@@ -24,15 +25,31 @@ export class GanttBarView extends GanttBar {
   groups:GanttGroups;
   bars: GanttBars;
   rowIndex = 0;
-  bus:GanttBus;
   overlapBarIds:BarId[] = [];
   isShow = true;
+  bus:GanttBus;
   
   constructor(data:GanttBarViewClassConstructor) {
     super(data);
     this.groups = data.groups;
     this.bars = data.bars;
     this.bus = data.bus;
+  }
+
+  set group(val: GanttGroup) {
+    const oldGroupId = this.group.id;
+    const newGroupId = val.id;
+    if (oldGroupId !== newGroupId) {
+      super.group = val;
+      if (!this.isClone) {
+        this.groups.getById(oldGroupId)!.bars.removeById(this.id);
+        this.groups.getById(newGroupId)!.bars.push(this);
+      }
+    }
+  }
+
+  get group() {
+    return super.group;
   }
 
   get startMoment() {
@@ -60,7 +77,8 @@ export class GanttBarView extends GanttBar {
         
     const height = this.layoutConfig.BAR_HEIGHT;
     const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
-    const barCenterTop = this.config.showAttachedBar ? this.layoutConfig.SHOW_ATTACHED_BAR_BAR_CENTER_TOP : this.layoutConfig.BAR_CENTER_TOP;
+    // const barCenterTop = this.config.showAttachedBar ? this.layoutConfig.SHOW_ATTACHED_BAR_BAR_CENTER_TOP : this.layoutConfig.BAR_CENTER_TOP;
+    const barCenterTop = this.layoutConfig.ROW_HEIGHT / 2;
     const _sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
     const sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
     const ey = sy + height;
@@ -115,7 +133,8 @@ export class GanttBarView extends GanttBar {
   changeY() {
     if (this.isClone) return;
     const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
-    const barCenterTop = this.config.showAttachedBar ? this.layoutConfig.SHOW_ATTACHED_BAR_BAR_CENTER_TOP : this.layoutConfig.BAR_CENTER_TOP;
+    // const barCenterTop = this.config.showAttachedBar ? this.layoutConfig.SHOW_ATTACHED_BAR_BAR_CENTER_TOP : this.layoutConfig.BAR_CENTER_TOP;
+    const barCenterTop = this.layoutConfig.ROW_HEIGHT / 2;
     const height = this.layoutConfig.BAR_HEIGHT;
     const _sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
     const sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2) + (this.rowIndex * this.layoutConfig.ROW_HEIGHT);

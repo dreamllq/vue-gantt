@@ -25,11 +25,22 @@ export class GanttBars extends BizArray<GanttBarView> {
     this.bus.on(GanttBusEvents.GROUP_OVERLAP_CHANGE, (data) => {
       this.calculateGroupOverlap(data);
     });
+
+    this.bus.on(GanttBusEvents.GROUP_TOP_CHANGE, (groupIds) => {
+      this.updateBarsYByGroupIds(groupIds);
+    });
   }
   add(data: GanttBarViewClassConstructor) {
     const bar = new GanttBarView(data);
-    this.push(bar);
-    // bar.calculate();
+    super.push(bar);
+    this.groups.getById(bar.group.id)!.bars.push(bar);
+  }
+
+  removeById(id: BarId): void {
+    const bar = this.getById(id);
+    if (!bar) return;
+    this.groups.getById(bar.group.id)!.bars.removeById(id);
+    super.removeById(id);
   }
 
   updateShow() {
@@ -108,34 +119,14 @@ export class GanttBars extends BizArray<GanttBarView> {
   updateCurrentAndAfterGroupBarsPositionByRowIndex(groupId: GroupId) {
     const group = this.groups.getById(groupId)!;
     if (group.barOverlap) return;
-    const effectGroupIds:GroupId[] = [];
     const effectBarIds: BarId[] = [];
-    const groupIndex = this.groups.getGroupIndex(this.groups.getById(groupId)!);
     const groupBars = this.filter(item => item.group.id === groupId);
     groupBars.forEach(item => {
       item.changeY();
       effectBarIds.push(item.id);
     });
-    const rows = max(groupBars.map(item => item.rowIndex + 1)) || 1;
-    if (group.rows !== rows) {
-      group.rows = rows;
-      const ids:GroupId[] = [];
-      for (let i = groupIndex + 1; i < this.groups.expandedGroups.length; i++) {
-        ids.push(this.groups.expandedGroups[i].id);
-        effectGroupIds.push(this.groups.expandedGroups[i].id);
-      }
-      const bars = this.filter(item => ids.includes(item.group.id));
-      bars.forEach(item => {
-        item.changeY();
-        effectBarIds.push(item.id);
-      });
-    }
-
-    this.bus.emit(GanttBusEvents.GROUP_ROWS_CHANGE, {
-      groupId: group.id,
-      effectGroupIds: effectGroupIds,
-      effectBarIds: effectBarIds
-    });
+    this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, effectBarIds);
+    this.bus.emit(GanttBusEvents.GROUP_BAR_ROWS_CHANGE, { groupId: group.id });
   }
 
   updateGroupExpandChangeEffectBar(groupId: GroupId) {
@@ -153,5 +144,31 @@ export class GanttBars extends BizArray<GanttBarView> {
     });
 
     return effectBarIds;
+  }
+
+  updateBarsYByGroupIds(groupIds: GroupId[]) {
+    const effectBars = this.filter(item => groupIds.includes(item.group.id));
+    effectBars.forEach(item => item.changeY());
+    this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, effectBars.map(item => item.id));
+  }
+  
+  push(...items: GanttBarView[]): number {
+    throw new Error('Method not implemented.');
+  }
+  
+  pop(): GanttBarView | undefined {
+    throw new Error('Method not implemented.');
+  }
+  
+  shift(): GanttBarView | undefined {
+    throw new Error('Method not implemented.');
+  }
+  
+  unshift(...items: GanttBarView[]): number {
+    throw new Error('Method not implemented.');
+  }
+  
+  splice(start: number, deleteCount: number, ...items: GanttBarView[]): GanttBarView[] {
+    throw new Error('Method not implemented.');
   }
 }

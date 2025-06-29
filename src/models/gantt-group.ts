@@ -1,6 +1,9 @@
 import { GanttGroupWorkTimes } from './gantt-group-work-times';
 import { GanttGroupClassConstructor, GroupId } from '@/types/gantt-group';
 import { GanttBase } from './gantt-base';
+import { GanttBar } from './gantt-bar';
+import { GanttAttachedBar } from './gantt-attached-bar';
+import { BizArray } from './biz-array';
 
 export class GanttGroup extends GanttBase {
   id: GroupId;

@@ -4,6 +4,7 @@ import { useStore } from '../store';
 import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { Events } from '@/types/events';
 import { GanttAttachedBarView } from '@/models/gantt-attached-bar-view';
+import { AttachedBarId } from '@/types/gantt-attached-bar';
 
 export const useAttachedBarHook = () => {
   const lazyAttachedBarGrid = shallowRef<ReturnType<typeof GanttAttachedBarView.prototype.toJSON>[]>([]);
@@ -33,12 +34,24 @@ export const useAttachedBarHook = () => {
     lazyCalculate();
   };
 
+  const onAttachedBarChange = (ids:AttachedBarId[]) => {
+    lazyAttachedBarGrid.value = lazyAttachedBarGrid.value.map(item => {
+      if (ids.includes(item.id)) {
+        return ganttEntity.attachedBars.getById(item.id)!.toJSON();
+      } else {
+        return item;
+      }
+    });
+  };
+
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
+    bus.on(Events.ATTACHED_BAR_CHANGE, onAttachedBarChange);
   });
   
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
+    bus.off(Events.ATTACHED_BAR_CHANGE, onVisibleAreaChange);
   });
 
   return { lazyAttachedBarGrid };

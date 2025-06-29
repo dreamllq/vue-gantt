@@ -12,13 +12,13 @@ export class GanttBar extends GanttBase {
   start: DateTimeString | null = null;
   end: DateTimeString | null = null;
   duration: number | null = null;
-  group: GanttGroup;
+  private _group: GanttGroup;
   schedulingMode:SchedulingMode | null = null;
 
   constructor(data:GanttBarClassConstructor) {
     super(data);
     this.id = data.id;
-    this.group = data.group;
+    this._group = data.group;
     this.schedulingMode = data.schedulingMode || null;
     this.duration = data.duration;
 
@@ -26,6 +26,14 @@ export class GanttBar extends GanttBase {
       start: data.start,
       end: data.end
     }, false);
+  }
+
+  get group() {
+    return this._group;
+  }
+
+  set group(group: GanttGroup) {
+    this._group = group;
   }
 
   get mergeSchedulingMode() {

@@ -1,6 +1,19 @@
 import { Id } from '@/types/id';
+import EventEmitter from 'eventemitter3';
+const ee = new EventEmitter();
 
+export default {
+  emit: ee.emit.bind(ee),
+  on: ee.on.bind(ee),
+  off: ee.off.bind(ee)
+};
 export class BizArray<T> extends Array<T & {id: Id}> {
+  static Events = { CHANGE: 'CHANGE' };
+
+  private _ee: EventEmitter = new EventEmitter();
+  emit = this._ee.emit.bind(this._ee);
+  on = this._ee.on.bind(this._ee);
+  off = this._ee.off.bind(this._ee);
 
   // 导致数据变化的方法：push\pop\shift\unshift\splice\
   _map = new Map<Id, T & {id: Id}>(); 
@@ -33,7 +46,9 @@ export class BizArray<T> extends Array<T & {id: Id}> {
       this.idUniqValid(item.id);
       this._map.set(item.id, item);
     });
-    return super.push(...items);
+    const data = super.push(...items);
+    this.emit(BizArray.Events.CHANGE);
+    return data;
   }
   
   pop() {
@@ -41,6 +56,7 @@ export class BizArray<T> extends Array<T & {id: Id}> {
     if (item) {
       this._map.delete(item.id);
     }
+    this.emit(BizArray.Events.CHANGE);
     return item;
   }
 
@@ -49,6 +65,7 @@ export class BizArray<T> extends Array<T & {id: Id}> {
     if (item) {
       this._map.delete(item.id);
     }
+    this.emit(BizArray.Events.CHANGE);
     return item;
   }
 
@@ -57,7 +74,10 @@ export class BizArray<T> extends Array<T & {id: Id}> {
       this.idUniqValid(item.id);
       this._map.set(item.id, item);
     });
-    return super.unshift(...items);
+    this.emit(BizArray.Events.CHANGE);
+    const data = super.unshift(...items);
+    this.emit(BizArray.Events.CHANGE);
+    return data;
   }
   
   splice(start: number, deleteCount?: number): (T & { id: Id; })[];
@@ -73,6 +93,7 @@ export class BizArray<T> extends Array<T & {id: Id}> {
     deleteItems.forEach(item => {
       this._map.delete(item.id);
     });
+    this.emit(BizArray.Events.CHANGE);
     return deleteItems;
   }
 
