@@ -39,6 +39,13 @@ export const useSingleDraggingHook = () => {
       const bar = ganttEntity.bars.getById(id);
       
       if (bar) {
+        // hook.beforeDragStart
+        if (ganttEntity.hook?.beforeDragStart) {
+          const flag = ganttEntity.hook.beforeDragStart({ barId: bar.id });
+          if (flag !== true) {
+            return;
+          }
+        }
         draggingBar.value = {
           height: bar.height,
           id: bar.id,
@@ -108,6 +115,21 @@ export const useSingleDraggingHook = () => {
     const dropRowIndex = max([Math.floor((dropY - top) / ganttEntity.layoutConfig.ROW_HEIGHT), 0])!;
 
     const bar = ganttEntity.bars.getById(draggingBar.value.id)!;
+
+    // hook.beforeDragEnd
+    if (ganttEntity.hook?.beforeDragEnd) {
+      const flag = ganttEntity.hook.beforeDragEnd({ barId: bar.id });
+      if (flag !== true) {
+        bar.dragging = false;
+        bus.emit(Events.BAR_CHANGE, [bar.id]);
+        bus.emit(Events.BAR_DRAGGING_CHANGE, [bar.id], false);
+        draggingBar.value = undefined;
+        barClone.value = undefined;
+        shadowDraggingBar.value = undefined;
+        return;
+      }
+    }
+        
     let recentGroupId:GroupId|null = null;
     if (bar.group.id !== group.id) {
       recentGroupId = bar.group.id;

@@ -9,11 +9,8 @@ const GRID_HEAD_CELL_WIDTH = 140;
 const BAR_HEIGHT = 30;
 const GRID_CELL_WIDTH = 400;
 const MILESTONE_WIDTH = 20;
-const BAR_CENTER_TOP = 40; // 任务中心高度
-const SHOW_ATTACHED_BAR_BAR_CENTER_TOP = 20; // 显示附属任务时，任务中心的高度
 const ATTACHED_BAR_HEIGHT = 20;
 const ATTACHED_ROW_HEIGHT = 30;
-const ATTACHED_BAR_CENTER_TOP = 60; // 附属任务中心高度
 // 拖拽时，滚动条自动移动速率
 const AUTO_SCROLL_AREA_SIZE = 50;
 const AUTO_SCROLL_INTERVAL_MS = 8;
@@ -31,11 +28,8 @@ export class GanttLayoutConfig {
   private _BAR_HEIGHT:number;
   private _GRID_CELL_WIDTH:number;
   private _MILESTONE_WIDTH:number;
-  private _BAR_CENTER_TOP:number;
-  private _SHOW_ATTACHED_BAR_BAR_CENTER_TOP:number;
   private _ATTACHED_BAR_HEIGHT:number;
   private _ATTACHED_ROW_HEIGHT:number;
-  private _ATTACHED_BAR_CENTER_TOP:number;
   AUTO_SCROLL_AREA_SIZE:number;
   AUTO_SCROLL_INTERVAL_MS:number;
   AUTO_SCROLL_SHIFT_AMOUNT_X:number;
@@ -52,11 +46,8 @@ export class GanttLayoutConfig {
     this._BAR_HEIGHT = data.BAR_HEIGHT || BAR_HEIGHT;
     this._GRID_CELL_WIDTH = data.GRID_CELL_WIDTH || GRID_CELL_WIDTH;
     this._MILESTONE_WIDTH = data.MILESTONE_WIDTH || MILESTONE_WIDTH;
-    this._BAR_CENTER_TOP = data.BAR_CENTER_TOP || BAR_CENTER_TOP;
-    this._SHOW_ATTACHED_BAR_BAR_CENTER_TOP = data.SHOW_ATTACHED_BAR_BAR_CENTER_TOP || SHOW_ATTACHED_BAR_BAR_CENTER_TOP;
     this._ATTACHED_BAR_HEIGHT = data.ATTACHED_BAR_HEIGHT || ATTACHED_BAR_HEIGHT;
     this._ATTACHED_ROW_HEIGHT = data.ATTACHED_ROW_HEIGHT || ATTACHED_ROW_HEIGHT;
-    this._ATTACHED_BAR_CENTER_TOP = data.ATTACHED_BAR_CENTER_TOP || ATTACHED_BAR_CENTER_TOP;
     this.AUTO_SCROLL_AREA_SIZE = data.AUTO_SCROLL_AREA_SIZE || AUTO_SCROLL_AREA_SIZE;
     this.AUTO_SCROLL_INTERVAL_MS = data.AUTO_SCROLL_INTERVAL_MS || AUTO_SCROLL_INTERVAL_MS;
     this.AUTO_SCROLL_SHIFT_AMOUNT_X = data.AUTO_SCROLL_SHIFT_AMOUNT_X || AUTO_SCROLL_SHIFT_AMOUNT_X;
@@ -119,22 +110,6 @@ export class GanttLayoutConfig {
     this._MILESTONE_WIDTH = val;
   }
 
-  get BAR_CENTER_TOP() {
-    return this._BAR_CENTER_TOP * this.sizeRatioPercent / 100;
-  }
-
-  set BAR_CENTER_TOP(val) {
-    this._BAR_CENTER_TOP = val;
-  }
-
-  get SHOW_ATTACHED_BAR_BAR_CENTER_TOP() {
-    return this._SHOW_ATTACHED_BAR_BAR_CENTER_TOP * this.sizeRatioPercent / 100;
-  }
-
-  set SHOW_ATTACHED_BAR_BAR_CENTER_TOP(val) {
-    this._SHOW_ATTACHED_BAR_BAR_CENTER_TOP = val;
-  }
-
   get ATTACHED_BAR_HEIGHT() {
     return this._ATTACHED_BAR_HEIGHT * this.sizeRatioPercent / 100;
   }
@@ -149,13 +124,5 @@ export class GanttLayoutConfig {
 
   set ATTACHED_ROW_HEIGHT(val) {
     this._ATTACHED_ROW_HEIGHT = val;
-  }
-
-  get ATTACHED_BAR_CENTER_TOP() {
-    return this._ATTACHED_BAR_CENTER_TOP * this.sizeRatioPercent / 100;
-  }
-
-  set ATTACHED_BAR_CENTER_TOP(val) {
-    this._ATTACHED_BAR_CENTER_TOP = val;
   }
 }

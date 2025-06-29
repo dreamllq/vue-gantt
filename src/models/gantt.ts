@@ -10,7 +10,7 @@ import { GanttGroupWorkTimes } from './gantt-group-work-times';
 import { GanttGroupAddParams } from '@/types/gantt-group';
 import { GanttBarAddParams } from '@/types/gantt-bar';
 import { GanttLinkAddParams, GanttLinkType, LinkShowStrategy } from '@/types/gantt-link';
-import { GanttClassConstructor, GanttJsonData, GanttJsonDataAttachedBar, GanttJsonDataBar, GanttJsonDataGroup, GanttJsonDataLink } from '@/types/gantt';
+import { GanttClassConstructor, GanttHook, GanttJsonData, GanttJsonDataAttachedBar, GanttJsonDataBar, GanttJsonDataGroup, GanttJsonDataLink } from '@/types/gantt';
 import { GanttGroupWorkTime } from './gantt-group-work-time';
 import { GanttLayoutConfig } from './gantt-layout-config';
 import { Unit } from '@/types/unit';
@@ -20,6 +20,7 @@ import { GanttAttachedBars } from './gantt-attached-bars';
 import { GanttAttachedBarAddParams } from '@/types/gantt-attached-bar';
 
 export class Gantt extends EventEmitter {
+  hook?: GanttHook;
   container: GanttContainer = new GanttContainer();
   scroll: GanttScroll;
   layoutConfig: GanttLayoutConfig;
@@ -32,6 +33,7 @@ export class Gantt extends EventEmitter {
 
   constructor(data:GanttClassConstructor) {
     super();
+    this.hook = data.hook;
     this.config = data.config;
     this.layoutConfig = data.layoutConfig;
 
@@ -205,7 +207,8 @@ export class Gantt extends EventEmitter {
     });
     const gantt = new Gantt({
       config,
-      layoutConfig 
+      layoutConfig,
+      hook: data.hook
     });
 
     gantt.batchAddGroup(data.groups);

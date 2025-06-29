@@ -11,7 +11,12 @@ import { GroupId } from './gantt-group';
 import { BarId } from './gantt-bar';
 import { AttachedBarId } from './gantt-attached-bar';
 
-export type GanttClassConstructor = { config: GanttConfig, layoutConfig: GanttLayoutConfig}
+export type GanttClassConstructor = { config: GanttConfig, layoutConfig: GanttLayoutConfig, hook?: GanttHook}
+
+export type GanttHook = {
+  beforeDragStart?: (data:{barId: BarId}) => boolean,
+  beforeDragEnd?: (data:{barId: BarId}) => boolean,
+}
 
 export type GanttJsonDataConfig = {
   startDate: DateString,
@@ -76,5 +81,6 @@ export type GanttJsonData = {
   groups: GanttJsonDataGroup[],
   bars: GanttJsonDataBar[],
   attachedBars?: GanttJsonDataAttachedBar[],
-  links?: GanttJsonDataLink[]
+  links?: GanttJsonDataLink[],
+  hook?: GanttHook,
 }

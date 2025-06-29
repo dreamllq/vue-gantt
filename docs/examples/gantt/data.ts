@@ -25,7 +25,6 @@ export const data:GanttJsonData = {
   'layoutConfig': {
     'ROW_HEIGHT': 40,
     'BAR_HEIGHT': 30,
-    'BAR_CENTER_TOP': 20,
     'GRID_CELL_WIDTH': 200
   },
   'groups': [
@@ -180,5 +179,9 @@ export const data:GanttJsonData = {
       'sourceId': 5,
       'targetId': 6
     }
-  ]
+  ], 
+  hook: {
+    beforeDragStart: (data:{barId}) => true,
+    beforeDragEnd: (data:{barId}) => true
+  }
 };
