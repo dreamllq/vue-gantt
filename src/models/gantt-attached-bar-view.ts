@@ -50,7 +50,6 @@ export class GanttAttachedBarView extends GanttAttachedBar {
     const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
     const barCenterTop = this.layoutConfig.ATTACHED_BAR_CENTER_TOP;
     const _sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
-    console.log(this.rowIndex, this.layoutConfig.ATTACHED_ROW_HEIGHT);
     
     const sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2) + (this.rowIndex * this.layoutConfig.ATTACHED_ROW_HEIGHT);
     const ey = sy + height;

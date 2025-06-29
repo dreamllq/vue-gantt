@@ -179,8 +179,6 @@ export class Gantt extends EventEmitter {
         });
       }
     });
-    this.links.calculate();
-    this.links.calculateLinkGroupMap();
   }
 
   static fromJson(data: GanttJsonData) {
@@ -213,6 +211,11 @@ export class Gantt extends EventEmitter {
     gantt.batchAddBar(data.bars);
     gantt.batchAddAttachedBar(data.attachedBars || []);
     gantt.batchAddLink(data.links || []);
+
+    gantt.bars.calculate();
+    gantt.attachedBars.calculate();
+    gantt.links.calculate();
+    gantt.links.calculateLinkGroupMap();
 
     return gantt;
   }

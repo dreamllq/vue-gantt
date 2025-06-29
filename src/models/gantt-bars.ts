@@ -29,7 +29,7 @@ export class GanttBars extends BizArray<GanttBarView> {
   add(data: GanttBarViewClassConstructor) {
     const bar = new GanttBarView(data);
     this.push(bar);
-    bar.calculate();
+    // bar.calculate();
   }
 
   updateShow() {

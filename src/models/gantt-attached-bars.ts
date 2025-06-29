@@ -22,7 +22,7 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
   add(data: GanttAttachedBarViewClassConstructor) {
     const bar = new GanttAttachedBarView(data);
     this.push(bar);
-    bar.calculate();
+    // bar.calculate();
   }
 
   updateShow() {
