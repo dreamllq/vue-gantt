@@ -19,13 +19,14 @@ export const data:GanttJsonData = {
         }
       }
     ],
-    showCurrentTimeLine: true
+    showCurrentTimeLine: true,
+    showAttachedBar: true
   },
   'layoutConfig': {
-    'ROW_HEIGHT': 40,
-    'BAR_HEIGHT': 30,
-    'BAR_CENTER_TOP': 20,
-    'GRID_CELL_WIDTH': 200
+    // 'ROW_HEIGHT': 40,
+    // 'BAR_HEIGHT': 30,
+    // 'BAR_CENTER_TOP': 20,
+    // 'GRID_CELL_WIDTH': 200
   },
   'groups': [
     {
@@ -142,6 +143,14 @@ export const data:GanttJsonData = {
       'groupId': 4,
       'id': 6,
       'start': '2024-01-04 04:00:00'
+    }
+  ],
+  attachedBars: [
+    {
+      groupId: 1,
+      id: 1,
+      start: '2024-01-02 00:00:00',
+      end: '2024-01-02 12:00:00'
     }
   ],
   'links': [

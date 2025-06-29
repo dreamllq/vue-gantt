@@ -17,13 +17,13 @@ export type GanttAttachedBarViewClassConstructor = GanttAttachedBarClassConstruc
 export type GanttAttachedBarClassConstructor = {
   id: AttachedBarId,
   group: GanttGroup,
-  start: DateTimeString | null,
-  end: DateTimeString | null,
+  start: DateTimeString,
+  end: DateTimeString,
 } & GanttBaseClassConstructor;
 
 export type GanttAttachedBarAddParams = {
   id: AttachedBarId,
   group: GanttGroup,
-  start: DateTimeString | null,
-  end: DateTimeString | null
+  start: DateTimeString,
+  end: DateTimeString
 }

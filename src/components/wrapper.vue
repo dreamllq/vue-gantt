@@ -26,6 +26,11 @@
             <slot name='bar' v-bind='slotProps' />
           </template>
         </bar-grid>
+        <attached-bar-grid v-if='ganttEntity.config.showAttachedBar'>
+          <template #default='slotProps'>
+            <slot name='attachedBar' v-bind='slotProps' />
+          </template>
+        </attached-bar-grid>
         <drag-bar-grid>
           <template #draggingBar='slotProps'>
             <slot name='bar' v-bind='slotProps' />
@@ -56,6 +61,7 @@ import WorkTimeGrid from './work-time-grid/index.vue';
 import CurrentTime from './current-time/index.vue';
 import BarGrid from './bar-grid/index.vue';
 import DragBarGrid from './drag-bar-grid/index.vue';
+import AttachedBarGrid from './attached-bar-grid/index.vue';
 import SelectBarGrid from './select-bar-grid/index.vue';
 import ContextmenuBarGrid from './contextmenu-bar-grid/index.vue';
 import LinkGrid from './link-grid/index.vue';

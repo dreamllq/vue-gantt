@@ -46,11 +46,13 @@ export class GanttAttachedBarView extends GanttAttachedBar {
     const width = (endSecond - startSecond) * this.config.secondWidth;
     const ex = sx + width;
         
-    const height = this.layoutConfig.ATTACHED_BAR_CENTER_TOP;
+    const height = this.layoutConfig.ATTACHED_BAR_HEIGHT;
     const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
     const barCenterTop = this.layoutConfig.ATTACHED_BAR_CENTER_TOP;
     const _sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
-    const sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
+    console.log(this.rowIndex, this.layoutConfig.ATTACHED_ROW_HEIGHT);
+    
+    const sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2) + (this.rowIndex * this.layoutConfig.ATTACHED_ROW_HEIGHT);
     const ey = sy + height;
    
     this.sx = sx;
@@ -62,5 +64,20 @@ export class GanttAttachedBarView extends GanttAttachedBar {
     this.height = height;
     this.st = startSecond * 1000;
     this.et = endSecond * 1000;
+  }
+
+  toJSON() {
+    return {
+      id: this.id,
+      sx: this.sx,
+      ex: this.ex,
+      width: this.width,
+      sy: this.sy,
+      ey: this.ey,
+      height: this.height,
+      st: this.st,
+      et: this.et,
+      rowIndex: this.rowIndex
+    };
   }
 }

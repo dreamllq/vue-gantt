@@ -16,6 +16,9 @@
       <template #bar='{bar}'>
         {{ bar.id }} \ {{ bar.selected }} \ {{ bar.rowIndex }}
       </template>
+      <template #attachedBar='{bar}'>
+        {{ bar.id }} \ {{ bar.rowIndex }}
+      </template>
     </gantt-view>
   </div>
 </template>

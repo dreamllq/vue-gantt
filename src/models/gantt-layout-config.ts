@@ -12,6 +12,7 @@ const MILESTONE_WIDTH = 20;
 const BAR_CENTER_TOP = 40; // 任务中心高度
 const SHOW_ATTACHED_BAR_BAR_CENTER_TOP = 20; // 显示附属任务时，任务中心的高度
 const ATTACHED_BAR_HEIGHT = 20;
+const ATTACHED_ROW_HEIGHT = 30;
 const ATTACHED_BAR_CENTER_TOP = 60; // 附属任务中心高度
 // 拖拽时，滚动条自动移动速率
 const AUTO_SCROLL_AREA_SIZE = 50;
@@ -33,6 +34,7 @@ export class GanttLayoutConfig {
   private _BAR_CENTER_TOP:number;
   private _SHOW_ATTACHED_BAR_BAR_CENTER_TOP:number;
   private _ATTACHED_BAR_HEIGHT:number;
+  private _ATTACHED_ROW_HEIGHT:number;
   private _ATTACHED_BAR_CENTER_TOP:number;
   AUTO_SCROLL_AREA_SIZE:number;
   AUTO_SCROLL_INTERVAL_MS:number;
@@ -53,6 +55,7 @@ export class GanttLayoutConfig {
     this._BAR_CENTER_TOP = data.BAR_CENTER_TOP || BAR_CENTER_TOP;
     this._SHOW_ATTACHED_BAR_BAR_CENTER_TOP = data.SHOW_ATTACHED_BAR_BAR_CENTER_TOP || SHOW_ATTACHED_BAR_BAR_CENTER_TOP;
     this._ATTACHED_BAR_HEIGHT = data.ATTACHED_BAR_HEIGHT || ATTACHED_BAR_HEIGHT;
+    this._ATTACHED_ROW_HEIGHT = data.ATTACHED_ROW_HEIGHT || ATTACHED_ROW_HEIGHT;
     this._ATTACHED_BAR_CENTER_TOP = data.ATTACHED_BAR_CENTER_TOP || ATTACHED_BAR_CENTER_TOP;
     this.AUTO_SCROLL_AREA_SIZE = data.AUTO_SCROLL_AREA_SIZE || AUTO_SCROLL_AREA_SIZE;
     this.AUTO_SCROLL_INTERVAL_MS = data.AUTO_SCROLL_INTERVAL_MS || AUTO_SCROLL_INTERVAL_MS;
@@ -138,6 +141,14 @@ export class GanttLayoutConfig {
 
   set ATTACHED_BAR_HEIGHT(val) {
     this._ATTACHED_BAR_HEIGHT = val;
+  }
+
+  get ATTACHED_ROW_HEIGHT() {
+    return this._ATTACHED_ROW_HEIGHT * this.sizeRatioPercent / 100;
+  }
+
+  set ATTACHED_ROW_HEIGHT(val) {
+    this._ATTACHED_ROW_HEIGHT = val;
   }
 
   get ATTACHED_BAR_CENTER_TOP() {

@@ -10,6 +10,9 @@
       <template #bar='slotProps'>
         <slot name='bar' v-bind='slotProps' />
       </template>
+      <template #attachedBar='slotProps'>
+        <slot name='attachedBar' v-bind='slotProps' />
+      </template>
     </wrapper>
   </root>
 </template>

@@ -12,6 +12,7 @@ export type GanttLayoutConfigClassConstructor = {
   BAR_CENTER_TOP?: number; // 任务中心高度
   SHOW_ATTACHED_BAR_BAR_CENTER_TOP?: number; // 显示附属任务时，任务中心的高度
   ATTACHED_BAR_HEIGHT?: number;
+  ATTACHED_ROW_HEIGHT?: number;
   ATTACHED_BAR_CENTER_TOP?: number; // 附属任务中心高度
   AUTO_SCROLL_AREA_SIZE?:number;
   AUTO_SCROLL_INTERVAL_MS?: number;

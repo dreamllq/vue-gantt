@@ -59,8 +59,8 @@ export type GanttJsonDataBar = {
 export type GanttJsonDataAttachedBar = {
   id: AttachedBarId,
   groupId:GroupId,
-  start: DateTimeString | null,
-  end: DateTimeString | null,
+  start: DateTimeString,
+  end: DateTimeString,
 }
 
 export type GanttJsonDataLink = {

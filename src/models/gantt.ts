@@ -47,7 +47,12 @@ export class Gantt extends EventEmitter {
       bus: this.bus
     });
 
-    this.attachedBars = new GanttAttachedBars();
+    this.attachedBars = new GanttAttachedBars({
+      layoutConfig: this.layoutConfig,
+      config: this.config,
+      groups: this.groups,
+      bus: this.bus
+    });
 
     this.scroll = new GanttScroll({
       layoutConfig: this.layoutConfig,
