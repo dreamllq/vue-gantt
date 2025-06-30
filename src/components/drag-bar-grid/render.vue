@@ -8,9 +8,11 @@
 
 <script setup lang="ts">
 import { useStore } from '../store';
+import { useBarDragEvent } from './bar-drag-event-hook';
 import SingleDrag from './single-drag.vue';
 const { ganttEntity } = useStore()!;
 
+useBarDragEvent();
 </script>
 
 <style scoped>

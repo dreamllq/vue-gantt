@@ -14,7 +14,7 @@
         {{ group.id }} / {{ group.deep }}
       </template>
       <template #bar='{bar}'>
-        {{ bar.id }} \ {{ bar.selected }} \ {{ bar.rowIndex }}
+        {{ bar.id }} \ {{ bar.selected }} \ {{ bar.rowIndex }} \ {{ bar.group.id }}
       </template>
       <template #attachedBar='{bar}'>
         {{ bar.id }} \ {{ bar.rowIndex }}

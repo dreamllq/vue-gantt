@@ -21,13 +21,17 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
     this.groups = data.groups;
     this.bus = data.bus;
 
-    this.bus.on(GanttBusEvents.GROUP_BAR_ROWS_CHANGE, (data) => {
+    this.bus.on(GanttBusEvents.GROUP_BARS_HEIGHT_CHANGE, (data) => {
+      if (!this.config.showAttachedBar) return; 
       const effectBars = this.filter(bar => bar.group.id === data.groupId);
-      effectBars.forEach(bar => bar.calculate());
-      this.bus.emit(GanttBusEvents.ATTACHED_BAR_POS_CHANGE, effectBars.map(bar => bar.id));
+      if (effectBars.length > 0) {
+        effectBars.forEach(bar => bar.calculate());
+        this.bus.emit(GanttBusEvents.ATTACHED_BAR_POS_CHANGE, effectBars.map(bar => bar.id));
+      }
     });
     
     this.bus.on(GanttBusEvents.GROUP_TOP_CHANGE, (groupIds) => {
+      if (!this.config.showAttachedBar) return; 
       this.updateBarsYByGroupIds(groupIds);
     });
   }
@@ -56,8 +60,10 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
 
   updateBarsYByGroupIds(groupIds: GroupId[]) {
     const effectBars = this.filter(item => groupIds.includes(item.group.id));
-    effectBars.forEach(item => item.changeY());
-    this.bus.emit(GanttBusEvents.ATTACHED_BAR_POS_CHANGE, effectBars.map(item => item.id));
+    if (effectBars.length > 0) {
+      effectBars.forEach(item => item.changeY());
+      this.bus.emit(GanttBusEvents.ATTACHED_BAR_POS_CHANGE, effectBars.map(item => item.id));
+    }
   }
     
   push(...items: GanttAttachedBarView[]): number {

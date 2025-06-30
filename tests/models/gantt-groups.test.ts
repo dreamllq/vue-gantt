@@ -1,3 +1,4 @@
+import { GanttBus } from '@/models/gantt-bus';
 import { GanttConfig } from '@/models/gantt-config';
 import { GanttGroupView } from '@/models/gantt-group-view';
 import { GanttGroups } from '@/models/gantt-groups';
@@ -11,39 +12,46 @@ describe('gantt-groups', () => {
     layoutConfig,
     startDate: ''
   });
+  const bus = new GanttBus();
 
   test('expandedGroups', () => {
     const groups = new GanttGroups({
       config,
-      layoutConfig
+      layoutConfig,
+      bus
     });
 
     const gg1 = new GanttGroupView({
       config,
       id: 1,
-      layoutConfig
+      layoutConfig,
+      bus
     });
     const gg2 = new GanttGroupView({
       config,
       id: 2,
-      layoutConfig
+      layoutConfig,
+      bus
     });
     const gg3 = new GanttGroupView({
       config,
       id: 3,
-      layoutConfig
+      layoutConfig,
+      bus
     });
     const gg11 = new GanttGroupView({
       config,
       id: 11,
       layoutConfig,
-      parent: gg1
+      parent: gg1,
+      bus
     });
     const gg111 = new GanttGroupView({
       config,
       id: 111,
       layoutConfig,
-      parent: gg11
+      parent: gg11,
+      bus
     });
 
     groups.push(gg1);

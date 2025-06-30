@@ -74,7 +74,8 @@ export class Gantt extends EventEmitter {
     this.groups.add({
       ...data,
       config: this.config,
-      layoutConfig: this.layoutConfig
+      layoutConfig: this.layoutConfig,
+      bus: this.bus
     });
   }
 
@@ -149,7 +150,9 @@ export class Gantt extends EventEmitter {
           start: barJson.start,
           end: barJson.end,
           group: group,
-          schedulingMode: barJson.schedulingMode ? SchedulingMode[barJson.schedulingMode] : undefined
+          schedulingMode: barJson.schedulingMode ? SchedulingMode[barJson.schedulingMode] : undefined,
+          draggable: barJson.draggable,
+          selectable: barJson.selectable
         });
       }
     });

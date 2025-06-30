@@ -17,7 +17,8 @@ describe('gantt-links 合并', () => {
   const bus = new GanttBus();
   const groups = new GanttGroups({
     config,
-    layoutConfig
+    layoutConfig,
+    bus
   });
   const bars = new GanttBars({
     config,
@@ -50,7 +51,8 @@ describe('gantt-links 合并', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -59,7 +61,8 @@ describe('gantt-links 合并', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -75,7 +78,8 @@ describe('gantt-links 合并', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -84,7 +88,8 @@ describe('gantt-links 合并', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -100,7 +105,8 @@ describe('gantt-links 合并', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -109,7 +115,8 @@ describe('gantt-links 合并', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -125,7 +132,8 @@ describe('gantt-links 合并', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -134,7 +142,8 @@ describe('gantt-links 合并', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -168,7 +177,8 @@ describe('gantt-links 合并2', () => {
   const bus = new GanttBus();
   const groups = new GanttGroups({
     config,
-    layoutConfig
+    layoutConfig,
+    bus
   });
   const bars = new GanttBars({
     config,
@@ -201,7 +211,8 @@ describe('gantt-links 合并2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -210,7 +221,8 @@ describe('gantt-links 合并2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -226,7 +238,8 @@ describe('gantt-links 合并2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -235,7 +248,8 @@ describe('gantt-links 合并2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -251,7 +265,8 @@ describe('gantt-links 合并2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -260,7 +275,8 @@ describe('gantt-links 合并2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -276,7 +292,8 @@ describe('gantt-links 合并2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -285,7 +302,8 @@ describe('gantt-links 合并2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -301,7 +319,8 @@ describe('gantt-links 合并2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -310,7 +329,8 @@ describe('gantt-links 合并2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -345,7 +365,8 @@ describe('gantt-links 分叉', () => {
   const bus = new GanttBus();
   const groups = new GanttGroups({
     config,
-    layoutConfig
+    layoutConfig,
+    bus
   });
   const bars = new GanttBars({
     config,
@@ -378,7 +399,8 @@ describe('gantt-links 分叉', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -387,7 +409,8 @@ describe('gantt-links 分叉', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -403,7 +426,8 @@ describe('gantt-links 分叉', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -412,7 +436,8 @@ describe('gantt-links 分叉', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -428,7 +453,8 @@ describe('gantt-links 分叉', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -437,7 +463,8 @@ describe('gantt-links 分叉', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -453,7 +480,8 @@ describe('gantt-links 分叉', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -462,7 +490,8 @@ describe('gantt-links 分叉', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -496,7 +525,8 @@ describe('gantt-links 分叉2', () => {
   const bus = new GanttBus();
   const groups = new GanttGroups({
     config,
-    layoutConfig
+    layoutConfig,
+    bus
   });
   const bars = new GanttBars({
     config,
@@ -529,7 +559,8 @@ describe('gantt-links 分叉2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -538,7 +569,8 @@ describe('gantt-links 分叉2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -554,7 +586,8 @@ describe('gantt-links 分叉2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -563,7 +596,8 @@ describe('gantt-links 分叉2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -579,7 +613,8 @@ describe('gantt-links 分叉2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -588,7 +623,8 @@ describe('gantt-links 分叉2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -604,7 +640,8 @@ describe('gantt-links 分叉2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -613,7 +650,8 @@ describe('gantt-links 分叉2', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -650,7 +688,8 @@ describe('gantt-links 多条单链', () => {
   const bus = new GanttBus();
   const groups = new GanttGroups({
     config,
-    layoutConfig
+    layoutConfig,
+    bus
   });
   const bars = new GanttBars({
     config,
@@ -683,7 +722,8 @@ describe('gantt-links 多条单链', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -692,7 +732,8 @@ describe('gantt-links 多条单链', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -708,7 +749,8 @@ describe('gantt-links 多条单链', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -717,7 +759,8 @@ describe('gantt-links 多条单链', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -733,7 +776,8 @@ describe('gantt-links 多条单链', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -742,7 +786,8 @@ describe('gantt-links 多条单链', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -758,7 +803,8 @@ describe('gantt-links 多条单链', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -767,7 +813,8 @@ describe('gantt-links 多条单链', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -806,7 +853,8 @@ describe('gantt-links 菱形', () => {
   const bus = new GanttBus();
   const groups = new GanttGroups({
     config,
-    layoutConfig
+    layoutConfig,
+    bus
   });
   const bars = new GanttBars({
     config,
@@ -839,7 +887,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -848,7 +897,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -864,7 +914,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -873,7 +924,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -889,7 +941,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -898,7 +951,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -914,7 +968,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -923,7 +978,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -958,7 +1014,8 @@ describe('gantt-links 菱形', () => {
   const bus = new GanttBus();
   const groups = new GanttGroups({
     config,
-    layoutConfig
+    layoutConfig,
+    bus
   });
   const bars = new GanttBars({
     config,
@@ -991,7 +1048,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -1000,7 +1058,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -1016,7 +1075,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -1025,7 +1085,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -1041,7 +1102,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -1050,7 +1112,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -1066,7 +1129,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -1075,7 +1139,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -1091,7 +1156,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -1100,7 +1166,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 
@@ -1116,7 +1183,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     }),
     target: new GanttBar({
       config,
@@ -1125,7 +1193,8 @@ describe('gantt-links 菱形', () => {
       start: '2024-01-01 01:01:00',
       duration: 10,
       end: null,
-      group: group
+      group: group,
+      bars
     })
   });
 

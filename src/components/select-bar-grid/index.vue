@@ -8,12 +8,13 @@ import SelectRender from './render.vue';
 import { Events } from '@/types/events';
 import { useStore } from '../store';
 
-const { bus } = useStore()!;
+const { bus, ganttEntity } = useStore()!;
 const renderFlag = ref(true);
+
 const onDraggableChange = async () => {
   renderFlag.value = false;
   await nextTick();
-  renderFlag.value = true;
+  renderFlag.value = ganttEntity.config.selectable;
 };
 
 onMounted(() => {

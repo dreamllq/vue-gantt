@@ -19,8 +19,8 @@ export class GanttGroups extends BizArray<GanttGroupView> {
     this.layoutConfig = data.layoutConfig;
     this.bus = data.bus;
 
-    this.bus.on(GanttBusEvents.GROUP_BAR_ROWS_CHANGE, (data) => {
-      this.calculateGroupHeight(data.groupId);
+    this.bus.on(GanttBusEvents.GROUP_HEIGHT_CHANGE, (data) => {
+      this.calculateEffectGroupTop(data.groupId);
     });
   }
   add(data:GanttGroupViewClassConstructor) {
@@ -95,40 +95,12 @@ export class GanttGroups extends BizArray<GanttGroupView> {
     });
   }
 
-  calculateGroupHeight(groupId: GroupId) {
-    const group = this.getById(groupId)!;
-    const oldHeight = group.height;
-    group.calculate();
-    const newHeight = group.height;
-    
-    if (oldHeight !== newHeight) {
-      this.bus.emit(GanttBusEvents.GROUP_HEIGHT_CHANGE, { groupId: groupId });
-      const groupIndex = this.getGroupIndex(this.getById(groupId)!);
-      const effectGroupIds: GroupId[] = [];
-      for (let i = groupIndex + 1; i < this.expandedGroups.length; i++) {
-        effectGroupIds.push(this.expandedGroups[i].id);
-      }
-      this.bus.emit(GanttBusEvents.GROUP_TOP_CHANGE, effectGroupIds);
+  calculateEffectGroupTop(groupId: GroupId) {
+    const groupIndex = this.getGroupIndex(this.getById(groupId)!);
+    const effectGroupIds: GroupId[] = [];
+    for (let i = groupIndex + 1; i < this.expandedGroups.length; i++) {
+      effectGroupIds.push(this.expandedGroups[i].id);
     }
-  }
-
-  push(...items: GanttGroupView[]): number {
-    throw new Error('Method not implemented.');
-  }
-
-  pop(): GanttGroupView | undefined {
-    throw new Error('Method not implemented.');
-  }
-
-  shift(): GanttGroupView | undefined {
-    throw new Error('Method not implemented.');
-  }
-
-  unshift(...items: GanttGroupView[]): number {
-    throw new Error('Method not implemented.');
-  }
-
-  splice(start: number, deleteCount: number, ...items: GanttGroupView[]): GanttGroupView[] {
-    throw new Error('Method not implemented.');
+    this.bus.emit(GanttBusEvents.GROUP_TOP_CHANGE, effectGroupIds);
   }
 }

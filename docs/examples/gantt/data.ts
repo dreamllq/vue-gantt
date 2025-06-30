@@ -106,14 +106,16 @@ export const data:GanttJsonData = {
       'end': null,
       'groupId': 1,
       'id': 1,
-      'start': '2024-01-02 00:00:00'
+      'start': '2024-01-02 00:00:00',
+      draggable: false
     },
     {
       'duration': 72000,
       'end': null,
       'groupId': 2,
       'id': 2,
-      'start': '2024-01-02 12:00:00'
+      'start': '2024-01-02 12:00:00',
+      selectable: false
     },
     {
       'duration': 72000,
@@ -181,7 +183,7 @@ export const data:GanttJsonData = {
     }
   ], 
   hook: {
-    beforeDragStart: (data:{barId}) => true,
-    beforeDragEnd: (data:{barId}) => true
+    beforeDragStart: (data) => true,
+    beforeDragEnd: (data) => true
   }
 };

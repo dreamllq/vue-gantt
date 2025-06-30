@@ -1,3 +1,4 @@
+import { GanttBarView } from '@/models/gantt-bar-view';
 import { BarId } from './gantt-bar';
 import { Id } from './id';
 
@@ -32,6 +33,11 @@ export enum Events {
   GROUP_CHANGE='GROUP_CHANGE',
   GROUP_EXPAND_CHANGE='GROUP_EXPAND_CHANGE',
 
+
+  BAR_DRAGSTART='BAR_DRAGSTART',
+  BAR_DRAG='BAR_DRAG',
+  BAR_DRAGEND='BAR_DRAGEND',
+  BAR_CLICK='BAR_CLICK',
   BAR_INIT_END = 'BAR_INIT_END',
   BAR_CHANGE='BAR_CHANGE',
   BAR_CHANGE_FRAGMENTATION='BAR_CHANGE_FRAGMENTATION',
@@ -49,5 +55,6 @@ export enum Events {
 }
 
 export interface EventsInterface {
+  [Events.BAR_DRAGSTART]:(e:MouseEvent, bar: GanttBarView)=>void
   [Events.BAR_CHANGE]:(ids: BarId[])=>void
 }

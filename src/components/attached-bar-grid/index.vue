@@ -4,10 +4,9 @@
       <div
         class='attach-bar-cell gantt-bar-cell'
         :style='{
-          top: `${item.sy}px`,
-          left: `${item.sx}px`,
           width: `${item.width}px`,
-          height: `${item.height}px`
+          height: `${item.height}px`,
+          transform: `translate(${item.sx}px, ${item.sy}px)`
         }'>
         <slot :bar='item' />
       </div>
@@ -31,7 +30,9 @@ const { lazyAttachedBarGrid } = useAttachedBarHook();
   .attach-bar-cell {
     position: absolute;
     background-color: var(--bar-color);
-    opacity: 0.7;
+    top: 0;
+    left: 0;
+    transition: transform 0.2s ease-in-out;
   }
 }
 </style>

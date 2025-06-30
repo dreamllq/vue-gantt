@@ -1,14 +1,13 @@
 import { BarId, GanttBarViewClassConstructor } from '@/types/gantt-bar';
 import { GanttBar } from './gantt-bar';
 import { GanttGroups } from './gantt-groups';
-import { computeTimeSecond } from '@/utils/compute-time-second';
 import moment from 'moment';
 import { GanttBars } from './gantt-bars';
 import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
-import { max } from 'lodash';
 import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GanttGroup } from './gantt-group';
+import { isBoolean } from 'lodash';
 
 export class GanttBarView extends GanttBar {
   sx = 0;
@@ -28,12 +27,16 @@ export class GanttBarView extends GanttBar {
   overlapBarIds:BarId[] = [];
   isShow = true;
   bus:GanttBus;
-  
+
+  private _selectable?: boolean;
+  private _draggable?:boolean;
   constructor(data:GanttBarViewClassConstructor) {
     super(data);
     this.groups = data.groups;
     this.bars = data.bars;
     this.bus = data.bus;
+    this._selectable = data.selectable;
+    this._draggable = data.draggable;
   }
 
   set group(val: GanttGroup) {
@@ -42,6 +45,7 @@ export class GanttBarView extends GanttBar {
     if (oldGroupId !== newGroupId) {
       super.group = val;
       if (!this.isClone) {
+        this.clearOverlap();
         this.groups.getById(oldGroupId)!.bars.removeById(this.id);
         this.groups.getById(newGroupId)!.bars.push(this);
       }
@@ -60,10 +64,27 @@ export class GanttBarView extends GanttBar {
     return moment(this.end, 'YYYY-MM-DD HH:mm:ss');
   }
 
+  get selectable(): boolean {
+    return this.config.selectable && (isBoolean(this._selectable) ? this._selectable : true);
+  }
+
+  set selectable(val:boolean | undefined) {
+    this._selectable = val;
+  }
+
+  get draggable():boolean {
+    return this.config.draggable && (isBoolean(this._draggable) ? this._draggable : true);
+  }
+
+  set draggable(val:boolean | undefined) {
+    this._draggable = val;
+  }
+
   calculate() {
     if (this.isClone) return;
     if (!this.isShow) return;
     this.calculatePos();
+    this.clearOverlap();
     this.calculateOverlap();
   }
 
@@ -93,15 +114,18 @@ export class GanttBarView extends GanttBar {
     this.et = endSecond * 1000;
   }
 
-  calculateOverlap() {
+  clearOverlap() {
     if (this.isClone) return;
-    const group = this.groups.getById(this.group.id)!;
     this.overlapBarIds.forEach(id => {
       this.bars.getById(id)!.overlapBarIds = this.bars.getById(id)!.overlapBarIds.filter(oid => oid !== this.id);
     });
     this.overlapBarIds = [];
-    this.calculateOverlapBarIds();
+  }
+  calculateOverlap() {
+    if (this.isClone) return;
+    const group = this.groups.getById(this.group.id)!;
     if (!group.barOverlap) {
+      this.calculateOverlapBarIds();
       this.bus.emit(GanttBusEvents.GROUP_OVERLAP_CHANGE, {
         barId: this.id,
         groupId: group.id
@@ -130,7 +154,6 @@ export class GanttBarView extends GanttBar {
   }
 
   changeY() {
-    if (this.isClone) return;
     const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
     const barCenterTop = this.layoutConfig.ROW_HEIGHT / 2;
     const height = this.layoutConfig.BAR_HEIGHT;

@@ -16,8 +16,9 @@ export const useMenuHook = () => {
             ...item,
             click: (menuItem) => item.click(menuItem, data)
           });
+        } else {
+          return menus.push(item as menusItemType);
         }
-        return menus.push(item as menusItemType);
       });
       menusEvent(e, {
         menus,

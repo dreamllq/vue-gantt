@@ -58,7 +58,9 @@ export type GanttJsonDataBar = {
   start: DateTimeString | null,
   end: DateTimeString | null,
   duration: number | null
-  schedulingMode?: keyof typeof SchedulingMode
+  schedulingMode?: keyof typeof SchedulingMode,
+  selectable?:boolean,
+  draggable?:boolean
 };
 
 export type GanttJsonDataAttachedBar = {

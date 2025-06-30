@@ -60,7 +60,7 @@ export class GanttBars extends BizArray<GanttBarView> {
     const group = this.groups.getById(data.groupId)!;
     if (group.barOverlap) return;
     this.calculateGroupBarsRowIndex(data.groupId, data.barId);
-    this.updateCurrentAndAfterGroupBarsPositionByRowIndex(data.groupId);
+    this.updateCurrentGroupBarsPositionByRowIndex(data.groupId);
   }
 
   /**
@@ -95,7 +95,7 @@ export class GanttBars extends BizArray<GanttBarView> {
     const changeIds:BarId[] = [];
     
     groupBars.forEach(bar => {
-      const rowIndexList = bar.overlapBarIds.map(id => this.getById(id)!.rowIndex);
+      const rowIndexList = bar.overlapBarIds.map(id => this.getById(id)!.rowIndex).sort((a, b) => a - b);
       let rowIndex = 0;
       
       while (rowIndexList.includes(rowIndex)) {
@@ -110,13 +110,15 @@ export class GanttBars extends BizArray<GanttBarView> {
         changeIds.push(bar.id);
       }
     });
+    group.calculateBarsHeight();
+    group.calculateHeight();
   }
 
   /**
-   * 根据bar的rowIndex更新指定group及之后group下的bar的位置信息-- _sy\sy属性
+   * 根据bar的rowIndex更新指定group下的bar的位置信息-- _sy\sy属性
    * @param groupId 分组id
    */
-  updateCurrentAndAfterGroupBarsPositionByRowIndex(groupId: GroupId) {
+  updateCurrentGroupBarsPositionByRowIndex(groupId: GroupId) {
     const group = this.groups.getById(groupId)!;
     if (group.barOverlap) return;
     const effectBarIds: BarId[] = [];
@@ -126,7 +128,6 @@ export class GanttBars extends BizArray<GanttBarView> {
       effectBarIds.push(item.id);
     });
     this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, effectBarIds);
-    this.bus.emit(GanttBusEvents.GROUP_BAR_ROWS_CHANGE, { groupId: group.id });
   }
 
   updateGroupExpandChangeEffectBar(groupId: GroupId) {
@@ -150,25 +151,5 @@ export class GanttBars extends BizArray<GanttBarView> {
     const effectBars = this.filter(item => groupIds.includes(item.group.id));
     effectBars.forEach(item => item.changeY());
     this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, effectBars.map(item => item.id));
-  }
-  
-  push(...items: GanttBarView[]): number {
-    throw new Error('Method not implemented.');
-  }
-  
-  pop(): GanttBarView | undefined {
-    throw new Error('Method not implemented.');
-  }
-  
-  shift(): GanttBarView | undefined {
-    throw new Error('Method not implemented.');
-  }
-  
-  unshift(...items: GanttBarView[]): number {
-    throw new Error('Method not implemented.');
-  }
-  
-  splice(start: number, deleteCount: number, ...items: GanttBarView[]): GanttBarView[] {
-    throw new Error('Method not implemented.');
   }
 }

@@ -5,15 +5,16 @@
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { useStore } from '../store';
-const { bus } = useStore()!;
 import DragRender from './render.vue';
 import { Events } from '@/types/events';
 
+const { bus, ganttEntity } = useStore()!;
 const renderFlag = ref(true);
+
 const onDraggableChange = async () => {
   renderFlag.value = false;
   await nextTick();
-  renderFlag.value = true;
+  renderFlag.value = ganttEntity.config.draggable || ganttEntity.config.multipleDraggable;
 };
 
 onMounted(() => {

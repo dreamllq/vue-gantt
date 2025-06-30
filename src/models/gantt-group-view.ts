@@ -4,30 +4,39 @@ import { BizArray } from './biz-array';
 import { GanttAttachedBarView } from './gantt-attached-bar-view';
 import { GanttBarView } from './gantt-bar-view';
 import { max } from 'lodash';
+import { GanttBus } from './gantt-bus';
+import { GanttBusEvents } from '@/types/gantt-bus';
 
 export class GanttGroupView extends GanttGroup {
   _isExpand = false;
   barOverlap = false;
-  // private _rows = 1;
   isShow = true;
   private _height:number;
   bars: BizArray<GanttBarView> = new BizArray<GanttBarView>();
   attachedBars: BizArray<GanttAttachedBarView> = new BizArray<GanttAttachedBarView>();
   barsHeight = 0;
   attachedBarsHeight = 0;
+  bus: GanttBus;
 
   constructor(data: GanttGroupViewClassConstructor) {
     super(data);
     this._isExpand = data.isExpand || false;
     this.barOverlap = data.barOverlap || false;
+    this.bus = data.bus;
 
     this._height = this.layoutConfig.ROW_HEIGHT;
 
     this.bars.on(BizArray.Events.CHANGE, () => {
-      this.calculateHeight();
+      if (this.barOverlap === false) {
+        this.bus.emit(GanttBusEvents.GROUP_OVERLAP_CHANGE, { groupId: this.id });
+      } else {
+        this.calculateBarsHeight();
+        this.calculateHeight();
+      }
     });
 
     this.attachedBars.on(BizArray.Events.CHANGE, () => {
+      this.calculateAttachedBarsHeight();
       this.calculateHeight();
     });
   }
@@ -40,41 +49,50 @@ export class GanttGroupView extends GanttGroup {
     this._isExpand = val;
   }
 
-  // get rows() {
-  //   return this._rows;
-  // }
-
-  // set rows(val) {
-  //   this._rows = val;
-  //   // this.calculateHeight();
-  // }
-
   get height() {
     return this._height;
   }
 
-  calculateHeight() {
-    let height = 0;
-    const barRows = max([...this.bars.map(item => item.rowIndex + 1), 1])!;
-    const barsHeight = this.layoutConfig.ROW_HEIGHT * barRows;
-    
-    height += barsHeight;
-    this.barsHeight = barsHeight;
+  calculateBarsHeight() {
+    let barRows = 1;
+    let height:number;
+    if (!this.barOverlap) {
+      barRows = max([...this.bars.map(item => item.rowIndex + 1), 1])!;
+      height = this.layoutConfig.ROW_HEIGHT * barRows;
+    } else {
+      height = this.layoutConfig.ROW_HEIGHT * barRows;
+    }
+    if (height !== this.barsHeight) {
+      this.barsHeight = height;
+      this.bus.emit(GanttBusEvents.GROUP_BARS_HEIGHT_CHANGE, { groupId: this.id });
+    }
+  }
 
+  calculateAttachedBarsHeight() {
+    let height = 0;
     if (this.config.showAttachedBar) {
       if (this.attachedBars.length > 0) {
-        height += this.layoutConfig.ATTACHED_ROW_HEIGHT;
-        this.attachedBarsHeight = this.layoutConfig.ATTACHED_ROW_HEIGHT;
+        height = this.layoutConfig.ATTACHED_ROW_HEIGHT;
       }
-    } else {
-      this.attachedBarsHeight = 0;
-    }
+    } 
 
-    this._height = height;
+    if (height !== this.attachedBarsHeight) {
+      this.attachedBarsHeight = height;
+      this.bus.emit(GanttBusEvents.GROUP_ATTACHED_BARS_HEIGHT_CHANGE, { groupId: this.id });
+    }
+  }
+
+  calculateHeight() {
+    const height = this.barsHeight + this.attachedBarsHeight;
+
+    if (height !== this._height) {
+      this._height = height;
+      this.bus.emit(GanttBusEvents.GROUP_HEIGHT_CHANGE, { groupId: this.id });
+    }
   }
 
   calculate() {
     if (!this.isShow) return;
-    this.calculateHeight();
+    // this.calculateHeight();
   }
 }

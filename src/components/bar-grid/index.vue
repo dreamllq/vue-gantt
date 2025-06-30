@@ -6,14 +6,13 @@
         class='bar-cell gantt-bar-cell'
         :class='barHtmlClass'
         :style='{
-          top: `${item.sy}px`,
-          left: `${item.sx}px`,
           width: `${item.width}px`,
-          height: `${item.height}px`
+          height: `${item.height}px`,
+          transform: `translate(${item.sx}px, ${item.sy}px)`
         }'
         :data-id='item.id'
         :data-type='getIdType(item.id)'>
-        <slot :bar='item' />
+        <slot :bar='ganttEntity.bars.getById(item.id)' />
       </div>
     </template>
   </div>
@@ -24,7 +23,7 @@ import { useBarGridHook } from './bar-grid-hook';
 import { useStore } from '../store';
 import { BarId } from '@/types/gantt-bar';
 
-const { barHtmlClass } = useStore()!;
+const { barHtmlClass, ganttEntity } = useStore()!;
 const { lazyBarGrid } = useBarGridHook();
 const getIdType = (id:BarId) => (typeof id);
 </script>
@@ -39,6 +38,9 @@ const getIdType = (id:BarId) => (typeof id);
   .bar-cell {
     position: absolute;
     background-color: var(--bar-color);
+    top: 0;
+    left: 0;
+    transition: transform 0.2s ease-in-out;
   }
 }
 </style>

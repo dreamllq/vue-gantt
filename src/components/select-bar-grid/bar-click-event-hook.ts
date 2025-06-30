@@ -1,13 +1,13 @@
 import { onBeforeUnmount, onMounted } from 'vue';
 import { useStore } from '../store';
-import dom from '@/utils/dom';
 import { Events } from '@/types/events';
 import { BarId } from '@/types/gantt-bar';
+import dom from '@/utils/dom';
 
-export const useContextmenuHook = () => {
-  const { bus, barHtmlClass, ganttEntity } = useStore()!;
+export const useBarClickEventHook = () => {
+  const { bus, ganttEntity, barHtmlClass } = useStore()!;
 
-  const onContextmenu = (e:MouseEvent) => {
+  const onClick = (e:MouseEvent) => {
     const domPath = dom.getPath(e.target as HTMLElement);
     const barTarget = domPath.find(p => p.classList && p.classList.contains(barHtmlClass)) as HTMLElement;
     if (barTarget) {
@@ -16,16 +16,16 @@ export const useContextmenuHook = () => {
       const bar = ganttEntity.bars.getById(id);
               
       if (bar) {
-        bus.emit(Events.BAR_CONTEXTMENU, { barId: bar.id }, e);
+        if (bar.selectable !== true) return; 
+        bus.emit(Events.BAR_CLICK, e, bar);
       } 
     }
   };
-
   onMounted(() => {
-    bus.on(Events.CONTEXTMENU, onContextmenu);
+    bus.on(Events.CLICK, onClick);
   });
-
+  
   onBeforeUnmount(() => {
-    bus.off(Events.CONTEXTMENU, onContextmenu);
+    bus.off(Events.CLICK, onClick);
   });
 };

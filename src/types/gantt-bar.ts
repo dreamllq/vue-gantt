@@ -11,7 +11,9 @@ export type BarId = Id;
 
 export type GanttBarViewClassConstructor = GanttBarClassConstructor & {
   groups: GanttGroups
-  bus: GanttBus
+  bus: GanttBus,
+  selectable?:boolean,
+  draggable?:boolean
 }
 
 export type GanttBarClassConstructor = {
@@ -30,5 +32,7 @@ export type GanttBarAddParams = {
   start: DateTimeString | null,
   end: DateTimeString | null,
   duration: number | null,
-  schedulingMode?: SchedulingMode | null
+  schedulingMode?: SchedulingMode | null,
+  selectable?:boolean,
+  draggable?:boolean
 }
