@@ -1,7 +1,7 @@
 import { Gantt } from '@/models/gantt';
 import { GanttJsonData } from '@/types/gantt';
 import { createInjectionState } from '@vueuse/core';
-import { ref } from 'vue';
+import { nextTick, ref } from 'vue';
 import { useContainer } from './hooks/container';
 import { useScroll } from './hooks/scroll';
 import { useLayout } from './hooks/layout';
@@ -10,6 +10,7 @@ import { useBus } from './hooks/bus';
 import { useDrag } from './hooks/drag';
 import { v4 as uuidv4 } from 'uuid';
 import { useEvents } from './hooks/events';
+import { GanttConfig } from '@/models/gantt-config';
 
 const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) => {
   const ganttId = uuidv4();
@@ -33,6 +34,21 @@ const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) =>
   });
 
   useEvents(ganttEntity, { bus });
+
+  const containerReload = async () => {
+    container.containerReady.value = false;
+    scroll.scrollReady.value = false;
+    layout.layoutReady.value = false;
+    await nextTick();
+    ganttEntity.bars.calculate();
+    ganttEntity.attachedBars.calculate();
+    ganttEntity.links.calculate();
+    container.containerReady.value = true;
+  };
+  
+  ganttEntity.config.on(GanttConfig.EVENTS.DATA_SCALE_UNIT_CHANGE, async() => {
+    containerReload();
+  });
 
   return {
     ganttId,

@@ -11,6 +11,7 @@ export class GanttConfig extends EventEmitter {
   static EVENTS = {
     DRAGGABLE_CHANGE: 'DRAGGABLE_CHANGE',
     SELECTABLE_CHANGE: 'SELECTABLE_CHANGE',
+    DATA_SCALE_UNIT_CHANGE: 'DATA_SCALE_UNIT_CHANGE',
     MULTIPLE_SELECTABLE_CHANGE: 'MULTIPLE_SELECTABLE_CHANGE'
   };
 
@@ -18,7 +19,7 @@ export class GanttConfig extends EventEmitter {
   private _endDate: DateString;
   private _daySplitTime: SplitTimeString;
   durationUnit: Unit;
-  dataScaleUnit: Unit;
+  private _dataScaleUnit: Unit;
   layoutConfig: GanttLayoutConfig;
   lazyDebounceTime: number;
   schedulingMode:SchedulingMode;
@@ -39,7 +40,7 @@ export class GanttConfig extends EventEmitter {
     this._endDate = data.endDate;
     this._daySplitTime = data.daySplitTime || '00:00';
     this.durationUnit = Unit.SECOND;
-    this.dataScaleUnit = Unit.DAY;
+    this._dataScaleUnit = Unit.DAY;
     this.layoutConfig = data.layoutConfig;
     this.lazyDebounceTime = data.lazyDebounceTime || 50;
     this.schedulingMode = data.schedulingMode || SchedulingMode.FORWARD;
@@ -54,6 +55,17 @@ export class GanttConfig extends EventEmitter {
     this.showAttachedBar = !!data.showAttachedBar;
     this.dragTimeOffset = data.dragTimeOffset || 5 * 60;
   }
+
+  get dataScaleUnit() {
+    return this._dataScaleUnit;
+  }
+
+  set dataScaleUnit(val: Unit) {
+    if (this._dataScaleUnit === val) return;
+    this._dataScaleUnit = val;
+    this.emit(GanttConfig.EVENTS.DATA_SCALE_UNIT_CHANGE, val);
+  }
+  
 
   get draggable() {
     return this._draggable;

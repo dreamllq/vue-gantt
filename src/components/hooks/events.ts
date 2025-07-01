@@ -24,6 +24,7 @@ export const useEvents = (ganttEntity: Gantt, store:{
   });
 
 
+
   ganttEntity.bus.on(GanttBusEvents.GROUP_HEIGHT_CHANGE, (data) => {
     store.bus.emit(Events.GROUP_CHANGE, [data.groupId]);
     store.bus.emit(Events.SCROLL_CHANGE);

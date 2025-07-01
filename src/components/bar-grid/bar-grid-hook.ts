@@ -26,6 +26,7 @@ export const useBarGridHook = () => {
     
     bus.emit(Events.BAR_LAZY_CHANGE, lazyBarGrid.value.map(item => item.id));
   };
+  console.log(lazyReady);
 
   if (lazyReady.value) {
     lazyCalculate();

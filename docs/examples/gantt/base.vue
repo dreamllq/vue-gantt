@@ -13,6 +13,10 @@
   <el-button @click='changeSelectable'>
     changeSelectable
   </el-button>
+  <el-button @click='setDataScaleUnit'>
+    setDataScaleUnit
+  </el-button>
+  
   <div style='height: 400px;'>
     <gantt-view ref='ganttRef' :data='ganttData'>
       <template #aside-header>
@@ -49,6 +53,10 @@ let selectable = ganttData.value.config.selectable;
 const changeSelectable = () => {
   selectable = !selectable;
   ganttRef.value!.api().setSelectable(selectable);
+};
+
+const setDataScaleUnit = () => {
+  ganttRef.value?.api().setDataScaleUnit('WEEK');
 };
 
 const onHistoryBack = () => {

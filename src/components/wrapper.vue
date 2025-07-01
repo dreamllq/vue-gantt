@@ -72,6 +72,7 @@ import LinkGrid from './link-grid/index.vue';
 import MouseHoverAutoScroll from './mouse-hover-auto-scroll/index.vue';
 import BarTipGrid from './bar-tip-grid/index.vue';
 import { LinkShowStrategy } from '@/types/gantt-link';
+import { Unit } from '@/types/unit';
 
 const { entityReady, container, scroll, ganttEntity, bus } = useStore()!;
 const { scrollReady } = scroll;
@@ -84,10 +85,15 @@ const setSelectable = (val:boolean) => {
   ganttEntity.config.selectable = val;
 };
 
+const setDataScaleUnit = (unit: (keyof typeof Unit)) => {
+  ganttEntity.config.dataScaleUnit = Unit[unit];
+};
+
 defineExpose({
   api: () => ({
     setDraggable,
     setSelectable,
+    setDataScaleUnit,
     history: {
       next: () => ganttEntity.history.next(),
       back: () => ganttEntity.history.back()
