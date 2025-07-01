@@ -31,6 +31,7 @@ export class GanttConfig extends EventEmitter {
   contextMenuMenus?:menusItemType[];
   showCurrentTimeLine: boolean;
   showAttachedBar: boolean;
+  dragTimeOffset: number;
 
   constructor(data:GanttConfigClassConstructor) {
     super();
@@ -51,6 +52,7 @@ export class GanttConfig extends EventEmitter {
     this.linkShowStrategy = data.linkShowStrategy || LinkShowStrategy.NONE;
     this.showCurrentTimeLine = !!data.showCurrentTimeLine; 
     this.showAttachedBar = !!data.showAttachedBar;
+    this.dragTimeOffset = data.dragTimeOffset || 5 * 60;
   }
 
   get draggable() {

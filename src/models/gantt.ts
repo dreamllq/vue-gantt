@@ -208,7 +208,8 @@ export class Gantt extends EventEmitter {
       contextMenuMenus: data.config.contextMenuMenus,
       linkShowStrategy: data.config.linkShowStrategy ? LinkShowStrategy[data.config.linkShowStrategy] : undefined,
       showCurrentTimeLine: data.config.showCurrentTimeLine,
-      showAttachedBar: data.config.showAttachedBar
+      showAttachedBar: data.config.showAttachedBar,
+      dragTimeOffset: data.config.dragTimeOffset
     });
     const gantt = new Gantt({
       config,

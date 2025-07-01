@@ -1,6 +1,5 @@
 import { GanttConfig } from '@/models/gantt-config';
 import { DateString, DateTimeString, SplitTimeString } from './date';
-import { Id } from './id';
 import { Unit } from './unit';
 import { GanttLayoutConfig } from '@/models/gantt-layout-config';
 import { GanttLayoutConfigClassConstructor } from './gantt-layout-config';
@@ -34,7 +33,8 @@ export type GanttJsonDataConfig = {
   contextMenuMenus?:menusItemType[],
   linkShowStrategy?: keyof typeof LinkShowStrategy,
   showCurrentTimeLine?:boolean,
-  showAttachedBar?:boolean
+  showAttachedBar?:boolean,
+  dragTimeOffset?:number
 };
 
 export type GanttJsonDataLayoutConfig=GanttLayoutConfigClassConstructor;
