@@ -14,6 +14,7 @@ export class GanttBar extends GanttBase {
   duration: number | null = null;
   private _group: GanttGroup;
   schedulingMode:SchedulingMode | null = null;
+  private _hasCalculated = false;
 
   constructor(data:GanttBarClassConstructor) {
     super(data);
@@ -21,11 +22,8 @@ export class GanttBar extends GanttBase {
     this._group = data.group;
     this.schedulingMode = data.schedulingMode || null;
     this.duration = data.duration;
-
-    this.resetTimeRange({
-      start: data.start,
-      end: data.end
-    }, false);
+    this.start = data.start;
+    this.end = data.end;
   }
 
   get group() {
@@ -40,11 +38,13 @@ export class GanttBar extends GanttBase {
     if (this.schedulingMode) return this.schedulingMode;
     else return this.config.schedulingMode;
   }
-  resetTimeRange(_data:{
-    start: DateTimeString | null;
-    end: DateTimeString | null;
-  }, resetTimeByMode = true) {
-    const data = cloneDeep(_data);
+  resetTimeRange() {
+    const data = {
+      start: this.start,
+      end: this.end
+    };
+    const resetTimeByMode = this._hasCalculated;
+    this._hasCalculated = true;
 
     if (resetTimeByMode) {
       if (this.mergeSchedulingMode === SchedulingMode.FORWARD) {

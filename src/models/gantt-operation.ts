@@ -28,10 +28,8 @@ export class GanttBarDragOperation implements OperationInterface {
       oldGroup = bar.group;
       bar.group = group;
     }
-    bar.resetTimeRange({
-      start: this.newData.start,
-      end: this.newData.end
-    });
+    bar.start = this.newData.start;
+    bar.end = this.newData.end;
     bar.rowIndex = this.newData.rowIndex;
     bar.calculate();
     if (oldGroup) {
@@ -49,10 +47,8 @@ export class GanttBarDragOperation implements OperationInterface {
       oldGroup = bar.group;
       bar.group = group;
     }
-    bar.resetTimeRange({
-      start: this.oldData.start,
-      end: this.oldData.end
-    });
+    bar.start = this.oldData.start;
+    bar.end = this.oldData.end;
     bar.rowIndex = this.oldData.rowIndex;
     bar.calculate();
     if (oldGroup) {

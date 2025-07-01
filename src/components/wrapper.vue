@@ -73,7 +73,10 @@ import MouseHoverAutoScroll from './mouse-hover-auto-scroll/index.vue';
 import BarTipGrid from './bar-tip-grid/index.vue';
 import { LinkShowStrategy } from '@/types/gantt-link';
 import { Unit } from '@/types/unit';
-import { BarId, GanttBarAddParams } from '@/types/gantt-bar';
+import { BarId, GanttBarAddParams, GanttBarUpdateParams } from '@/types/gantt-bar';
+import { isUndefined } from 'lodash';
+import { GanttBusEvents } from '@/types/gantt-bus';
+import { GanttGroup } from '../models/gantt-group';
 
 const { entityReady, container, scroll, ganttEntity, bus } = useStore()!;
 const { scrollReady } = scroll;
@@ -110,6 +113,13 @@ const addBar = (bar:GanttBarAddParams) => {
   ganttEntity.bars.calculateGroupOverlap({ groupId: b.group.id });
 };
 
+const updateBar = (id:BarId, data:GanttBarUpdateParams) => {
+  const bar = ganttEntity.bars.getById(id);
+  if (bar) {
+    bar.update(data);
+  }
+};
+
 defineExpose({
   api: () => ({
     setDraggable,
@@ -118,6 +128,7 @@ defineExpose({
     setSizeRatioPercent,
     removeBarById,
     addBar,
+    updateBar,
     history: {
       next: () => ganttEntity.history.next(),
       back: () => ganttEntity.history.back()

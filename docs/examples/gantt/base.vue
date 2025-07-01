@@ -25,6 +25,11 @@
   <el-button @click='addBar'>
     addBar
   </el-button>
+  <el-button @click='updateBar'>
+    updateBar
+  </el-button>
+
+  
 
   
   
@@ -86,6 +91,16 @@ const addBar = () => {
     'id': 2,
     'start': '2024-01-02 12:00:00',
     selectable: false 
+  });
+};
+
+const updateBar = () => {
+  ganttRef.value?.api().updateBar(2, {
+    duration: 72000 * 2,
+    groupId: 1,
+    start: '2024-01-04 12:00:00',
+    selectable: true,
+    draggable: false
   });
 };
 

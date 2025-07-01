@@ -133,10 +133,8 @@ export const useSingleDraggingHook = () => {
       oldGroup = bar.group;
       bar.group = group;
     }
-    bar.resetTimeRange({
-      start: startTime,
-      end: endTime
-    });
+    bar.start = startTime;
+    bar.end = endTime;
     bar.rowIndex = dropRowIndex;
     bar.calculate();
     if (oldGroup) {
@@ -180,10 +178,9 @@ export const useSingleDraggingHook = () => {
     const top = ganttEntity.groups.getGroupTopByIndex(index);
     const dropRowIndex = max([Math.floor(min([(dropY - top), group.barsHeight - 1])! / ganttEntity.layoutConfig.ROW_HEIGHT), 0])!;
     barClone.value.group = group;
-    barClone.value.resetTimeRange({
-      start: startTime,
-      end: endTime
-    });
+    barClone.value.start = startTime;
+    barClone.value.end = endTime;
+    barClone.value.resetTimeRange();
     barClone.value.rowIndex = dropRowIndex;
     barClone.value.calculatePos();
     barClone.value.changeY();

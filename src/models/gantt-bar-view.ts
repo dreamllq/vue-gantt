@@ -1,4 +1,4 @@
-import { BarId, GanttBarViewClassConstructor } from '@/types/gantt-bar';
+import { BarId, GanttBarUpdateParams, GanttBarViewClassConstructor } from '@/types/gantt-bar';
 import { GanttBar } from './gantt-bar';
 import { GanttGroups } from './gantt-groups';
 import moment from 'moment';
@@ -7,7 +7,7 @@ import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GanttGroup } from './gantt-group';
-import { isBoolean } from 'lodash';
+import { isBoolean, isUndefined } from 'lodash';
 import { DateTimeString } from '@/types/date';
 import { GroupId } from '@/types/gantt-group';
 
@@ -99,9 +99,49 @@ export class GanttBarView extends GanttBar {
     this._draggable = val;
   }
 
+  update(data:GanttBarUpdateParams) {
+    if (data.schedulingMode) {
+      this.schedulingMode = data.schedulingMode;
+    }
+
+    if (!isUndefined(data.duration)) {
+      this.duration = data.duration;
+    }
+
+    if (!isUndefined(data.draggable)) {
+      this.draggable = data.draggable;
+    }
+
+    if (!isUndefined(data.selectable)) {
+      this.selectable = data.selectable;
+    }
+    
+    if (data.start) {
+      this.start = data.start;
+    }
+
+    if (data.end) {
+      this.end = data.end;
+    }
+
+    let oldGroup:GanttGroup|undefined;
+    if (data.groupId && this.group.id !== data.groupId) {
+      oldGroup = this.group;
+      this.group = this.groups.getById(data.groupId)!;
+    }
+
+    this.calculate();
+    
+    if (oldGroup) {
+      this.bars.calculateGroupOverlap({ groupId: oldGroup.id });
+    }
+    this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [this.id]);
+  }
+
   calculate() {
     if (this.isClone) return;
     if (!this.isShow) return;
+    this.resetTimeRange();
     this.calculatePos();
     this.clearOverlap();
     this.calculateOverlap();

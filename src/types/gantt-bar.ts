@@ -36,4 +36,14 @@ export type GanttBarAddParams = {
   schedulingMode?: SchedulingMode | null,
   selectable?:boolean,
   draggable?:boolean
+} 
+
+export type GanttBarUpdateParams = {
+  groupId?: GroupId,
+  start?: DateTimeString | null,
+  end?: DateTimeString | null,
+  duration?: number | null,
+  schedulingMode?: SchedulingMode | null,
+  selectable?:boolean,
+  draggable?:boolean
 }
