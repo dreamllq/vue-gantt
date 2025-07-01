@@ -9,44 +9,46 @@ export const useMultipleSelectHook = () => {
   const { bus, ganttEntity, barHtmlClass } = useStore()!;
   const selectedBars = ref<GanttBarView[]>([]);
 
-  onMounted(() => {
-    selectedBars.value = ganttEntity.bars.filter(item => item.selected);
-  });
+  // onMounted(() => {
+  //   selectedBars.value = ganttEntity.bars.filter(item => item.selected);
+  // });
   const onClick = (e:MouseEvent, bar:GanttBarView) => {
     if (bar.selectable !== true) return;
     const barIds:BarId[] = [];
+    let selectedBars = ganttEntity.bars.filter(item => item.selected);
+    
     if (e.altKey || e.metaKey) {
-      if (selectedBars.value.some(item => item.id === bar.id)) {
+      if (selectedBars.some(item => item.id === bar.id)) {
         bar.selected = false;
-        selectedBars.value = selectedBars.value.filter(item => item.id !== bar.id);
+        selectedBars = selectedBars.filter(item => item.id !== bar.id);
       } else {
         bar.selected = true;
-        selectedBars.value.push(bar);
+        selectedBars.push(bar);
       }
       barIds.push(bar.id);
     } else {
-      if (selectedBars.value.some(item => item.id === bar.id)) {
-        if (selectedBars.value.length === 1) {
+      if (selectedBars.some(item => item.id === bar.id)) {
+        if (selectedBars.length === 1) {
           bar.selected = false;
           barIds.push(bar.id);
-          selectedBars.value = [];
+          selectedBars = [];
         } else {
-          selectedBars.value.forEach(item => {
+          selectedBars.forEach(item => {
             if (item.id !== bar.id) {
               item.selected = false;
               barIds.push(item.id);
             }
           });
-          selectedBars.value = [bar];
+          selectedBars = [bar];
         }
       } else {
-        selectedBars.value.forEach(item => {
+        selectedBars.forEach(item => {
           item.selected = false;
           barIds.push(item.id);
         });
         bar.selected = true;
         barIds.push(bar.id);
-        selectedBars.value = [bar];
+        selectedBars = [bar];
       }
     }
     bus.emit(Events.BAR_CHANGE, barIds);

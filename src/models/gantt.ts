@@ -200,7 +200,7 @@ export class Gantt extends EventEmitter {
       lazyDebounceTime: data.config.lazyDebounceTime,
       draggable: data.config.draggable,
       selectable: data.config.selectable,
-      checkable: data.config.checkable,
+      multipleSelectable: data.config.multipleSelectable,
       multipleDraggable: data.config.multipleDraggable,
       contextMenuEnable: data.config.contextMenuEnable,
       contextMenuMenus: data.config.contextMenuMenus,

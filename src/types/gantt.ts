@@ -28,7 +28,7 @@ export type GanttJsonDataConfig = {
   schedulingMode?: keyof typeof SchedulingMode,
   draggable?:boolean,
   selectable?:boolean,
-  checkable?:boolean,
+  multipleSelectable?:boolean,
   multipleDraggable?:boolean,
   contextMenuEnable?:boolean,
   contextMenuMenus?:menusItemType[],

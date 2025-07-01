@@ -20,7 +20,7 @@ export type GanttConfigClassConstructor = {
   schedulingMode?: SchedulingMode,
   draggable?:boolean,
   selectable?:boolean,
-  checkable?:boolean,
+  multipleSelectable?:boolean,
   multipleDraggable?:boolean,
   contextMenuEnable?:boolean,
   contextMenuMenus?:menusItemType[],

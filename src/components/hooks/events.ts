@@ -19,8 +19,8 @@ export const useEvents = (ganttEntity: Gantt, store:{
     store.bus.emit(Events.SELECTABLE_CHANGE, val);
   });
 
-  ganttEntity.config.on(GanttConfig.EVENTS.CHECKABLE_CHANGE, (val) => {
-    store.bus.emit(Events.CHECKABLE_CHANGE, val);
+  ganttEntity.config.on(GanttConfig.EVENTS.MULTIPLE_SELECTABLE_CHANGE, (val) => {
+    store.bus.emit(Events.MULTIPLE_SELECTABLE_CHANGE, val);
   });
 
 

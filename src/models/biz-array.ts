@@ -47,7 +47,10 @@ export class BizArray<T> extends Array<T & {id: Id}> {
       this._map.set(item.id, item);
     });
     const data = super.push(...items);
-    this.emit(BizArray.Events.CHANGE);
+    this.emit(BizArray.Events.CHANGE, {
+      addItems: items,
+      deleteItems: [] 
+    });
     return data;
   }
   
@@ -56,7 +59,10 @@ export class BizArray<T> extends Array<T & {id: Id}> {
     if (item) {
       this._map.delete(item.id);
     }
-    this.emit(BizArray.Events.CHANGE);
+    this.emit(BizArray.Events.CHANGE, {
+      addItems: [],
+      deleteItems: [item] 
+    });
     return item;
   }
 
@@ -65,7 +71,10 @@ export class BizArray<T> extends Array<T & {id: Id}> {
     if (item) {
       this._map.delete(item.id);
     }
-    this.emit(BizArray.Events.CHANGE);
+    this.emit(BizArray.Events.CHANGE, {
+      addItems: [],
+      deleteItems: [item] 
+    });
     return item;
   }
 
@@ -74,9 +83,11 @@ export class BizArray<T> extends Array<T & {id: Id}> {
       this.idUniqValid(item.id);
       this._map.set(item.id, item);
     });
-    this.emit(BizArray.Events.CHANGE);
     const data = super.unshift(...items);
-    this.emit(BizArray.Events.CHANGE);
+    this.emit(BizArray.Events.CHANGE, {
+      addItems: items,
+      deleteItems: [] 
+    });
     return data;
   }
   
@@ -93,7 +104,10 @@ export class BizArray<T> extends Array<T & {id: Id}> {
     deleteItems.forEach(item => {
       this._map.delete(item.id);
     });
-    this.emit(BizArray.Events.CHANGE);
+    this.emit(BizArray.Events.CHANGE, {
+      addItems: items,
+      deleteItems: deleteItems
+    });
     return deleteItems;
   }
 

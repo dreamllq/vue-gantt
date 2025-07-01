@@ -7,7 +7,7 @@ export const data:GanttJsonData = {
     'durationUnit': 'SECOND',
     'draggable': true,
     'selectable': true,
-    'checkable': true,
+    'multipleSelectable': true,
     'contextMenuEnable': true,
     'linkShowStrategy': 'SELECTED_ALL',
     contextMenuMenus: [

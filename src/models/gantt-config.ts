@@ -11,7 +11,7 @@ export class GanttConfig extends EventEmitter {
   static EVENTS = {
     DRAGGABLE_CHANGE: 'DRAGGABLE_CHANGE',
     SELECTABLE_CHANGE: 'SELECTABLE_CHANGE',
-    CHECKABLE_CHANGE: 'CHECKABLE_CHANGE'
+    MULTIPLE_SELECTABLE_CHANGE: 'MULTIPLE_SELECTABLE_CHANGE'
   };
 
   private _startDate: DateString;
@@ -24,7 +24,7 @@ export class GanttConfig extends EventEmitter {
   schedulingMode:SchedulingMode;
   private _draggable = false;
   private _selectable = false;
-  private _checkable = false;
+  private _multipleSelectable = false;
   multipleDraggable = false;
   contextMenuEnable = false;
   linkShowStrategy:LinkShowStrategy;
@@ -44,7 +44,7 @@ export class GanttConfig extends EventEmitter {
     this.schedulingMode = data.schedulingMode || SchedulingMode.FORWARD;
     this._draggable = !!data.draggable;
     this._selectable = !!data.selectable;
-    this._checkable = !!data.checkable;
+    this._multipleSelectable = !!data.multipleSelectable;
     this.multipleDraggable = !!data.multipleDraggable;
     this.contextMenuEnable = !!data.contextMenuEnable;
     this.contextMenuMenus = data.contextMenuMenus;
@@ -73,14 +73,14 @@ export class GanttConfig extends EventEmitter {
     this.emit(GanttConfig.EVENTS.SELECTABLE_CHANGE, val);
   }
 
-  get checkable() {
-    return this._checkable;
+  get multipleSelectable() {
+    return this._multipleSelectable;
   }
 
-  set checkable(val:boolean) {
-    if (this._checkable === val) return;
-    this._checkable = val;
-    this.emit(GanttConfig.EVENTS.CHECKABLE_CHANGE, val);
+  set multipleSelectable(val:boolean) {
+    if (this._multipleSelectable === val) return;
+    this._multipleSelectable = val;
+    this.emit(GanttConfig.EVENTS.MULTIPLE_SELECTABLE_CHANGE, val);
   }
 
   get daySplitTime() {

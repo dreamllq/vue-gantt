@@ -8,6 +8,8 @@ import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GanttGroup } from './gantt-group';
 import { isBoolean } from 'lodash';
+import { DateTimeString } from '@/types/date';
+import { GroupId } from '@/types/gantt-group';
 
 export class GanttBarView extends GanttBar {
   sx = 0;

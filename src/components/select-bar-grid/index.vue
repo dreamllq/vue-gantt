@@ -19,12 +19,12 @@ const onDraggableChange = async () => {
 
 onMounted(() => {
   bus.on(Events.SELECTABLE_CHANGE, onDraggableChange);
-  bus.on(Events.CHECKABLE_CHANGE, onDraggableChange);
+  bus.on(Events.MULTIPLE_SELECTABLE_CHANGE, onDraggableChange);
 });
 
 onUnmounted(() => {
   bus.off(Events.SELECTABLE_CHANGE, onDraggableChange);
-  bus.off(Events.CHECKABLE_CHANGE, onDraggableChange);
+  bus.off(Events.MULTIPLE_SELECTABLE_CHANGE, onDraggableChange);
 });
 </script>
 

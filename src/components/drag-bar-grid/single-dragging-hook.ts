@@ -4,6 +4,7 @@ import { Events } from '@/types/events';
 import { max, min } from 'lodash';
 import { GanttBarView } from '@/models/gantt-bar-view';
 import { BarId } from '@/types/gantt-bar';
+import { GanttGroup } from '@/models/gantt-group';
 
 type DraggingBar = {
   id: BarId,
@@ -115,16 +116,21 @@ export const useSingleDraggingHook = () => {
     const top = ganttEntity.groups.getGroupTopByIndex(index);
     const dropRowIndex = max([Math.floor(min([(dropY - top), group.barsHeight - 1])! / ganttEntity.layoutConfig.ROW_HEIGHT), 0])!;
         
+    let oldGroup:GanttGroup|undefined;
+    bar.dragging = false;
     if (bar.group.id !== group.id) {
+      oldGroup = bar.group;
       bar.group = group;
     }
     bar.resetTimeRange({
       start: startTime,
       end: endTime
     });
-    bar.dragging = false;
     bar.rowIndex = dropRowIndex;
     bar.calculate();
+    if (oldGroup) {
+      ganttEntity.bars.calculateGroupOverlap({ groupId: oldGroup.id });
+    }
     bus.emit(Events.BAR_CHANGE, [bar.id]);
     bus.emit(Events.BAR_DRAGGING_CHANGE, [bar.id], false);
     draggingBar.value = undefined;
