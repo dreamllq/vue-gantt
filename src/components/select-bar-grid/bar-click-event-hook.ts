@@ -18,7 +18,11 @@ export const useBarClickEventHook = () => {
       if (bar) {
         if (bar.selectable !== true) return; 
         bus.emit(Events.BAR_CLICK, e, bar);
-      } 
+      } else {
+        bus.emit(Events.BAR_CLICK_OUTSIDE, e);
+      }
+    } else {
+      bus.emit(Events.BAR_CLICK_OUTSIDE, e);
     }
   };
   onMounted(() => {

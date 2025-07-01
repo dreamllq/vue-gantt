@@ -1,33 +1,23 @@
-import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { useStore } from '../store';
-import dom from '@/utils/dom';
 import { GanttBarView } from '@/models/gantt-bar-view';
 import { BarId } from '@/types/gantt-bar';
 import { Events } from '@/types/events';
 
 export const useSingleSelectHook = () => {
   const { bus, ganttEntity, barHtmlClass } = useStore()!;
-  const selectedBar = ref<GanttBarView>();
-
-  onMounted(() => {
-    selectedBar.value = ganttEntity.bars.find(item => item.selected);
-  });
-
   const onClick = (e:MouseEvent, bar: GanttBarView) => {
     if (bar.selectable !== true) return;
     const barIds:BarId[] = [];
-    if (selectedBar.value) {
-      selectedBar.value.selected = false;
-      barIds.push(selectedBar.value.id);
-      if (selectedBar.value.id !== bar.id) {
-        selectedBar.value = bar;
-        selectedBar.value.selected = true;
-      } else {
-        selectedBar.value = undefined;
+    if (ganttEntity.bars.selectedBars.length > 0) {
+      const oldBarId = ganttEntity.bars.selectedBars[0].id;
+      barIds.push(oldBarId);
+      ganttEntity.bars.selectedBars[0].selected = false;
+      if (oldBarId !== bar.id) {
+        bar.selected = true;
       }
     } else {
-      selectedBar.value = bar;
-      selectedBar.value.selected = true;
+      bar.selected = true;
     }
     barIds.push(bar.id);
     bus.emit(Events.BAR_CHANGE, barIds);

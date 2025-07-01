@@ -12,6 +12,8 @@ import { DateTimeString } from '@/types/date';
 import { GroupId } from '@/types/gantt-group';
 
 export class GanttBarView extends GanttBar {
+  static Events = { SELECTED_CHANGE: 'SELECTED_CHANGE' };
+
   sx = 0;
   ex = 0;
   width = 0;
@@ -22,7 +24,7 @@ export class GanttBarView extends GanttBar {
   st = 0;
   et = 0;
   dragging = false;
-  selected = false;
+  _selected = false;
   groups:GanttGroups;
   bars: GanttBars;
   rowIndex = 0;
@@ -56,6 +58,21 @@ export class GanttBarView extends GanttBar {
 
   get group() {
     return super.group;
+  }
+
+  get selected() {
+    return this._selected;
+  }
+  
+  set selected(val) {
+    if (this._selected === val) return;
+    
+    this._selected = val;
+    if (val === true) {
+      this.bars.selectedBars.push(this);
+    } else {
+      this.bars.selectedBars.removeById(this.id);
+    }
   }
 
   get startMoment() {

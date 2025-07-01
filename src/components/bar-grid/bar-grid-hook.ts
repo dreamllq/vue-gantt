@@ -23,6 +23,8 @@ export const useBarGridHook = () => {
       x2: item.ex,
       y2: item.ey 
     })).map(item => item.toJSON());
+    
+    bus.emit(Events.BAR_LAZY_CHANGE, lazyBarGrid.value.map(item => item.id));
   };
 
   if (lazyReady.value) {

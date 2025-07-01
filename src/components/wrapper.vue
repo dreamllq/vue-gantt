@@ -40,7 +40,10 @@
         <contextmenu-bar-grid />
         <link-grid v-if='ganttEntity.config.linkShowStrategy !== LinkShowStrategy.NONE' />
       </template>
-      <template #main-tip>
+      <template #main>
+        <bar-tip-grid />
+      </template>
+      <template #main-main-layer>
         <mouse-hover-auto-scroll />
       </template>
     </layout>
@@ -66,6 +69,7 @@ import SelectBarGrid from './select-bar-grid/index.vue';
 import ContextmenuBarGrid from './contextmenu-bar-grid/index.vue';
 import LinkGrid from './link-grid/index.vue';
 import MouseHoverAutoScroll from './mouse-hover-auto-scroll/index.vue';
+import BarTipGrid from './bar-tip-grid/index.vue';
 import { LinkShowStrategy } from '@/types/gantt-link';
 
 const { entityReady, container, scroll, ganttEntity, bus } = useStore()!;

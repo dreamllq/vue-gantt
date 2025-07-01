@@ -32,10 +32,21 @@
             </div>
           </div>
           <div class='main-tip-block' :style='mainContainerStyle'>
-            <slot v-if='layoutReady' name='main-tip' />
+            <slot v-if='layoutReady' name='main-main-layer' />
           </div>
         </div>
       </div>
+      <div class='main-layer'>
+        <slot v-if='layoutReady' name='main-layer' />
+      </div>
+      <div ref='mainRef' class='main'>
+        <div class='main-inner' :style='mainStyle'>
+          <slot name='main' />
+        </div>
+      </div>
+    </div>
+    <div class='container-layer'>
+      <slot v-if='layoutReady' name='container-layer' />
     </div>
   </div>
 </template>
@@ -56,6 +67,7 @@ const { scrollLeft, scrollTop } = scroll;
 const mainContainerRef = ref();
 const mainHeaderRef = ref();
 const asideMainRef = ref();
+const mainRef = ref();
 useSizeHook({ mainContainerRef });
 
 const { isOutside } = useMouseInElement(mainContainerRef);
@@ -73,6 +85,9 @@ watchPostEffect(() => {
 
   mainContainerRef.value.scrollLeft = scrollLeft.value;
   mainContainerRef.value.scrollTop = scrollTop.value;
+
+  mainRef.value.scrollLeft = scrollLeft.value;
+  mainRef.value.scrollTop = scrollTop.value;
 });
 
 const asideStyle = ref({ width: `${ganttEntity.layoutConfig.GRID_CELL_WIDTH}px` });
@@ -94,6 +109,11 @@ const mainContainerStyle = ref({
 const mainContainerInnerStyle = ref({
   width: `${max([ganttEntity.config.totalSeconds * ganttEntity.config.secondWidth, ganttEntity.container.width])}px`,
   height: `${ganttEntity.groups.getGroupHeight()}px` 
+});
+
+const mainStyle = ref({
+  width: `${max([ganttEntity.config.totalSeconds * ganttEntity.config.secondWidth, ganttEntity.container.width])}px`,
+  height: `${ganttEntity.groups.getGroupHeight() + ganttEntity.layoutConfig.HEADER_HEIGHT}px` 
 });
 
 const onLayoutChange = () => {
@@ -123,10 +143,18 @@ onBeforeMount(() => {
   background-color: var(--el-fill-color-blank);
   display: flex;
 
+  .container-layer{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
 
-    .vertical{
-      flex-direction: column;
-    }
+  .vertical{
+    flex-direction: column;
+  }
 
   .gantt-aside {
     flex: none;
@@ -147,12 +175,33 @@ onBeforeMount(() => {
     overflow: hidden;
     display: flex;
     height: 100%;
+    position: relative;
 
     .vertical{
       .gantt-main{
         height: auto;
         width: 100%;
       }
+    }
+
+    .main-layer{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .main {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
     }
   }
 

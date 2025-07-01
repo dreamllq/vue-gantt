@@ -12,7 +12,7 @@ export const useShowSelectedHook = () => {
   const { ganttEntity, lazy, bus } = useStore()!;
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
   const lazyCalculate = () => {
-    const selectBarIds = ganttEntity.bars.filter(item => item.selected).map(bar => bar.id);
+    const selectBarIds = ganttEntity.bars.selectedBars.map(bar => bar.id);
 
     lazyLinkGrid.value = ganttEntity.links
       .filter(link => selectBarIds.includes(link.source.id) || selectBarIds.includes(link.target.id))

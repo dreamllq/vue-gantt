@@ -15,6 +15,7 @@ export class GanttBars extends BizArray<GanttBarView> {
   layoutConfig: GanttLayoutConfig;
   groups: GanttGroups;
   bus: GanttBus;
+  selectedBars: BizArray<GanttBarView> = new BizArray<GanttBarView>();
   constructor(data:GanttBarsClassConstructor) {
     super();
     this.config = data.config;
