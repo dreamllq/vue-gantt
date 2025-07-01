@@ -5,6 +5,8 @@ import { max, min } from 'lodash';
 import { GanttBarView } from '@/models/gantt-bar-view';
 import { BarId } from '@/types/gantt-bar';
 import { GanttGroup } from '@/models/gantt-group';
+import { GanttBarDragOperation } from '@/models/gantt-operation';
+import { GanttBarDragOperationData } from '@/types/gantt-operation-history';
 
 type DraggingBar = {
   id: BarId,
@@ -116,6 +118,14 @@ export const useSingleDraggingHook = () => {
     const top = ganttEntity.groups.getGroupTopByIndex(index);
     const dropRowIndex = max([Math.floor(min([(dropY - top), group.barsHeight - 1])! / ganttEntity.layoutConfig.ROW_HEIGHT), 0])!;
         
+    const operationOldData:GanttBarDragOperationData = {
+      barId: bar.id,
+      groupId: bar.group.id,
+      start: bar.start,
+      end: bar.end,
+      rowIndex: bar.rowIndex
+    };
+
     let oldGroup:GanttGroup|undefined;
     bar.dragging = false;
     if (bar.group.id !== group.id) {
@@ -131,6 +141,24 @@ export const useSingleDraggingHook = () => {
     if (oldGroup) {
       ganttEntity.bars.calculateGroupOverlap({ groupId: oldGroup.id });
     }
+
+    const operationNewData:GanttBarDragOperationData = {
+      barId: bar.id,
+      groupId: bar.group.id,
+      start: bar.start,
+      end: bar.end,
+      rowIndex: dropRowIndex
+    };
+
+    const operation = new GanttBarDragOperation({
+      bus: ganttEntity.bus,
+      bars: ganttEntity.bars,
+      groups: ganttEntity.groups,
+      newData: operationNewData,
+      oldData: operationOldData
+    });
+    ganttEntity.history.push(operation);
+
     bus.emit(Events.BAR_CHANGE, [bar.id]);
     bus.emit(Events.BAR_DRAGGING_CHANGE, [bar.id], false);
     draggingBar.value = undefined;
@@ -174,6 +202,7 @@ export const useSingleDraggingHook = () => {
 
   return {
     draggingBar,
-    shadowDraggingBar 
+    shadowDraggingBar,
+    barClone
   };
 };

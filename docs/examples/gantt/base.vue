@@ -1,4 +1,12 @@
 <template>
+  <div>
+    <el-button @click='onHistoryBack'>
+      back
+    </el-button>
+    <el-button @click='onHistoryNext'>
+      next
+    </el-button>
+  </div>
   <el-button @click='changeDraggable'>
     changeDraggable
   </el-button>
@@ -41,6 +49,14 @@ let selectable = ganttData.value.config.selectable;
 const changeSelectable = () => {
   selectable = !selectable;
   ganttRef.value!.api().setSelectable(selectable);
+};
+
+const onHistoryBack = () => {
+  ganttRef.value!.api().history.back();
+};
+
+const onHistoryNext = () => {
+  ganttRef.value!.api().history.next();
 };
 </script>
 

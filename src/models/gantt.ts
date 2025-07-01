@@ -18,6 +18,7 @@ import { SchedulingMode } from '@/types/gantt-config';
 import { GanttBus } from './gantt-bus';
 import { GanttAttachedBars } from './gantt-attached-bars';
 import { GanttAttachedBarAddParams } from '@/types/gantt-attached-bar';
+import { GanttOperationHistory } from './gantt-operation-history';
 
 export class Gantt extends EventEmitter {
   hook?: GanttHook;
@@ -30,6 +31,7 @@ export class Gantt extends EventEmitter {
   attachedBars: GanttAttachedBars;
   links: GanttLinks;
   bus: GanttBus = new GanttBus();
+  history: GanttOperationHistory = new GanttOperationHistory();
 
   constructor(data:GanttClassConstructor) {
     super();

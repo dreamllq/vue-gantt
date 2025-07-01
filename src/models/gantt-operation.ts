@@ -1,0 +1,63 @@
+import { GanttBarDragOperationConstructor, GanttBarDragOperationData, OperationInterface } from '@/types/gantt-operation-history';
+import { GanttBars } from './gantt-bars';
+import { GanttGroups } from './gantt-groups';
+import { GanttGroup } from './gantt-group';
+import { GanttBus } from './gantt-bus';
+import { GanttBusEvents } from '@/types/gantt-bus';
+
+export class GanttBarDragOperation implements OperationInterface {
+  bus: GanttBus;
+  bars: GanttBars;
+  groups: GanttGroups;
+  oldData: GanttBarDragOperationData;
+  newData: GanttBarDragOperationData;
+
+  constructor(data: GanttBarDragOperationConstructor) {
+    this.bus = data.bus;
+    this.bars = data.bars;
+    this.groups = data.groups;
+    this.oldData = data.oldData;
+    this.newData = data.newData;
+  }
+
+  up () {
+    const bar = this.bars.getById(this.newData.barId)!;
+    const group = this.groups.getById(this.newData.groupId)!;
+    let oldGroup:GanttGroup|undefined;
+    if (bar.group.id !== group.id) {
+      oldGroup = bar.group;
+      bar.group = group;
+    }
+    bar.resetTimeRange({
+      start: this.newData.start,
+      end: this.newData.end
+    });
+    bar.rowIndex = this.newData.rowIndex;
+    bar.calculate();
+    if (oldGroup) {
+      this.bars.calculateGroupOverlap({ groupId: oldGroup.id });
+    }
+
+    this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [bar.id]);
+  }
+
+  down () {
+    const bar = this.bars.getById(this.oldData.barId)!;
+    const group = this.groups.getById(this.oldData.groupId)!;
+    let oldGroup:GanttGroup|undefined;
+    if (bar.group.id !== group.id) {
+      oldGroup = bar.group;
+      bar.group = group;
+    }
+    bar.resetTimeRange({
+      start: this.oldData.start,
+      end: this.oldData.end
+    });
+    bar.rowIndex = this.oldData.rowIndex;
+    bar.calculate();
+    if (oldGroup) {
+      this.bars.calculateGroupOverlap({ groupId: oldGroup.id });
+    }
+    this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [bar.id]);
+  }
+}

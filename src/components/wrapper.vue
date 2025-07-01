@@ -31,16 +31,17 @@
             <slot name='attachedBar' v-bind='slotProps' />
           </template>
         </attached-bar-grid>
-        <drag-bar-grid>
-          <template #draggingBar='slotProps'>
-            <slot name='bar' v-bind='slotProps' />
-          </template>
-        </drag-bar-grid>
+        
         <select-bar-grid />
         <contextmenu-bar-grid />
         <link-grid v-if='ganttEntity.config.linkShowStrategy !== LinkShowStrategy.NONE' />
       </template>
       <template #main>
+        <drag-bar-grid>
+          <template #draggingBar='slotProps'>
+            <slot name='bar' v-bind='slotProps' />
+          </template>
+        </drag-bar-grid>
         <bar-tip-grid />
       </template>
       <template #main-main-layer>
@@ -86,7 +87,11 @@ const setSelectable = (val:boolean) => {
 defineExpose({
   api: () => ({
     setDraggable,
-    setSelectable 
+    setSelectable,
+    history: {
+      next: () => ganttEntity.history.next(),
+      back: () => ganttEntity.history.back()
+    }
   }) 
 });
 </script>
