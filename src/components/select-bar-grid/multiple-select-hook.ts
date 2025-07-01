@@ -23,7 +23,7 @@ export const useMultipleSelectHook = () => {
           bar.selected = false;
           barIds.push(bar.id);
         } else {
-          ganttEntity.bars.selectedBars.forEach(item => {
+          ganttEntity.bars.selectedBars.map(item => item).forEach(item => {
             if (item.id !== bar.id) {
               item.selected = false;
               barIds.push(item.id);
@@ -31,7 +31,7 @@ export const useMultipleSelectHook = () => {
           });
         }
       } else {
-        ganttEntity.bars.selectedBars.forEach(item => {
+        ganttEntity.bars.selectedBars.map(item => item).forEach(item => {
           item.selected = false;
           barIds.push(item.id);
         });
@@ -48,7 +48,8 @@ export const useMultipleSelectHook = () => {
     const selectedBars = ganttEntity.bars.selectedBars;
     
     if (selectedBars.length > 1) {
-      selectedBars.forEach(item => {
+      const bars = selectedBars.map(item => item);
+      bars.forEach(item => {
         barIds.push(item.id);
         item.selected = false;
       });

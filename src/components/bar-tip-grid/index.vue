@@ -2,6 +2,7 @@
   <div class='bar-tip-grid'>
     <template v-for='item in tipBars' :key='item.id'>
       <div
+        v-if='item.sy - scrollTop > 0 && !item.dragging'
         class='dragging-tip' 
         :style='{
           top: `${item.sy + wrapperHeight}px`, 
@@ -19,7 +20,8 @@ import { ref } from 'vue';
 import { useBarTipGridHook } from './hook';
 import { useStore } from '../store';
 
-const { ganttEntity } = useStore()!;
+const { ganttEntity, scroll } = useStore()!;
+const { scrollTop } = scroll;
 const { tipBars } = useBarTipGridHook();
 const width = ref(280);
 const wrapperHeight = ref(ganttEntity.layoutConfig.HEADER_HEIGHT - 20);
