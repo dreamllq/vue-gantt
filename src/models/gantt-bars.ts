@@ -41,7 +41,13 @@ export class GanttBars extends BizArray<GanttBarView> {
     const bar = this.getById(id);
     if (!bar) return;
     this.groups.getById(bar.group.id)!.bars.removeById(id);
+    if (bar.selectable) {
+      this.selectedBars.removeById(id);
+    }
     super.removeById(id);
+    bar.clearOverlap();
+    this.calculateGroupOverlap({ groupId: bar.group.id });
+    this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [id]);
   }
 
   updateShow() {

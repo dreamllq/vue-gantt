@@ -56,14 +56,14 @@ export const useBarGridHook = () => {
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.on(Events.BAR_VISIBLE_CHANGE, onVisibleAreaChange);
-    bus.on(Events.BAR_CHANGE_FRAGMENTATION, onBarChange);
+    bus.on(Events.BAR_CHANGE_FRAGMENTATION, onVisibleAreaChange);
     bus.on(Events.GROUP_EXPAND_CHANGE, onGroupExpandChange);
   });
   
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.off(Events.BAR_VISIBLE_CHANGE, onVisibleAreaChange);
-    bus.off(Events.BAR_CHANGE_FRAGMENTATION, onBarChange);
+    bus.off(Events.BAR_CHANGE_FRAGMENTATION, onVisibleAreaChange);
     bus.off(Events.GROUP_EXPAND_CHANGE, onGroupExpandChange);
   });
 

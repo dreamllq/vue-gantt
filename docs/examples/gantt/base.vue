@@ -19,6 +19,14 @@
   <el-button @click='setSizeRatioPercent'>
     setSizeRatioPercent
   </el-button>
+  <el-button @click='removeBarById'>
+    removeBarById
+  </el-button>
+  <el-button @click='addBar'>
+    addBar
+  </el-button>
+
+  
   
   <div style='height: 400px;'>
     <gantt-view ref='ganttRef' :data='ganttData'>
@@ -64,6 +72,21 @@ const setDataScaleUnit = () => {
 
 const setSizeRatioPercent = () => {
   ganttRef.value?.api().setSizeRatioPercent(150);
+};
+
+const removeBarById = () => {
+  ganttRef.value?.api().removeBarById(2);
+};
+
+const addBar = () => {
+  ganttRef.value?.api().addBar({
+    'duration': 72000,
+    'end': null,
+    'groupId': 2,
+    'id': 2,
+    'start': '2024-01-02 12:00:00',
+    selectable: false 
+  });
 };
 
 const onHistoryBack = () => {

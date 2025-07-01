@@ -82,14 +82,18 @@ export class Gantt extends EventEmitter {
   }
 
   addBar(data: GanttBarAddParams) {
-    this.bars.add({
-      ...data,
-      config: this.config,
-      layoutConfig: this.layoutConfig,
-      groups: this.groups,
-      bars: this.bars,
-      bus: this.bus
-    });
+    const group = this.groups.getById(data.groupId);
+    if (group) {
+      this.bars.add({
+        ...data,
+        group: group,
+        config: this.config,
+        layoutConfig: this.layoutConfig,
+        groups: this.groups,
+        bars: this.bars,
+        bus: this.bus
+      });
+    }
   }
 
   addAttachedBar(data: GanttAttachedBarAddParams) {
@@ -144,19 +148,16 @@ export class Gantt extends EventEmitter {
 
   batchAddBar(bars:GanttJsonDataBar[]) {
     bars.forEach(barJson => {
-      const group = this.groups.getById(barJson.groupId);
-      if (group) {
-        this.addBar({
-          id: barJson.id,
-          duration: barJson.duration,
-          start: barJson.start,
-          end: barJson.end,
-          group: group,
-          schedulingMode: barJson.schedulingMode ? SchedulingMode[barJson.schedulingMode] : undefined,
-          draggable: barJson.draggable,
-          selectable: barJson.selectable
-        });
-      }
+      this.addBar({
+        id: barJson.id,
+        duration: barJson.duration,
+        start: barJson.start,
+        end: barJson.end,
+        groupId: barJson.groupId,
+        schedulingMode: barJson.schedulingMode ? SchedulingMode[barJson.schedulingMode] : undefined,
+        draggable: barJson.draggable,
+        selectable: barJson.selectable
+      });
     });
   }
 

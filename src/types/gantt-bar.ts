@@ -6,6 +6,7 @@ import { GanttGroups } from '@/models/gantt-groups';
 import { SchedulingMode } from './gantt-config';
 import { GanttBars } from '@/models/gantt-bars';
 import { GanttBus } from '@/models/gantt-bus';
+import { GroupId } from './gantt-group';
 
 export type BarId = Id;
 
@@ -28,7 +29,7 @@ export type GanttBarClassConstructor = {
 
 export type GanttBarAddParams = {
   id: BarId,
-  group: GanttGroup,
+  groupId: GroupId,
   start: DateTimeString | null,
   end: DateTimeString | null,
   duration: number | null,
