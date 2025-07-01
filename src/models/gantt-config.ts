@@ -8,7 +8,7 @@ import EventEmitter from '@/utils/eventemitter';
 import { menusItemType } from '@/types/contextmenu-menus';
 
 export class GanttConfig extends EventEmitter {
-  static EVENTS = {
+  static Events = {
     DRAGGABLE_CHANGE: 'DRAGGABLE_CHANGE',
     SELECTABLE_CHANGE: 'SELECTABLE_CHANGE',
     DATA_SCALE_UNIT_CHANGE: 'DATA_SCALE_UNIT_CHANGE',
@@ -63,7 +63,7 @@ export class GanttConfig extends EventEmitter {
   set dataScaleUnit(val: Unit) {
     if (this._dataScaleUnit === val) return;
     this._dataScaleUnit = val;
-    this.emit(GanttConfig.EVENTS.DATA_SCALE_UNIT_CHANGE, val);
+    this.emit(GanttConfig.Events.DATA_SCALE_UNIT_CHANGE, val);
   }
   
 
@@ -74,7 +74,7 @@ export class GanttConfig extends EventEmitter {
   set draggable(val:boolean) {
     if (this._draggable === val) return;
     this._draggable = val;
-    this.emit(GanttConfig.EVENTS.DRAGGABLE_CHANGE, val);
+    this.emit(GanttConfig.Events.DRAGGABLE_CHANGE, val);
   }
 
   get selectable() {
@@ -84,7 +84,7 @@ export class GanttConfig extends EventEmitter {
   set selectable(val: boolean) {
     if (this._selectable === val) return;
     this._selectable = val;
-    this.emit(GanttConfig.EVENTS.SELECTABLE_CHANGE, val);
+    this.emit(GanttConfig.Events.SELECTABLE_CHANGE, val);
   }
 
   get multipleSelectable() {
@@ -94,7 +94,7 @@ export class GanttConfig extends EventEmitter {
   set multipleSelectable(val:boolean) {
     if (this._multipleSelectable === val) return;
     this._multipleSelectable = val;
-    this.emit(GanttConfig.EVENTS.MULTIPLE_SELECTABLE_CHANGE, val);
+    this.emit(GanttConfig.Events.MULTIPLE_SELECTABLE_CHANGE, val);
   }
 
   get daySplitTime() {

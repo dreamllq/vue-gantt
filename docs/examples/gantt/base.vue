@@ -16,6 +16,9 @@
   <el-button @click='setDataScaleUnit'>
     setDataScaleUnit
   </el-button>
+  <el-button @click='setSizeRatioPercent'>
+    setSizeRatioPercent
+  </el-button>
   
   <div style='height: 400px;'>
     <gantt-view ref='ganttRef' :data='ganttData'>
@@ -57,6 +60,10 @@ const changeSelectable = () => {
 
 const setDataScaleUnit = () => {
   ganttRef.value?.api().setDataScaleUnit('WEEK');
+};
+
+const setSizeRatioPercent = () => {
+  ganttRef.value?.api().setSizeRatioPercent(150);
 };
 
 const onHistoryBack = () => {

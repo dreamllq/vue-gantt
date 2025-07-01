@@ -96,6 +96,8 @@ export class GanttGroupView extends GanttGroup {
 
   calculate() {
     if (!this.isShow) return;
-    // this.calculateHeight();
+    this.calculateBarsHeight();
+    this.calculateAttachedBarsHeight();
+    this.calculateHeight();
   }
 }

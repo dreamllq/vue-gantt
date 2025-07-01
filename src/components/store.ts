@@ -11,6 +11,7 @@ import { useDrag } from './hooks/drag';
 import { v4 as uuidv4 } from 'uuid';
 import { useEvents } from './hooks/events';
 import { GanttConfig } from '@/models/gantt-config';
+import { GanttLayoutConfig } from '@/models/gantt-layout-config';
 
 const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) => {
   const ganttId = uuidv4();
@@ -40,15 +41,15 @@ const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) =>
     scroll.scrollReady.value = false;
     layout.layoutReady.value = false;
     await nextTick();
+    ganttEntity.groups.calculate();
     ganttEntity.bars.calculate();
     ganttEntity.attachedBars.calculate();
     ganttEntity.links.calculate();
     container.containerReady.value = true;
   };
   
-  ganttEntity.config.on(GanttConfig.EVENTS.DATA_SCALE_UNIT_CHANGE, async() => {
-    containerReload();
-  });
+  ganttEntity.config.on(GanttConfig.Events.DATA_SCALE_UNIT_CHANGE, containerReload);
+  ganttEntity.layoutConfig.on(GanttLayoutConfig.Events.SIZE_RATIO_PERCENT_CHANGE, containerReload);
 
   return {
     ganttId,

@@ -89,11 +89,16 @@ const setDataScaleUnit = (unit: (keyof typeof Unit)) => {
   ganttEntity.config.dataScaleUnit = Unit[unit];
 };
 
+const setSizeRatioPercent = (sizeRatioPercent:number) => {
+  ganttEntity.layoutConfig.sizeRatioPercent = sizeRatioPercent;
+};
+
 defineExpose({
   api: () => ({
     setDraggable,
     setSelectable,
     setDataScaleUnit,
+    setSizeRatioPercent,
     history: {
       next: () => ganttEntity.history.next(),
       back: () => ganttEntity.history.back()

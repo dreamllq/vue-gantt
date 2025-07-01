@@ -1,4 +1,5 @@
 import { GanttLayoutConfigClassConstructor } from '@/types/gantt-layout-config';
+import EventEmitter from '@/utils/eventemitter';
 
 const HEADER_HEIGHT = 70;
 const ROW_HEIGHT = 80;
@@ -17,8 +18,10 @@ const AUTO_SCROLL_INTERVAL_MS = 8;
 const AUTO_SCROLL_SHIFT_AMOUNT_X = 4;
 const AUTO_SCROLL_SHIFT_AMOUNT_Y = 4;
 
-export class GanttLayoutConfig {
-  sizeRatioPercent:number;
+export class GanttLayoutConfig extends EventEmitter {
+  static Events = { SIZE_RATIO_PERCENT_CHANGE: 'SIZE_RATIO_PERCENT_CHANGE' };
+
+  _sizeRatioPercent:number;
   private _HEADER_HEIGHT :number;
   private _ROW_HEIGHT:number;
   private _TIME_UNIT_WIDTH:number;
@@ -36,7 +39,8 @@ export class GanttLayoutConfig {
   AUTO_SCROLL_SHIFT_AMOUNT_Y:number;
 
   constructor(data:GanttLayoutConfigClassConstructor) {
-    this.sizeRatioPercent = data.sizeRatioPercent || 100;
+    super();
+    this._sizeRatioPercent = data.sizeRatioPercent || 100;
     this._HEADER_HEIGHT = data.HEADER_HEIGHT || HEADER_HEIGHT;
     this._ROW_HEIGHT = data.ROW_HEIGHT || ROW_HEIGHT;
     this._TIME_UNIT_WIDTH = data.TIME_UNIT_WIDTH || TIME_UNIT_WIDTH;
@@ -52,6 +56,16 @@ export class GanttLayoutConfig {
     this.AUTO_SCROLL_INTERVAL_MS = data.AUTO_SCROLL_INTERVAL_MS || AUTO_SCROLL_INTERVAL_MS;
     this.AUTO_SCROLL_SHIFT_AMOUNT_X = data.AUTO_SCROLL_SHIFT_AMOUNT_X || AUTO_SCROLL_SHIFT_AMOUNT_X;
     this.AUTO_SCROLL_SHIFT_AMOUNT_Y = data.AUTO_SCROLL_SHIFT_AMOUNT_Y || AUTO_SCROLL_SHIFT_AMOUNT_Y; 
+  }
+
+  get sizeRatioPercent() {
+    return this._sizeRatioPercent;
+  }
+
+  set sizeRatioPercent(val) {
+    if (this._sizeRatioPercent === val) return;
+    this._sizeRatioPercent = val;
+    this.emit(GanttLayoutConfig.Events.SIZE_RATIO_PERCENT_CHANGE, val);
   }
 
   get HEADER_HEIGHT() {

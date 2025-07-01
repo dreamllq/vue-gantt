@@ -11,15 +11,15 @@ export const useEvents = (ganttEntity: Gantt, store:{
   bus: ReturnType<typeof useBus>
 }) => {
 
-  ganttEntity.config.on(GanttConfig.EVENTS.DRAGGABLE_CHANGE, (val) => {
+  ganttEntity.config.on(GanttConfig.Events.DRAGGABLE_CHANGE, (val) => {
     store.bus.emit(Events.DRAGGABLE_CHANGE, val);
   });
 
-  ganttEntity.config.on(GanttConfig.EVENTS.SELECTABLE_CHANGE, (val) => {
+  ganttEntity.config.on(GanttConfig.Events.SELECTABLE_CHANGE, (val) => {
     store.bus.emit(Events.SELECTABLE_CHANGE, val);
   });
 
-  ganttEntity.config.on(GanttConfig.EVENTS.MULTIPLE_SELECTABLE_CHANGE, (val) => {
+  ganttEntity.config.on(GanttConfig.Events.MULTIPLE_SELECTABLE_CHANGE, (val) => {
     store.bus.emit(Events.MULTIPLE_SELECTABLE_CHANGE, val);
   });
 
