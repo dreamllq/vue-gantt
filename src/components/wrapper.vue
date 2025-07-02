@@ -77,6 +77,7 @@ import { BarId, GanttBarAddParams, GanttBarUpdateParams } from '@/types/gantt-ba
 import { isUndefined } from 'lodash';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GanttGroup } from '../models/gantt-group';
+import { GroupId } from '@/types/gantt-group';
 
 const { entityReady, container, scroll, ganttEntity, bus } = useStore()!;
 const { scrollReady } = scroll;
@@ -163,6 +164,12 @@ const setBarDraggable = (id: BarId, val: boolean) => {
   }
 };
 
+const scrollToGroup = (id: GroupId) => {
+  const index = ganttEntity.groups.getIndexById(id);
+  const top = ganttEntity.groups.getGroupTopByIndex(index);
+  scroll.scrollTop.value = top;
+};
+
 
 defineExpose({
   api: () => ({
@@ -180,6 +187,7 @@ defineExpose({
     setBarSelectable,
     setBarContextMenuEnable,
     setBarDraggable,
+    scrollToGroup,
     history: {
       next: () => ganttEntity.history.next(),
       back: () => ganttEntity.history.back()

@@ -49,6 +49,9 @@
   <el-button @click='setBarDraggable'>
     setBarDraggable
   </el-button>
+  <el-button @click='scrollToGroup'>
+    scrollToGroup
+  </el-button>
 
   
   
@@ -159,6 +162,10 @@ const onHistoryNext = () => {
 
 const setBarDraggable = () => {
   ganttRef.value?.api().setBarDraggable(1, true);
+};
+
+const scrollToGroup = () => {
+  ganttRef.value?.api().scrollToGroup(12);
 };
 </script>
 

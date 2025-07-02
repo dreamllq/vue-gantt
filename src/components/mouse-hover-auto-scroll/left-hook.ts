@@ -15,11 +15,7 @@ export const useLeftHook = (htmlRef: Ref<HTMLElement | undefined>) => {
   const toggleScrollFlag = computed(() => isShow.value && !isOutside.value);
 
   useTimerHook(toggleScrollFlag, () => {
-    if (scrollLeft.value > ganttEntity.layoutConfig.AUTO_SCROLL_SHIFT_AMOUNT_X) {
-      scrollLeft.value -= ganttEntity.layoutConfig.AUTO_SCROLL_SHIFT_AMOUNT_X;
-    } else {
-      scrollLeft.value = 0;
-    }
+    scrollLeft.value -= ganttEntity.layoutConfig.AUTO_SCROLL_SHIFT_AMOUNT_X;
     bus.emit(Events.AUTO_SCROLL_CHANGE);
   });
   return { isShow };

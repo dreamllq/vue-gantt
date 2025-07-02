@@ -1,5 +1,5 @@
 import { Gantt } from '@/models/gantt';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useBus } from './bus';
 import { Events } from '@/types/events';
 
@@ -7,8 +7,38 @@ export const useScroll = (ganttEntity:Gantt, store:{
     bus: ReturnType<typeof useBus>;
 }) => {
   const scrollReady = ref(false);
-  const scrollLeft = ref(0);
-  const scrollTop = ref(0);
+  const _scrollLeft = ref(0);
+  const _scrollTop = ref(0);
+
+  const scrollLeft = computed({
+    get() {
+      return _scrollLeft.value;
+    },
+    set(val) {
+      if (val < 0) {
+        _scrollLeft.value = 0;
+      } else if (val > ganttEntity.scroll.xScrollBarWidth - ganttEntity.scroll.xScrollWidth) {
+        _scrollLeft.value = ganttEntity.scroll.xScrollBarWidth - ganttEntity.scroll.xScrollWidth;
+      } else {
+        _scrollLeft.value = val;
+      }
+    }
+  });
+
+  const scrollTop = computed({
+    get() {
+      return _scrollTop.value;
+    },
+    set(val) {
+      if (val < 0) {
+        _scrollTop.value = 0;
+      } else if (val > ganttEntity.scroll.yScrollBarHeight - ganttEntity.scroll.yScrollHeight) {
+        _scrollTop.value = ganttEntity.scroll.yScrollBarHeight - ganttEntity.scroll.yScrollHeight;
+      } else {
+        _scrollTop.value = val;
+      }
+    }
+  });
   const calculate = () => {
     ganttEntity.scroll.calculate();
     scrollReady.value = true;
@@ -19,48 +49,10 @@ export const useScroll = (ganttEntity:Gantt, store:{
     store.bus.emit(Events.WHEEL, evt);
 
     if (evt.shiftKey === true) {
-      if (evt.deltaY > 0) {
-        if (scrollLeft.value + evt.deltaY > ganttEntity.scroll.xScrollBarWidth - ganttEntity.scroll.xScrollWidth) {
-          scrollLeft.value = ganttEntity.scroll.xScrollBarWidth - ganttEntity.scroll.xScrollWidth;
-        } else {
-          scrollLeft.value += evt.deltaY;
-        }
-      } else if (evt.deltaY < 0) {
-        if (scrollLeft.value + evt.deltaY < 0) {
-          scrollLeft.value = 0;
-        } else {
-          scrollLeft.value += evt.deltaY;
-        }
-      }
+      scrollLeft.value += evt.deltaY;
     } else {
-      if (evt.deltaY > 0) {
-        if (scrollTop.value + evt.deltaY > ganttEntity.scroll.yScrollBarHeight - ganttEntity.scroll.yScrollHeight) {
-          scrollTop.value = ganttEntity.scroll.yScrollBarHeight - ganttEntity.scroll.yScrollHeight;
-        } else {
-          scrollTop.value += evt.deltaY;
-        }
-      } else if (evt.deltaY < 0) {
-        if (scrollTop.value + evt.deltaY < 0) {
-          scrollTop.value = 0;
-        } else {
-          scrollTop.value += evt.deltaY;
-          
-        }
-      }
-
-      if (evt.deltaX > 0) {
-        if (scrollLeft.value + evt.deltaX > ganttEntity.scroll.xScrollBarWidth - ganttEntity.scroll.xScrollWidth) {
-          scrollLeft.value = ganttEntity.scroll.xScrollBarWidth - ganttEntity.scroll.xScrollWidth;
-        } else {
-          scrollLeft.value += evt.deltaX;
-        }
-      } else if (evt.deltaX < 0) {
-        if (scrollLeft.value + evt.deltaX < 0) {
-          scrollLeft.value = 0;
-        } else {
-          scrollLeft.value += evt.deltaX;
-        }
-      }
+      scrollTop.value += evt.deltaY;
+      scrollLeft.value += evt.deltaX;
     }
   };
 

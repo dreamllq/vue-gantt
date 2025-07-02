@@ -14,11 +14,7 @@ export const useTopHook = (htmlRef: Ref<HTMLElement | undefined>) => {
   const toggleScrollFlag = computed(() => isShow.value && !isOutside.value);
 
   useTimerHook(toggleScrollFlag, () => {
-    if (scrollTop.value > ganttEntity.layoutConfig.AUTO_SCROLL_SHIFT_AMOUNT_Y) {
-      scrollTop.value -= ganttEntity.layoutConfig.AUTO_SCROLL_SHIFT_AMOUNT_Y;
-    } else {
-      scrollTop.value = 0;
-    }
+    scrollTop.value -= ganttEntity.layoutConfig.AUTO_SCROLL_SHIFT_AMOUNT_Y;
 
     bus.emit(Events.AUTO_SCROLL_CHANGE);
   });
