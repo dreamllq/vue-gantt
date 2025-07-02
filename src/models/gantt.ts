@@ -109,12 +109,18 @@ export class Gantt extends EventEmitter {
   }
 
   addLink(data: GanttLinkAddParams) {
-    this.links.add({
-      ...data,
-      config: this.config,
-      layoutConfig: this.layoutConfig,
-      bars: this.bars
-    });
+    const sourceBar = this.bars.getById(data.sourceId);
+    const targetBar = this.bars.getById(data.targetId);
+    if (sourceBar && targetBar) {
+      this.links.add({
+        ...data,
+        source: sourceBar,
+        target: targetBar,
+        config: this.config,
+        layoutConfig: this.layoutConfig,
+        bars: this.bars
+      });
+    }
   }
 
   batchAddGroup(groups:GanttJsonDataGroup[]) {
@@ -178,16 +184,12 @@ export class Gantt extends EventEmitter {
 
   batchAddLink(links:GanttJsonDataLink[]) {
     links.forEach(linkJson => {
-      const sourceBar = this.bars.getById(linkJson.sourceId);
-      const targetBar = this.bars.getById(linkJson.targetId);
-      if (sourceBar && targetBar) {
-        this.addLink({
-          id: linkJson.id,
-          source: sourceBar,
-          target: targetBar,
-          linkType: linkJson.linkType ? GanttLinkType[linkJson.linkType] : undefined
-        });
-      }
+      this.addLink({
+        id: linkJson.id,
+        sourceId: linkJson.sourceId,
+        targetId: linkJson.targetId,
+        linkType: linkJson.linkType ? GanttLinkType[linkJson.linkType] : undefined
+      });
     });
   }
 

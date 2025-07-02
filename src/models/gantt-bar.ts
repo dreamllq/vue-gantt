@@ -34,12 +34,12 @@ export class GanttBar extends GanttBase {
     this._group = group;
   }
 
-  get schedulingMode() {
+  get schedulingMode():SchedulingMode {
     if (this._schedulingMode) return this._schedulingMode;
     else return this.config.schedulingMode;
   }
 
-  set schedulingMode(val) {
+  set schedulingMode(val:SchedulingMode | null) {
     this._schedulingMode = val;
   }
 

@@ -28,6 +28,12 @@
   <el-button @click='updateBar'>
     updateBar
   </el-button>
+  <el-button @click='removeLinkById'>
+    removeLinkById
+  </el-button>
+  <el-button @click='addLink'>
+    addLink
+  </el-button>
 
   
 
@@ -101,6 +107,18 @@ const updateBar = () => {
     start: '2024-01-04 12:00:00',
     selectable: true,
     draggable: false
+  });
+};
+
+const removeLinkById = () => {
+  ganttRef.value?.api().removeLinkById(3);
+};
+
+const addLink = () => {
+  ganttRef.value?.api().addLink({
+    'id': 3,
+    'sourceId': 4,
+    'targetId': 5
   });
 };
 

@@ -36,9 +36,17 @@ export class BizArray<T> extends Array<T & {id: Id}> {
     return this.map(item => item.id);
   }
 
+  getIndexById(id:Id) {
+    return this.findIndex(item => item.id === id);
+  }
+
   removeById(id: Id) {
-    const index = this.findIndex(item => item.id === id);
-    this.splice(index, 1);
+    if (this.isExist(id)) {
+      const index = this.getIndexById(id);
+      this.splice(index, 1);
+    } else {
+      throw new Error(`id:${id} 数据不存在`);
+    }
   }
 
   push(...items:(T & { id: Id })[]) {
@@ -93,7 +101,7 @@ export class BizArray<T> extends Array<T & {id: Id}> {
 
   _slice(start?: number, end?: number): (T & {id: Id;})[]
   _slice(start?: number, end?: number): T[] {
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const arr = this;
     const len = arr.length;
 

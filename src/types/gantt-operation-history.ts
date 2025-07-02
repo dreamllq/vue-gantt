@@ -18,7 +18,7 @@ export interface OperationInterface {
   down: ()=>void
 }
 
-export type GanttBarChangeOperationData = {
+export type GanttBarUpdateOperationData = {
   barId: BarId,
   groupId: GroupId,
   start: DateTimeString | null,
@@ -33,6 +33,6 @@ export type GanttBarDragOperationConstructor = {
   bus: GanttBus,
   bars: GanttBars,
   groups: GanttGroups,
-  oldData: GanttBarChangeOperationData,
-  newData: GanttBarChangeOperationData
+  oldData: GanttBarUpdateOperationData,
+  newData: GanttBarUpdateOperationData
 }

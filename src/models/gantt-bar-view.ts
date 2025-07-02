@@ -10,8 +10,8 @@ import { GanttGroup } from './gantt-group';
 import { isBoolean, isUndefined } from 'lodash';
 import { DateTimeString } from '@/types/date';
 import { GroupId } from '@/types/gantt-group';
-import { GanttBarChangeOperationData } from '@/types/gantt-operation-history';
-import { GanttBarChangeOperation } from './gantt-operation';
+import { GanttBarUpdateOperationData } from '@/types/gantt-operation-history';
+import { GanttBarUpdateOperation } from './gantt-operation';
 
 export class GanttBarView extends GanttBar {
   static Events = { SELECTED_CHANGE: 'SELECTED_CHANGE' };
@@ -102,7 +102,7 @@ export class GanttBarView extends GanttBar {
   }
 
   update(data:GanttBarUpdateParams) {
-    const operationOldData:GanttBarChangeOperationData = {
+    const operationOldData:GanttBarUpdateOperationData = {
       barId: this.id,
       groupId: this.group.id,
       start: this.start,
@@ -154,7 +154,7 @@ export class GanttBarView extends GanttBar {
     }
     this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [this.id]);
 
-    const operationNewData:GanttBarChangeOperationData = {
+    const operationNewData:GanttBarUpdateOperationData = {
       barId: this.id,
       groupId: this.group.id,
       start: this.start,
@@ -165,7 +165,7 @@ export class GanttBarView extends GanttBar {
       selectable: this.selectable
     };
     
-    const operation = new GanttBarChangeOperation({
+    const operation = new GanttBarUpdateOperation({
       bus: this.bus,
       bars: this.bars,
       groups: this.groups,

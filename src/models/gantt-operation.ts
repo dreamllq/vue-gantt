@@ -1,16 +1,16 @@
-import { GanttBarDragOperationConstructor, GanttBarChangeOperationData, OperationInterface } from '@/types/gantt-operation-history';
+import { GanttBarDragOperationConstructor, GanttBarUpdateOperationData, OperationInterface } from '@/types/gantt-operation-history';
 import { GanttBars } from './gantt-bars';
 import { GanttGroups } from './gantt-groups';
 import { GanttGroup } from './gantt-group';
 import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
 
-export class GanttBarChangeOperation implements OperationInterface {
+export class GanttBarUpdateOperation implements OperationInterface {
   bus: GanttBus;
   bars: GanttBars;
   groups: GanttGroups;
-  oldData: GanttBarChangeOperationData;
-  newData: GanttBarChangeOperationData;
+  oldData: GanttBarUpdateOperationData;
+  newData: GanttBarUpdateOperationData;
 
   constructor(data: GanttBarDragOperationConstructor) {
     this.bus = data.bus;

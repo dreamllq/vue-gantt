@@ -6,7 +6,7 @@ import { GanttBarView } from '@/models/gantt-bar-view';
 import { BarId } from '@/types/gantt-bar';
 import { GanttGroup } from '@/models/gantt-group';
 import { GanttBarDragOperation } from '@/models/gantt-operation';
-import { GanttBarChangeOperationData } from '@/types/gantt-operation-history';
+import { GanttBarUpdateOperationData } from '@/types/gantt-operation-history';
 import { roundDownTimeToNearestSeconds } from '@/utils/round-down-time-to-nearest-seconds';
 
 type DraggingBar = {

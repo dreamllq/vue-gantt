@@ -47,7 +47,7 @@ export class GanttBars extends BizArray<GanttBarView> {
     super.removeById(id);
     bar.clearOverlap();
     this.calculateGroupOverlap({ groupId: bar.group.id });
-    this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [id]);
+    this.bus.emit(GanttBusEvents.BARS_CHANGE);
   }
 
   updateShow() {

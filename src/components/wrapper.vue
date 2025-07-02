@@ -71,7 +71,7 @@ import ContextmenuBarGrid from './contextmenu-bar-grid/index.vue';
 import LinkGrid from './link-grid/index.vue';
 import MouseHoverAutoScroll from './mouse-hover-auto-scroll/index.vue';
 import BarTipGrid from './bar-tip-grid/index.vue';
-import { LinkShowStrategy } from '@/types/gantt-link';
+import { GanttLinkAddParams, LinkId, LinkShowStrategy } from '@/types/gantt-link';
 import { Unit } from '@/types/unit';
 import { BarId, GanttBarAddParams, GanttBarUpdateParams } from '@/types/gantt-bar';
 import { isUndefined } from 'lodash';
@@ -98,12 +98,7 @@ const setSizeRatioPercent = (sizeRatioPercent:number) => {
 };
 
 const removeBarById = (id:BarId) => {
-  if (ganttEntity.bars.isExist(id)) {
-    const bar = ganttEntity.bars.getById(id)!;
-    const group = bar?.group;
-    ganttEntity.bars.removeById(id);
-    // ganttEntity.bars.calculateGroupOverlap({ groupId: group.id });
-  }
+  ganttEntity.bars.removeById(id);
 };
 
 const addBar = (bar:GanttBarAddParams) => {
@@ -111,6 +106,7 @@ const addBar = (bar:GanttBarAddParams) => {
   const b = ganttEntity.bars.getById(bar.id)!;
   b.calculate();
   ganttEntity.bars.calculateGroupOverlap({ groupId: b.group.id });
+  ganttEntity.bus.emit(GanttBusEvents.BARS_CHANGE);
 };
 
 const updateBar = (id:BarId, data:GanttBarUpdateParams) => {
@@ -119,6 +115,19 @@ const updateBar = (id:BarId, data:GanttBarUpdateParams) => {
     bar.update(data);
   }
 };
+
+const removeLinkById = (id:LinkId) => {
+  ganttEntity.links.removeById(id);
+};
+
+const addLink = (data: GanttLinkAddParams) => {
+  ganttEntity.addLink(data);
+  const link = ganttEntity.links.getById(data.id)!;
+  link.calculate();
+  ganttEntity.links.calculateLinkGroupMap();
+  ganttEntity.bus.emit(GanttBusEvents.LINKS_CHANGE);
+};
+
 
 defineExpose({
   api: () => ({
@@ -129,6 +138,8 @@ defineExpose({
     removeBarById,
     addBar,
     updateBar,
+    removeLinkById,
+    addLink,
     history: {
       next: () => ganttEntity.history.next(),
       back: () => ganttEntity.history.back()
