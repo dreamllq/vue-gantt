@@ -31,13 +31,14 @@ export class Gantt extends EventEmitter {
   attachedBars: GanttAttachedBars;
   links: GanttLinks;
   bus: GanttBus = new GanttBus();
-  history: GanttOperationHistory = new GanttOperationHistory();
+  history: GanttOperationHistory;
 
   constructor(data:GanttClassConstructor) {
     super();
     this.hook = data.hook;
     this.config = data.config;
     this.layoutConfig = data.layoutConfig;
+    this.history = new GanttOperationHistory({ bus: this.bus });
 
     this.groups = new GanttGroups({
       layoutConfig: this.layoutConfig,

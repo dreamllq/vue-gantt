@@ -1,7 +1,9 @@
 import { BarId } from './gantt-bar';
 import { GroupId } from './gantt-group';
+import { OperationInterface } from './gantt-operation-history';
 
 export enum GanttBusEvents {
+  HISTORY_PUSH='HISTORY_PUSH',
   GROUP_HEIGHT_CHANGE='GROUP_HEIGHT_CHANGE',
   GROUP_TOP_CHANGE='GROUP_TOP_CHANGE',
   GROUP_BARS_HEIGHT_CHANGE='GROUP_BARS_HEIGHT_CHANGE',
@@ -13,6 +15,7 @@ export enum GanttBusEvents {
 }
 
 export interface GanttBusEventsInterface {
+  [GanttBusEvents.HISTORY_PUSH]:(operation: OperationInterface)=>void,
   [GanttBusEvents.GROUP_HEIGHT_CHANGE]: (data: {groupId: GroupId})=> void,
   [GanttBusEvents.GROUP_BARS_HEIGHT_CHANGE]: (data: {groupId: GroupId})=> void,
   [GanttBusEvents.GROUP_ATTACHED_BARS_HEIGHT_CHANGE]: (data: {groupId: GroupId})=> void,

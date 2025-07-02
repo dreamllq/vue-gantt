@@ -1,9 +1,19 @@
-import { OperationInterface } from '@/types/gantt-operation-history';
+import { GanttOperationHistoryClassConstructor, OperationInterface } from '@/types/gantt-operation-history';
+import { GanttBus } from './gantt-bus';
+import { GanttBusEvents } from '@/types/gantt-bus';
 
 export class GanttOperationHistory {
+  bus:GanttBus;
   preOperations: OperationInterface[] = [];
   sufOperations: OperationInterface[] = [];
 
+  constructor(data: GanttOperationHistoryClassConstructor) {
+    this.bus = data.bus;
+
+    this.bus.on(GanttBusEvents.HISTORY_PUSH, (operation) => {
+      this.push(operation);
+    });
+  }
   push(operation: OperationInterface) {
     this.sufOperations = [];
     this.preOperations.push(operation);

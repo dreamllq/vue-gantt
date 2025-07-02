@@ -10,6 +10,8 @@ import { GanttGroup } from './gantt-group';
 import { isBoolean, isUndefined } from 'lodash';
 import { DateTimeString } from '@/types/date';
 import { GroupId } from '@/types/gantt-group';
+import { GanttBarChangeOperationData } from '@/types/gantt-operation-history';
+import { GanttBarChangeOperation } from './gantt-operation';
 
 export class GanttBarView extends GanttBar {
   static Events = { SELECTED_CHANGE: 'SELECTED_CHANGE' };
@@ -100,6 +102,17 @@ export class GanttBarView extends GanttBar {
   }
 
   update(data:GanttBarUpdateParams) {
+    const operationOldData:GanttBarChangeOperationData = {
+      barId: this.id,
+      groupId: this.group.id,
+      start: this.start,
+      end: this.end,
+      rowIndex: this.rowIndex,
+      draggable: this.draggable,
+      schedulingMode: this.schedulingMode,
+      selectable: this.selectable
+    };
+        
     if (data.schedulingMode) {
       this.schedulingMode = data.schedulingMode;
     }
@@ -115,12 +128,16 @@ export class GanttBarView extends GanttBar {
     if (!isUndefined(data.selectable)) {
       this.selectable = data.selectable;
     }
+
+    if (!isUndefined(data.rowIndex)) {
+      this.rowIndex = data.rowIndex;
+    }
     
-    if (data.start) {
+    if (!isUndefined(data.start)) {
       this.start = data.start;
     }
 
-    if (data.end) {
+    if (!isUndefined(data.end)) {
       this.end = data.end;
     }
 
@@ -136,6 +153,26 @@ export class GanttBarView extends GanttBar {
       this.bars.calculateGroupOverlap({ groupId: oldGroup.id });
     }
     this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [this.id]);
+
+    const operationNewData:GanttBarChangeOperationData = {
+      barId: this.id,
+      groupId: this.group.id,
+      start: this.start,
+      end: this.end,
+      rowIndex: this.rowIndex,
+      draggable: this.draggable,
+      schedulingMode: this.schedulingMode,
+      selectable: this.selectable
+    };
+    
+    const operation = new GanttBarChangeOperation({
+      bus: this.bus,
+      bars: this.bars,
+      groups: this.groups,
+      newData: operationNewData,
+      oldData: operationOldData
+    });
+    this.bus.emit(GanttBusEvents.HISTORY_PUSH, operation);
   }
 
   calculate() {

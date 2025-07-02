@@ -6,7 +6,7 @@ import { GanttBarView } from '@/models/gantt-bar-view';
 import { BarId } from '@/types/gantt-bar';
 import { GanttGroup } from '@/models/gantt-group';
 import { GanttBarDragOperation } from '@/models/gantt-operation';
-import { GanttBarDragOperationData } from '@/types/gantt-operation-history';
+import { GanttBarChangeOperationData } from '@/types/gantt-operation-history';
 import { roundDownTimeToNearestSeconds } from '@/utils/round-down-time-to-nearest-seconds';
 
 type DraggingBar = {
@@ -119,46 +119,14 @@ export const useSingleDraggingHook = () => {
     const top = ganttEntity.groups.getGroupTopByIndex(index);
     const dropRowIndex = max([Math.floor(min([(dropY - top), group.barsHeight - 1])! / ganttEntity.layoutConfig.ROW_HEIGHT), 0])!;
         
-    const operationOldData:GanttBarDragOperationData = {
-      barId: bar.id,
-      groupId: bar.group.id,
-      start: bar.start,
-      end: bar.end,
-      rowIndex: bar.rowIndex
-    };
-
-    let oldGroup:GanttGroup|undefined;
     bar.dragging = false;
-    if (bar.group.id !== group.id) {
-      oldGroup = bar.group;
-      bar.group = group;
-    }
-    bar.start = startTime;
-    bar.end = endTime;
-    bar.rowIndex = dropRowIndex;
-    bar.calculate();
-    if (oldGroup) {
-      ganttEntity.bars.calculateGroupOverlap({ groupId: oldGroup.id });
-    }
-
-    const operationNewData:GanttBarDragOperationData = {
-      barId: bar.id,
-      groupId: bar.group.id,
-      start: bar.start,
-      end: bar.end,
-      rowIndex: dropRowIndex
-    };
-
-    const operation = new GanttBarDragOperation({
-      bus: ganttEntity.bus,
-      bars: ganttEntity.bars,
-      groups: ganttEntity.groups,
-      newData: operationNewData,
-      oldData: operationOldData
+    bar.update({
+      end: endTime,
+      start: startTime,
+      rowIndex: dropRowIndex,
+      groupId: group.id
     });
-    ganttEntity.history.push(operation);
 
-    bus.emit(Events.BAR_CHANGE, [bar.id]);
     bus.emit(Events.BAR_DRAGGING_CHANGE, [bar.id], false);
     draggingBar.value = undefined;
     barClone.value = undefined;

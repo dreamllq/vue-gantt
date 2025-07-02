@@ -13,14 +13,14 @@ export class GanttBar extends GanttBase {
   end: DateTimeString | null = null;
   duration: number | null = null;
   private _group: GanttGroup;
-  schedulingMode:SchedulingMode | null = null;
+  private _schedulingMode:SchedulingMode | null = null;
   private _hasCalculated = false;
 
   constructor(data:GanttBarClassConstructor) {
     super(data);
     this.id = data.id;
     this._group = data.group;
-    this.schedulingMode = data.schedulingMode || null;
+    this._schedulingMode = data.schedulingMode || null;
     this.duration = data.duration;
     this.start = data.start;
     this.end = data.end;
@@ -34,10 +34,15 @@ export class GanttBar extends GanttBase {
     this._group = group;
   }
 
-  get mergeSchedulingMode() {
-    if (this.schedulingMode) return this.schedulingMode;
+  get schedulingMode() {
+    if (this._schedulingMode) return this._schedulingMode;
     else return this.config.schedulingMode;
   }
+
+  set schedulingMode(val) {
+    this._schedulingMode = val;
+  }
+
   resetTimeRange() {
     const data = {
       start: this.start,
@@ -47,12 +52,12 @@ export class GanttBar extends GanttBase {
     this._hasCalculated = true;
 
     if (resetTimeByMode) {
-      if (this.mergeSchedulingMode === SchedulingMode.FORWARD) {
+      if (this.schedulingMode === SchedulingMode.FORWARD) {
         data.end = null;
         if (moment(data.start, 'YYYY-MM-DD HH:mm:ss').isBefore(this.config.startDate)) {
           data.start = this.config.startDate.format('YYYY-MM-DD HH:mm:ss');
         }
-      } else if (this.mergeSchedulingMode === SchedulingMode.BACKWARD) {
+      } else if (this.schedulingMode === SchedulingMode.BACKWARD) {
         data.start = null;
         if (moment(data.end, 'YYYY-MM-DD HH:mm:ss').isAfter(this.config.endDate)) {
           data.end = this.config.endDate.format('YYYY-MM-DD HH:mm:ss');

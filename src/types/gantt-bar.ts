@@ -45,5 +45,6 @@ export type GanttBarUpdateParams = {
   duration?: number | null,
   schedulingMode?: SchedulingMode | null,
   selectable?:boolean,
-  draggable?:boolean
+  draggable?:boolean,
+  rowIndex?:number
 }

@@ -1,16 +1,16 @@
-import { GanttBarDragOperationConstructor, GanttBarDragOperationData, OperationInterface } from '@/types/gantt-operation-history';
+import { GanttBarDragOperationConstructor, GanttBarChangeOperationData, OperationInterface } from '@/types/gantt-operation-history';
 import { GanttBars } from './gantt-bars';
 import { GanttGroups } from './gantt-groups';
 import { GanttGroup } from './gantt-group';
 import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
 
-export class GanttBarDragOperation implements OperationInterface {
+export class GanttBarChangeOperation implements OperationInterface {
   bus: GanttBus;
   bars: GanttBars;
   groups: GanttGroups;
-  oldData: GanttBarDragOperationData;
-  newData: GanttBarDragOperationData;
+  oldData: GanttBarChangeOperationData;
+  newData: GanttBarChangeOperationData;
 
   constructor(data: GanttBarDragOperationConstructor) {
     this.bus = data.bus;
@@ -31,6 +31,9 @@ export class GanttBarDragOperation implements OperationInterface {
     bar.start = this.newData.start;
     bar.end = this.newData.end;
     bar.rowIndex = this.newData.rowIndex;
+    bar.draggable = this.newData.draggable;
+    bar.selectable = this.newData.selectable;
+    bar.schedulingMode = this.newData.schedulingMode;
     bar.calculate();
     if (oldGroup) {
       this.bars.calculateGroupOverlap({ groupId: oldGroup.id });
@@ -50,6 +53,9 @@ export class GanttBarDragOperation implements OperationInterface {
     bar.start = this.oldData.start;
     bar.end = this.oldData.end;
     bar.rowIndex = this.oldData.rowIndex;
+    bar.draggable = this.oldData.draggable;
+    bar.selectable = this.oldData.selectable;
+    bar.schedulingMode = this.oldData.schedulingMode;
     bar.calculate();
     if (oldGroup) {
       this.bars.calculateGroupOverlap({ groupId: oldGroup.id });
