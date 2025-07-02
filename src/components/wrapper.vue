@@ -132,6 +132,23 @@ const addLink = (data: GanttLinkAddParams) => {
   ganttEntity.bus.emit(GanttBusEvents.LINKS_CHANGE);
 };
 
+const setBarSelected = (id: BarId, val: boolean) => {
+  if (ganttEntity.bars.isExist(id)) {
+    const bar = ganttEntity.bars.getById(id)!;
+    bar.selected = val;
+    ganttEntity.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [id]);
+  }
+};
+
+const setBarSelectable = (id: BarId, val: boolean) => {
+  if (ganttEntity.bars.isExist(id)) {
+    const bar = ganttEntity.bars.getById(id)!;
+    bar.selectable = val;
+    bar.selected = false;
+    ganttEntity.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [id]);
+  }
+};
+
 
 defineExpose({
   api: () => ({
@@ -145,6 +162,8 @@ defineExpose({
     updateBar,
     removeLinkById,
     addLink,
+    setBarSelected,
+    setBarSelectable,
     history: {
       next: () => ganttEntity.history.next(),
       back: () => ganttEntity.history.back()
