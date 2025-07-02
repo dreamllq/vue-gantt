@@ -46,6 +46,9 @@
   <el-button @click='setBarContextMenuEnable'>
     setBarContextMenuEnable
   </el-button>
+  <el-button @click='setBarDraggable'>
+    setBarDraggable
+  </el-button>
 
   
   
@@ -152,6 +155,10 @@ const onHistoryBack = () => {
 
 const onHistoryNext = () => {
   ganttRef.value!.api().history.next();
+};
+
+const setBarDraggable = () => {
+  ganttRef.value?.api().setBarDraggable(1, true);
 };
 </script>
 

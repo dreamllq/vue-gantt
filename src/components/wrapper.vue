@@ -156,6 +156,13 @@ const setBarContextMenuEnable = (id: BarId, val: boolean) => {
   }
 };
 
+const setBarDraggable = (id: BarId, val: boolean) => {
+  if (ganttEntity.bars.isExist(id)) {
+    const bar = ganttEntity.bars.getById(id)!;
+    bar.draggable = val;
+  }
+};
+
 
 defineExpose({
   api: () => ({
@@ -172,6 +179,7 @@ defineExpose({
     setBarSelected,
     setBarSelectable,
     setBarContextMenuEnable,
+    setBarDraggable,
     history: {
       next: () => ganttEntity.history.next(),
       back: () => ganttEntity.history.back()
