@@ -34,10 +34,9 @@
   <el-button @click='addLink'>
     addLink
   </el-button>
-
-  
-
-  
+  <el-button @click='setShowAttachedBars'>
+    setShowAttachedBars
+  </el-button>
   
   <div style='height: 400px;'>
     <gantt-view ref='ganttRef' :data='ganttData'>
@@ -120,6 +119,10 @@ const addLink = () => {
     'sourceId': 4,
     'targetId': 5
   });
+};
+
+const setShowAttachedBars = () => {
+  ganttRef.value?.api().setShowAttachedBars(false);
 };
 
 const onHistoryBack = () => {

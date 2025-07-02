@@ -33,7 +33,7 @@ export type GanttJsonDataConfig = {
   contextMenuMenus?:menusItemType[],
   linkShowStrategy?: keyof typeof LinkShowStrategy,
   showCurrentTimeLine?:boolean,
-  showAttachedBar?:boolean,
+  showAttachedBars?:boolean,
   dragTimeOffset?:number
 };
 

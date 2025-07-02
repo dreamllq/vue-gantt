@@ -22,7 +22,7 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
     this.bus = data.bus;
 
     this.bus.on(GanttBusEvents.GROUP_BARS_HEIGHT_CHANGE, (data) => {
-      if (!this.config.showAttachedBar) return; 
+      if (!this.config.showAttachedBars) return; 
       const effectBars = this.filter(bar => bar.group.id === data.groupId);
       if (effectBars.length > 0) {
         effectBars.forEach(bar => bar.calculate());
@@ -31,7 +31,7 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
     });
     
     this.bus.on(GanttBusEvents.GROUP_TOP_CHANGE, (groupIds) => {
-      if (!this.config.showAttachedBar) return; 
+      if (!this.config.showAttachedBars) return; 
       this.updateBarsYByGroupIds(groupIds);
     });
   }

@@ -12,7 +12,8 @@ export class GanttConfig extends EventEmitter {
     DRAGGABLE_CHANGE: 'DRAGGABLE_CHANGE',
     SELECTABLE_CHANGE: 'SELECTABLE_CHANGE',
     DATA_SCALE_UNIT_CHANGE: 'DATA_SCALE_UNIT_CHANGE',
-    MULTIPLE_SELECTABLE_CHANGE: 'MULTIPLE_SELECTABLE_CHANGE'
+    MULTIPLE_SELECTABLE_CHANGE: 'MULTIPLE_SELECTABLE_CHANGE',
+    SHOW_ATTACHED_BARS_CHANGE: 'SHOW_ATTACHED_BARS_CHANGE'
   };
 
   private _startDate: DateString;
@@ -31,7 +32,7 @@ export class GanttConfig extends EventEmitter {
   linkShowStrategy:LinkShowStrategy;
   contextMenuMenus?:menusItemType[];
   showCurrentTimeLine: boolean;
-  showAttachedBar: boolean;
+  _showAttachedBars: boolean;
   dragTimeOffset: number;
 
   constructor(data:GanttConfigClassConstructor) {
@@ -52,8 +53,18 @@ export class GanttConfig extends EventEmitter {
     this.contextMenuMenus = data.contextMenuMenus;
     this.linkShowStrategy = data.linkShowStrategy || LinkShowStrategy.NONE;
     this.showCurrentTimeLine = !!data.showCurrentTimeLine; 
-    this.showAttachedBar = !!data.showAttachedBar;
+    this._showAttachedBars = !!data.showAttachedBars;
     this.dragTimeOffset = data.dragTimeOffset || 5 * 60;
+  }
+
+  get showAttachedBars() {
+    return this._showAttachedBars;
+  }
+
+  set showAttachedBars(val) {
+    if (this._showAttachedBars === val) return;
+    this._showAttachedBars = val;
+    this.emit(GanttConfig.Events.SHOW_ATTACHED_BARS_CHANGE, val);
   }
 
   get dataScaleUnit() {

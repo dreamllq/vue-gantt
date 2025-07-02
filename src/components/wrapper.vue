@@ -26,7 +26,7 @@
             <slot name='bar' v-bind='slotProps' />
           </template>
         </bar-grid>
-        <attached-bar-grid v-if='ganttEntity.config.showAttachedBar'>
+        <attached-bar-grid v-if='ganttEntity.config.showAttachedBars'>
           <template #default='slotProps'>
             <slot name='attachedBar' v-bind='slotProps' />
           </template>
@@ -89,6 +89,10 @@ const setSelectable = (val:boolean) => {
   ganttEntity.config.selectable = val;
 };
 
+const setShowAttachedBars = (val: boolean) => {
+  ganttEntity.config.showAttachedBars = val;
+};
+
 const setDataScaleUnit = (unit: (keyof typeof Unit)) => {
   ganttEntity.config.dataScaleUnit = Unit[unit];
 };
@@ -133,6 +137,7 @@ defineExpose({
   api: () => ({
     setDraggable,
     setSelectable,
+    setShowAttachedBars,
     setDataScaleUnit,
     setSizeRatioPercent,
     removeBarById,

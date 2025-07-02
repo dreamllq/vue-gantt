@@ -73,7 +73,7 @@ export class GanttGroupView extends GanttGroup {
 
   calculateAttachedBarsHeight() {
     let height = 0;
-    if (this.config.showAttachedBar) {
+    if (this.config.showAttachedBars) {
       if (this.attachedBars.length > 0) {
         height = this.layoutConfig.ATTACHED_ROW_HEIGHT;
       }

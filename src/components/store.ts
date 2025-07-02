@@ -50,6 +50,7 @@ const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) =>
   
   ganttEntity.config.on(GanttConfig.Events.DATA_SCALE_UNIT_CHANGE, containerReload);
   ganttEntity.layoutConfig.on(GanttLayoutConfig.Events.SIZE_RATIO_PERCENT_CHANGE, containerReload);
+  ganttEntity.config.on(GanttConfig.Events.SHOW_ATTACHED_BARS_CHANGE, containerReload);
 
   return {
     ganttId,

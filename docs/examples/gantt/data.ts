@@ -20,7 +20,7 @@ export const data:GanttJsonData = {
       }
     ],
     showCurrentTimeLine: true,
-    showAttachedBar: true
+    showAttachedBars: true
   },
   'layoutConfig': {
     'ROW_HEIGHT': 40,
