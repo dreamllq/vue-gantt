@@ -26,7 +26,8 @@ export class GanttBarView extends GanttBar {
   st = 0;
   et = 0;
   dragging = false;
-  _selected = false;
+  private _selected = false;
+  private _contextMenuEnable:boolean | undefined;
   groups:GanttGroups;
   bars: GanttBars;
   rowIndex = 0;
@@ -43,6 +44,7 @@ export class GanttBarView extends GanttBar {
     this.bus = data.bus;
     this._selectable = data.selectable;
     this._draggable = data.draggable;
+    this._contextMenuEnable = data.contextMenuEnable;
   }
 
   set group(val: GanttGroup) {
@@ -77,6 +79,20 @@ export class GanttBarView extends GanttBar {
     }
   }
 
+  get contextMenuEnable():boolean {
+    if (isBoolean(this._contextMenuEnable)) {
+      return this._contextMenuEnable && this.config.contextMenuEnable;
+    } else {
+      return this.config.contextMenuEnable;
+    }
+  }
+
+  set contextMenuEnable(val:boolean | undefined) {
+    if (this._contextMenuEnable === val) return;
+    this._contextMenuEnable = val;
+    this.bus.emit(GanttBusEvents.BAR_CONTEXT_MENU_ENABLE_CHANGE, [this.id]);
+  }
+
   get startMoment() {
     return moment(this.start, 'YYYY-MM-DD HH:mm:ss');
   }
@@ -90,6 +106,7 @@ export class GanttBarView extends GanttBar {
   }
 
   set selectable(val:boolean | undefined) {
+    if (this._selectable === val) return;
     this._selectable = val;
   }
 

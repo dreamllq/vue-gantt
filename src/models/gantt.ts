@@ -163,7 +163,8 @@ export class Gantt extends EventEmitter {
         groupId: barJson.groupId,
         schedulingMode: barJson.schedulingMode ? SchedulingMode[barJson.schedulingMode] : undefined,
         draggable: barJson.draggable,
-        selectable: barJson.selectable
+        selectable: barJson.selectable,
+        contextMenuEnable: barJson.contextMenuEnable
       });
     });
   }

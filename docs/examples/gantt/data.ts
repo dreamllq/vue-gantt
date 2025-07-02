@@ -107,7 +107,8 @@ export const data:GanttJsonData = {
       'groupId': 1,
       'id': 1,
       'start': '2024-01-02 00:00:00',
-      draggable: false
+      draggable: false,
+      contextMenuEnable: false
     },
     {
       'duration': 72000,

@@ -16,6 +16,7 @@ export const useContextmenuHook = () => {
       const bar = ganttEntity.bars.getById(id);
               
       if (bar) {
+        if (!bar.contextMenuEnable) return;
         bus.emit(Events.BAR_CONTEXTMENU, { barId: bar.id }, e);
       } 
     }

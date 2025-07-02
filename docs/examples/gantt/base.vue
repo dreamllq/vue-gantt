@@ -43,6 +43,9 @@
   <el-button @click='setBarSelectable'>
     setBarSelectable
   </el-button>
+  <el-button @click='setBarContextMenuEnable'>
+    setBarContextMenuEnable
+  </el-button>
 
   
   
@@ -140,7 +143,9 @@ const setBarSelected = () => {
 const setBarSelectable = () => {
   ganttRef.value?.api().setBarSelectable(4, false);
 };
-
+const setBarContextMenuEnable = () => {
+  ganttRef.value?.api().setBarContextMenuEnable(1, true);
+};
 const onHistoryBack = () => {
   ganttRef.value!.api().history.back();
 };
