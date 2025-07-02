@@ -52,6 +52,11 @@
   <el-button @click='scrollToGroup'>
     scrollToGroup
   </el-button>
+  <el-button @click='scrollToDatetime'>
+    scrollToDatetime
+  </el-button>
+
+  
 
   
   
@@ -165,8 +170,13 @@ const setBarDraggable = () => {
 };
 
 const scrollToGroup = () => {
-  ganttRef.value?.api().scrollToGroup(12);
+  ganttRef.value?.api().scrollToGroup(4);
 };
+
+const scrollToDatetime = () => {
+  ganttRef.value?.api().scrollToDatetime('2024-01-04 11:00:00');
+};
+
 </script>
 
 <style scoped>

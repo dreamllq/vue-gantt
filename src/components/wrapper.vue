@@ -78,6 +78,8 @@ import { isUndefined } from 'lodash';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GanttGroup } from '../models/gantt-group';
 import { GroupId } from '@/types/gantt-group';
+import { DateTimeString } from '@/types/date';
+import moment from 'moment';
 
 const { entityReady, container, scroll, ganttEntity, bus } = useStore()!;
 const { scrollReady } = scroll;
@@ -170,6 +172,15 @@ const scrollToGroup = (id: GroupId) => {
   scroll.scrollTop.value = top;
 };
 
+const scrollToDatetime = (datetime: DateTimeString) => {
+  const dateMoment = moment(datetime, 'YYYY-MM-DD HH:mm:ss');
+  if (dateMoment.isBefore(ganttEntity.config.endDate) && dateMoment.isAfter(ganttEntity.config.startDate)) {
+    const seconds = dateMoment.diff(ganttEntity.config.startDate, 'second');
+    const left = seconds * ganttEntity.config.secondWidth;
+    scroll.scrollLeft.value = left;
+  }
+};
+
 
 defineExpose({
   api: () => ({
@@ -188,6 +199,7 @@ defineExpose({
     setBarContextMenuEnable,
     setBarDraggable,
     scrollToGroup,
+    scrollToDatetime,
     history: {
       next: () => ganttEntity.history.next(),
       back: () => ganttEntity.history.back()
