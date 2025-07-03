@@ -39,7 +39,7 @@ export const getData = ():GanttJsonData => {
   for (let i = 0; i < groupCount; i++) {
     groups.push({
       id: `g_${i + 1}`,
-      barOverlap: true,
+      barOverlap: false,
       workTimes
     });
   }
