@@ -73,6 +73,7 @@ export const useShowSelectedHook = () => {
     bus.on(Events.BAR_SELECT_CHANGE, onVisibleAreaChange);
     bus.on(Events.BAR_POS_CHANGE, onBarPosChange);
     bus.on(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
+    bus.on(Events.LINKS_CHANGE, onVisibleAreaChange);
   });
     
   onBeforeUnmount(() => {
@@ -81,6 +82,7 @@ export const useShowSelectedHook = () => {
     bus.off(Events.BAR_SELECT_CHANGE, onVisibleAreaChange);
     bus.off(Events.BAR_POS_CHANGE, onBarPosChange);
     bus.off(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
+    bus.off(Events.LINKS_CHANGE, onVisibleAreaChange);
   });
 
   return {

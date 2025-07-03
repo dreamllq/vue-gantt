@@ -68,6 +68,7 @@ export const useShowAllHook = () => {
     bus.on(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
     bus.on(Events.BAR_POS_CHANGE, onBarPosChange);
     bus.on(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
+    bus.on(Events.LINKS_CHANGE, onVisibleAreaChange);
   });
     
   onBeforeUnmount(() => {
@@ -75,6 +76,7 @@ export const useShowAllHook = () => {
     bus.off(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
     bus.off(Events.BAR_POS_CHANGE, onBarPosChange);
     bus.off(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
+    bus.off(Events.LINKS_CHANGE, onVisibleAreaChange);
   });
 
   return {

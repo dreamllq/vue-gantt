@@ -26,6 +26,7 @@
             <slot name='bar' v-bind='slotProps' />
           </template>
         </bar-grid>
+        <milestone-grid />
         <attached-bar-grid v-if='ganttEntity.config.showAttachedBars'>
           <template #default='slotProps'>
             <slot name='attachedBar' v-bind='slotProps' />
@@ -64,6 +65,7 @@ import Group from './group/index.vue';
 import WorkTimeGrid from './work-time-grid/index.vue';
 import CurrentTime from './current-time/index.vue';
 import BarGrid from './bar-grid/index.vue';
+import MilestoneGrid from './milestone-grid/index.vue';
 import DragBarGrid from './drag-bar-grid/index.vue';
 import AttachedBarGrid from './attached-bar-grid/index.vue';
 import SelectBarGrid from './select-bar-grid/index.vue';
@@ -181,6 +183,23 @@ const scrollToDatetime = (datetime: DateTimeString) => {
   }
 };
 
+const getSelectedBarIds = () => ganttEntity.bars.selectedBars.getIds();
+
+const getBarById = (id:BarId) => {
+  if (ganttEntity.bars.isExist(id)) {
+    const bar = ganttEntity.bars.getById(id)!;
+    return {
+      id: bar.id,
+      start: bar.start,
+      end: bar.start,
+      duration: bar.duration,
+      schedulingMode: bar.schedulingMode
+    };
+  } else {
+    return undefined;
+  }
+};
+
 
 defineExpose({
   api: () => ({
@@ -200,6 +219,8 @@ defineExpose({
     setBarDraggable,
     scrollToGroup,
     scrollToDatetime,
+    getSelectedBarIds,
+    getBarById,
     history: {
       next: () => ganttEntity.history.next(),
       back: () => ganttEntity.history.back()

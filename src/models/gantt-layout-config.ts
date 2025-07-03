@@ -117,7 +117,7 @@ export class GanttLayoutConfig extends EventEmitter {
   }
 
   get MILESTONE_WIDTH() {
-    return this.MILESTONE_WIDTH * this.sizeRatioPercent / 100;
+    return this._MILESTONE_WIDTH * this.sizeRatioPercent / 100;
   }
 
   set MILESTONE_WIDTH(val) {

@@ -9,6 +9,8 @@ import { menusItemType } from './contextmenu-menus';
 import { GroupId } from './gantt-group';
 import { BarId } from './gantt-bar';
 import { AttachedBarId } from './gantt-attached-bar';
+import { MilestoneId } from './gantt-milestone';
+import { GanttGroup } from '@/models/gantt-group';
 
 export type GanttClassConstructor = { config: GanttConfig, layoutConfig: GanttLayoutConfig, hook?: GanttHook}
 
@@ -78,6 +80,13 @@ export type GanttJsonDataLink = {
   linkType?: keyof typeof GanttLinkType;
 };
 
+export type GanttJsonDataMilestone = {
+  id: MilestoneId;
+  groupId: GroupId;
+  datetime: DateTimeString;
+  text?: string;
+}
+
 export type GanttJsonData = {
   config: GanttJsonDataConfig,
   layoutConfig?: GanttJsonDataLayoutConfig,
@@ -85,5 +94,6 @@ export type GanttJsonData = {
   bars: GanttJsonDataBar[],
   attachedBars?: GanttJsonDataAttachedBar[],
   links?: GanttJsonDataLink[],
+  milestones?: GanttJsonDataMilestone[],
   hook?: GanttHook,
 }

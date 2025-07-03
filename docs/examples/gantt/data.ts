@@ -183,6 +183,20 @@ export const data:GanttJsonData = {
       'targetId': 6
     }
   ], 
+  milestones: [
+    {
+      id: 1,
+      datetime: '2024-01-20 14:00:00',
+      groupId: 1,
+      text: '111'
+    },
+    {
+      id: 2,
+      datetime: '2024-01-02 14:00:00',
+      groupId: 1,
+      text: '111'
+    }
+  ],
   hook: {
     beforeDragStart: (data) => true,
     beforeDragEnd: (data) => true

@@ -10,7 +10,7 @@ import { GanttGroupWorkTimes } from './gantt-group-work-times';
 import { GanttGroupAddParams } from '@/types/gantt-group';
 import { GanttBarAddParams } from '@/types/gantt-bar';
 import { GanttLinkAddParams, GanttLinkType, LinkShowStrategy } from '@/types/gantt-link';
-import { GanttClassConstructor, GanttHook, GanttJsonData, GanttJsonDataAttachedBar, GanttJsonDataBar, GanttJsonDataGroup, GanttJsonDataLink } from '@/types/gantt';
+import { GanttClassConstructor, GanttHook, GanttJsonData, GanttJsonDataAttachedBar, GanttJsonDataBar, GanttJsonDataGroup, GanttJsonDataLink, GanttJsonDataMilestone } from '@/types/gantt';
 import { GanttGroupWorkTime } from './gantt-group-work-time';
 import { GanttLayoutConfig } from './gantt-layout-config';
 import { Unit } from '@/types/unit';
@@ -19,6 +19,8 @@ import { GanttBus } from './gantt-bus';
 import { GanttAttachedBars } from './gantt-attached-bars';
 import { GanttAttachedBarAddParams } from '@/types/gantt-attached-bar';
 import { GanttOperationHistory } from './gantt-operation-history';
+import { GanttMilestones } from './gantt-milestones';
+import { GanttMilestoneAddParams } from '@/types/gantt-milestone';
 
 export class Gantt extends EventEmitter {
   hook?: GanttHook;
@@ -30,6 +32,7 @@ export class Gantt extends EventEmitter {
   bars: GanttBars;
   attachedBars: GanttAttachedBars;
   links: GanttLinks;
+  milestones: GanttMilestones;
   bus: GanttBus = new GanttBus();
   history: GanttOperationHistory;
 
@@ -71,6 +74,8 @@ export class Gantt extends EventEmitter {
       bars: this.bars,
       bus: this.bus
     });
+
+    this.milestones = new GanttMilestones();
   }
 
   addGroup(data:GanttGroupAddParams) {
@@ -119,6 +124,19 @@ export class Gantt extends EventEmitter {
         config: this.config,
         layoutConfig: this.layoutConfig,
         bars: this.bars
+      });
+    }
+  }
+
+  addMilestone(data: GanttMilestoneAddParams) {
+    const group = this.groups.getById(data.groupId);
+    if (group) {
+      this.milestones.add({
+        ...data,
+        group,
+        config: this.config,
+        groups: this.groups,
+        layoutConfig: this.layoutConfig
       });
     }
   }
@@ -194,6 +212,12 @@ export class Gantt extends EventEmitter {
     });
   }
 
+  batchAddMilestone(milestones:GanttJsonDataMilestone[]) {
+    milestones.forEach(milestoneJson => {
+      this.addMilestone(milestoneJson);
+    });
+  }
+
   static fromJson(data: GanttJsonData) {
     const layoutConfig = new GanttLayoutConfig(data.layoutConfig || {});
     const config = new GanttConfig({
@@ -226,11 +250,13 @@ export class Gantt extends EventEmitter {
     gantt.batchAddBar(data.bars);
     gantt.batchAddAttachedBar(data.attachedBars || []);
     gantt.batchAddLink(data.links || []);
+    gantt.batchAddMilestone(data.milestones || []);
 
     gantt.bars.calculate();
     gantt.attachedBars.calculate();
     gantt.links.calculate();
     gantt.links.calculateLinkGroupMap();
+    gantt.milestones.calculate();
 
     return gantt;
   }

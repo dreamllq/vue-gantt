@@ -55,6 +55,9 @@
   <el-button @click='scrollToDatetime'>
     scrollToDatetime
   </el-button>
+  <el-button @click='getSelectedBarIds'>
+    getSelectedBarIds
+  </el-button>
 
   
 
@@ -175,6 +178,20 @@ const scrollToGroup = () => {
 
 const scrollToDatetime = () => {
   ganttRef.value?.api().scrollToDatetime('2024-01-04 11:00:00');
+};
+
+const getSelectedBarIds = () => {
+  const selectedIds = ganttRef.value!.api().getSelectedBarIds();
+  console.log(selectedIds);
+  const bars = selectedIds.map(id => {
+    if (id) {
+      return ganttRef.value?.api().getBarById(id);
+    } else {
+      return undefined;
+    }
+  });
+
+  console.log(bars);
 };
 
 </script>
