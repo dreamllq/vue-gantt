@@ -6,6 +6,7 @@ import { GanttBusEvents } from '@/types/gantt-bus';
 import { flatten, uniq } from 'lodash';
 import asyncFragmentation from 'simple-async-fragmentation';
 import { BarId } from '@/types/gantt-bar';
+import { GroupId } from '@/types/gantt-group';
 
 export const useEvents = (ganttEntity: Gantt, store:{
   bus: ReturnType<typeof useBus>
@@ -30,15 +31,15 @@ export const useEvents = (ganttEntity: Gantt, store:{
     store.bus.emit(Events.SCROLL_CHANGE);
     store.bus.emit(Events.LAYOUT_CHANGE);
     store.bus.emit(Events.DATE_GRID_CHANGE);
-    store.bus.emit(Events.WORK_TIME_GRID_CHANGE);
+    store.bus.emit(Events.WORK_TIME_GRID_CHANGE, [data.groupId]);
   });
 
-  ganttEntity.bus.on(GanttBusEvents.GROUP_TOP_CHANGE, (data) => {
+  ganttEntity.bus.on(GanttBusEvents.GROUP_TOP_CHANGE, (data: GroupId[]) => {
     store.bus.emit(Events.GROUP_CHANGE, data);
     store.bus.emit(Events.SCROLL_CHANGE);
     store.bus.emit(Events.LAYOUT_CHANGE);
     store.bus.emit(Events.DATE_GRID_CHANGE);
-    store.bus.emit(Events.WORK_TIME_GRID_CHANGE);
+    store.bus.emit(Events.WORK_TIME_GRID_CHANGE, data);
   });
 
   ganttEntity.bus.on(GanttBusEvents.BAR_POS_CHANGE, (ids) => {

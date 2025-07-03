@@ -1,6 +1,6 @@
 <template>
   <div class='gantt-work-time-grid'>
-    <template v-for='item in lazyWorkTimeGrid' :key='`${item.index}-${item.timeString}`'>
+    <template v-for='item in lazyWorkTimeGrid' :key='item.id'>
       <div
         class='grid-cell' 
         :style='{

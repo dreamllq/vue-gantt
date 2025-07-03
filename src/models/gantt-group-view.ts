@@ -27,17 +27,6 @@ export class GanttGroupView extends GanttGroup {
     this.barsHeight = this.layoutConfig.ROW_HEIGHT;
     this._height = this.barsHeight + this.attachedBarsHeight;
 
-    // this.bars.on(BizArray.Events.CHANGE, (diff:{addItems:[], deleteItems:[]}) => {
-    //   if (this.barOverlap === false) {
-    //     if (diff.deleteItems.length > 0) {
-    //       this.bus.emit(GanttBusEvents.GROUP_OVERLAP_CHANGE, { groupId: this.id });
-    //     }
-    //   } else {
-    //     this.calculateBarsHeight();
-    //     this.calculateHeight();
-    //   }
-    // });
-
     this.attachedBars.on(BizArray.Events.CHANGE, () => {
       this.calculateAttachedBarsHeight();
       this.calculateHeight();

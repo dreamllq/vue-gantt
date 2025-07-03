@@ -103,4 +103,10 @@ export class GanttGroups extends BizArray<GanttGroupView> {
     }
     this.bus.emit(GanttBusEvents.GROUP_TOP_CHANGE, effectGroupIds);
   }
+
+  calculateWorkTime() {
+    this.filter(item => item.isShow).forEach(item => {
+      item.workTimes.calculate();
+    });
+  }
 }

@@ -21,6 +21,7 @@ import { GanttAttachedBarAddParams } from '@/types/gantt-attached-bar';
 import { GanttOperationHistory } from './gantt-operation-history';
 import { GanttMilestones } from './gantt-milestones';
 import { GanttMilestoneAddParams } from '@/types/gantt-milestone';
+import { GanttGroupWorkTimeView } from './gantt-group-work-time-view';
 
 export class Gantt extends EventEmitter {
   hook?: GanttHook;
@@ -148,7 +149,13 @@ export class Gantt extends EventEmitter {
       if (Array.isArray(groupJson.workTimes)) {
         workTimes = new GanttGroupWorkTimes();
         groupJson.workTimes.forEach(wt => {
-          workTimes!.push(new GanttGroupWorkTime(wt));
+          workTimes!.push(new GanttGroupWorkTimeView({
+            config: this.config,
+            groupId: groupJson.id,
+            groups: this.groups,
+            start: wt.start,
+            end: wt.end
+          }));
         });
       }
 
@@ -257,6 +264,9 @@ export class Gantt extends EventEmitter {
     console.timeEnd('gantt fromJson class init');
 
     console.time('gantt fromJson data calculate');
+    console.time('gantt fromJson group data calculate');
+    gantt.groups.calculateWorkTime();
+    console.timeEnd('gantt fromJson group data calculate');
     console.time('gantt fromJson bar data calculate');
     gantt.bars.calculate();
     console.timeEnd('gantt fromJson bar data calculate');

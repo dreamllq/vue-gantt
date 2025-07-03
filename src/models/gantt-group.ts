@@ -15,7 +15,7 @@ export class GanttGroup extends GanttBase {
     super(data);
     this.id = data.id;
     this._parent = data.parent || null;
-    this.workTimes = data.workTimes || [];
+    this.workTimes = data.workTimes || new GanttGroupWorkTimes();
     
     if (this._parent) {
       this._parent.children.push(this);

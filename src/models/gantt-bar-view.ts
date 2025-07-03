@@ -247,7 +247,8 @@ export class GanttBarView extends GanttBar {
   }
   calculateOverlapBarIds() {
     if (this.isClone) return;
-    const groupBars = this.bars.filter(item => item.group.id === this.group.id);
+    // const groupBars = this.bars.filter(item => item.group.id === this.group.id);
+    const groupBars = this.groups.getById(this.group.id)!.bars;
     const overlapBars = groupBars.filter(bar => bar.id === this.id ? false : isRectanglesOverlap({
       x1: this.sx,
       y1: this._sy,

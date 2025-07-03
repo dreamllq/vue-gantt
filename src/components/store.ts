@@ -42,6 +42,7 @@ const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) =>
     layout.layoutReady.value = false;
     await nextTick();
     ganttEntity.groups.calculate();
+    ganttEntity.groups.calculateWorkTime();
     ganttEntity.bars.calculate();
     ganttEntity.attachedBars.calculate();
     ganttEntity.links.calculate();

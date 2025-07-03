@@ -77,7 +77,7 @@ export class GanttBars extends BizArray<GanttBarView> {
   calculateGroupBarsRowIndex(groupId: GroupId, barId?: BarId) {
     const group = this.groups.getById(groupId)!;
     if (group.barOverlap) return;
-    const groupBars = this.filter(item => item.group.id === groupId).toSorted((a, b) => {
+    const groupBars = group.bars.toSorted((a, b) => {
       if (a.rowIndex < b.rowIndex) {
         return -1;
       } else if (a.rowIndex > b.rowIndex) {
@@ -129,7 +129,7 @@ export class GanttBars extends BizArray<GanttBarView> {
     const group = this.groups.getById(groupId)!;
     if (group.barOverlap) return;
     const effectBarIds: BarId[] = [];
-    const groupBars = this.filter(item => item.group.id === groupId);
+    const groupBars = this.groups.getById(group.id)!.bars;
     groupBars.forEach(item => {
       item.changeY();
       effectBarIds.push(item.id);
@@ -144,7 +144,10 @@ export class GanttBars extends BizArray<GanttBarView> {
     for (let i = groupIndex + 1; i < this.groups.expandedGroups.length; i++) {
       ids.push(this.groups.expandedGroups[i].id);
     }
-    const bars = this.filter(item => ids.includes(item.group.id));
+    const bars:GanttBarView[] = [];
+    ids.forEach(groupId => {
+      this.groups.getById(groupId)!.bars.forEach(bar => bars.push(bar));
+    });
     
     bars.forEach(item => {
       item.changeY();
@@ -155,7 +158,10 @@ export class GanttBars extends BizArray<GanttBarView> {
   }
 
   updateBarsYByGroupIds(groupIds: GroupId[]) {
-    const effectBars = this.filter(item => groupIds.includes(item.group.id));
+    const effectBars:GanttBarView[] = [];
+    groupIds.forEach(groupId => {
+      this.groups.getById(groupId)!.bars.forEach(bar => effectBars.push(bar));
+    });
     effectBars.forEach(item => item.changeY());
     this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, effectBars.map(item => item.id));
   }
