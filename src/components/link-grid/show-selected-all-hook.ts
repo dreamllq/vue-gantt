@@ -2,7 +2,7 @@ import { onBeforeUnmount, onMounted, Ref, ref, ShallowRef, shallowRef } from 'vu
 import { useStore } from '../store';
 import { GanttLinkView } from '@/models/gantt-link-view';
 import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
-import { max, min, uniq } from 'lodash';
+import { max, min, uniq, uniqBy, uniqWith } from 'lodash';
 import { Events } from '@/types/events';
 import { BarId } from '@/types/gantt-bar';
 
@@ -12,16 +12,19 @@ export const useShowSelectedAllHook = () => {
   const { ganttEntity, lazy, bus } = useStore()!;
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
   const lazyCalculate = () => {
-    const linkGroups = ganttEntity.bars.selectedBars
+    const links = ganttEntity.bars.selectedBars
       .reduce<GanttLinkView[]>((acc, bar) => {
         const links = ganttEntity.links.getLinksByBarId(bar.id);
         return [...acc, ...links];
       }, [])
-      .map(item => item.linkGroup);
-
-    lazyLinkGrid.value = ganttEntity.links
+      .map(item => item.linkGroup)
+      .reduce<GanttLinkView[]>((acc, item) => {
+        const links = ganttEntity.links.linkGroupMap[item!];
+        return [...acc, ...links];
+      }, []);
+      
+    lazyLinkGrid.value = uniqBy(links, item => item.id)
       .filter(link => link.isShow)
-      .filter(link => linkGroups.includes(link.linkGroup))
       .filter(link => {
         link.calculate();
         return link;
@@ -58,9 +61,7 @@ export const useShowSelectedAllHook = () => {
     }
   };
     
-  const onVisibleAreaChange = (ids) => {
-    console.log(ids);
-    
+  const onVisibleAreaChange = () => {
     lazyCalculate();
   };
 
