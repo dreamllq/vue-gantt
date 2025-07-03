@@ -12,14 +12,20 @@ export const useShowSelectedAllHook = () => {
   const { ganttEntity, lazy, bus } = useStore()!;
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
   const lazyCalculate = () => {
-    const selectBarIds = ganttEntity.bars.selectedBars.map(bar => bar.id);
-    const linkGroups = ganttEntity.links
-      .filter(link => selectBarIds.includes(link.source.id) || selectBarIds.includes(link.target.id))
+    const linkGroups = ganttEntity.bars.selectedBars
+      .reduce<GanttLinkView[]>((acc, bar) => {
+        const links = ganttEntity.links.getLinksByBarId(bar.id);
+        return [...acc, ...links];
+      }, [])
       .map(item => item.linkGroup);
 
     lazyLinkGrid.value = ganttEntity.links
       .filter(link => link.isShow)
       .filter(link => linkGroups.includes(link.linkGroup))
+      .filter(link => {
+        link.calculate();
+        return link;
+      })
       .filter(link => isRectanglesOverlap({
         x1: visibleAreaStartX.value,
         y1: visibleAreaStartY.value,
@@ -52,18 +58,20 @@ export const useShowSelectedAllHook = () => {
     }
   };
     
-  const onVisibleAreaChange = () => {
+  const onVisibleAreaChange = (ids) => {
+    console.log(ids);
+    
     lazyCalculate();
   };
 
-  const onBarPosChange = (ids:BarId[]) => {
-    const links = uniq(ids.reduce<GanttLinkView[]>((acc, id) => {
-      const links = ganttEntity.links.getLinksByBarId(id);
-      return [...acc, ...links];
-    }, []));
-    links.forEach(link => link.calculate());
-    lazyCalculate();
-  };
+  // const onBarPosChange = (ids:BarId[]) => {
+  //   const links = uniq(ids.reduce<GanttLinkView[]>((acc, id) => {
+  //     const links = ganttEntity.links.getLinksByBarId(id);
+  //     return [...acc, ...links];
+  //   }, []));
+  //   links.forEach(link => link.calculate());
+  //   lazyCalculate();
+  // };
 
   const onBarVisibleChange = () => {
     ganttEntity.links.updateShow();
@@ -75,7 +83,7 @@ export const useShowSelectedAllHook = () => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.on(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
     bus.on(Events.BAR_SELECT_CHANGE, onVisibleAreaChange);
-    bus.on(Events.BAR_POS_CHANGE, onBarPosChange);
+    bus.on(Events.BAR_POS_CHANGE_FRAGMENTATION, onVisibleAreaChange);
     bus.on(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
     bus.on(Events.LINKS_CHANGE, onVisibleAreaChange);
   });
@@ -84,7 +92,7 @@ export const useShowSelectedAllHook = () => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.off(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
     bus.off(Events.BAR_SELECT_CHANGE, onVisibleAreaChange);
-    bus.off(Events.BAR_POS_CHANGE, onBarPosChange);
+    bus.off(Events.BAR_POS_CHANGE_FRAGMENTATION, onVisibleAreaChange);
     bus.off(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
     bus.off(Events.LINKS_CHANGE, onVisibleAreaChange);
   });

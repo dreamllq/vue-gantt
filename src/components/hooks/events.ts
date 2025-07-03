@@ -28,8 +28,8 @@ export const useEvents = (ganttEntity: Gantt, store:{
 
   ganttEntity.bus.on(GanttBusEvents.GROUP_HEIGHT_CHANGE, (data) => {
     store.bus.emit(Events.GROUP_CHANGE, [data.groupId]);
-    store.bus.emit(Events.SCROLL_CHANGE);
     store.bus.emit(Events.LAYOUT_CHANGE);
+    store.bus.emit(Events.SCROLL_CHANGE);
     store.bus.emit(Events.DATE_GRID_CHANGE);
     store.bus.emit(Events.WORK_TIME_GRID_CHANGE, [data.groupId]);
   });
@@ -63,6 +63,12 @@ export const useEvents = (ganttEntity: Gantt, store:{
   store.bus.on(Events.BAR_CHANGE, asyncFragmentation<BarId[]>(async (options:BarId[][]) => {
     const ids = uniq(flatten(options));
     store.bus.emit(Events.BAR_CHANGE_FRAGMENTATION, ids);
+    return [];
+  }));
+
+  store.bus.on(Events.BAR_POS_CHANGE, asyncFragmentation<BarId[]>(async (options:BarId[][]) => {
+    const ids = uniq(flatten(options));
+    store.bus.emit(Events.BAR_POS_CHANGE_FRAGMENTATION, ids);
     return [];
   }));
   

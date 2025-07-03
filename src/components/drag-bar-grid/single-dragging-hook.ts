@@ -120,7 +120,7 @@ export const useSingleDraggingHook = () => {
     bar.update({
       end: endTime,
       start: startTime,
-      rowIndex: dropRowIndex,
+      rowIndex: group.barOverlap === true ? 0 : dropRowIndex,
       groupId: group.id
     });
 
@@ -142,11 +142,12 @@ export const useSingleDraggingHook = () => {
     const group = ganttEntity.groups.expandedGroups[index];
     const top = ganttEntity.groups.getGroupTopByIndex(index);
     const dropRowIndex = max([Math.floor(min([(dropY - top), group.barsHeight - 1])! / ganttEntity.layoutConfig.ROW_HEIGHT), 0])!;
+    
     barClone.value.group = group;
     barClone.value.start = startTime;
     barClone.value.end = endTime;
     barClone.value.resetTimeRange();
-    barClone.value.rowIndex = dropRowIndex;
+    barClone.value.rowIndex = group.barOverlap === true ? 0 : dropRowIndex;
     barClone.value.calculatePos();
     barClone.value.changeY();
   };

@@ -48,7 +48,6 @@ const { draggingBar, shadowDraggingBar, barClone } = useSingleDraggingHook();
   left: 0;
   position: absolute;
   top:0;
-  left: 0;
 
   .dragging-bar-cell {
     position: absolute;

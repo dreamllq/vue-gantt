@@ -12,10 +12,15 @@ export const useShowSelectedHook = () => {
   const { ganttEntity, lazy, bus } = useStore()!;
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
   const lazyCalculate = () => {
-    const selectBarIds = ganttEntity.bars.selectedBars.map(bar => bar.id);
-
-    lazyLinkGrid.value = ganttEntity.links
-      .filter(link => selectBarIds.includes(link.source.id) || selectBarIds.includes(link.target.id))
+    lazyLinkGrid.value = ganttEntity.bars.selectedBars
+      .reduce<GanttLinkView[]>((acc, bar) => {
+        const links = ganttEntity.links.getLinksByBarId(bar.id);
+        return [...acc, ...links];
+      }, [])
+      .filter(link => {
+        link.calculate();
+        return link;
+      })
       .filter(link => isRectanglesOverlap({
         x1: visibleAreaStartX.value,
         y1: visibleAreaStartY.value,
@@ -71,7 +76,7 @@ export const useShowSelectedHook = () => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.on(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
     bus.on(Events.BAR_SELECT_CHANGE, onVisibleAreaChange);
-    bus.on(Events.BAR_POS_CHANGE, onBarPosChange);
+    bus.on(Events.BAR_POS_CHANGE_FRAGMENTATION, onVisibleAreaChange);
     bus.on(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
     bus.on(Events.LINKS_CHANGE, onVisibleAreaChange);
   });
@@ -80,7 +85,7 @@ export const useShowSelectedHook = () => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.off(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
     bus.off(Events.BAR_SELECT_CHANGE, onVisibleAreaChange);
-    bus.off(Events.BAR_POS_CHANGE, onBarPosChange);
+    bus.off(Events.BAR_POS_CHANGE_FRAGMENTATION, onVisibleAreaChange);
     bus.off(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
     bus.off(Events.LINKS_CHANGE, onVisibleAreaChange);
   });

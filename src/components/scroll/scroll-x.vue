@@ -43,18 +43,19 @@ function onScrollX(e) {
   updateScrollX();
 }
 
-const onScrollChange = () => {
-  style.value.width = `${ganttEntity.scroll.xScrollWidth}px`;
-  barStyle.value.width = `${ganttEntity.scroll.xScrollBarWidth}px`;
-};
+// const onScrollChange = () => {
+//   scroll.calculate();
+//   style.value.width = `${ganttEntity.scroll.xScrollWidth}px`;
+//   barStyle.value.width = `${ganttEntity.scroll.xScrollBarWidth}px`;
+// };
 
-onMounted(() => {
-  bus.on(Events.SCROLL_CHANGE, onScrollChange);
-});
+// onMounted(() => {
+//   bus.on(Events.SCROLL_CHANGE, onScrollChange);
+// });
 
-onBeforeMount(() => {
-  bus.off(Events.SCROLL_CHANGE, onScrollChange);
-});
+// onBeforeMount(() => {
+//   bus.off(Events.SCROLL_CHANGE, onScrollChange);
+// });
 </script>
 
 <style scoped lang="scss">

@@ -44,18 +44,19 @@ function onScrollY(e) {
   updateScrollY();
 }
 
-const onScrollChange = () => {
-  style.value.height = `${ganttEntity.scroll.yScrollHeight}px`;
-  barStyle.value.height = `${ganttEntity.scroll.yScrollBarHeight}px`;
-};
+// const onScrollChange = () => {
+//   scroll.calculate();
+//   style.value.height = `${ganttEntity.scroll.yScrollHeight}px`;
+//   barStyle.value.height = `${ganttEntity.scroll.yScrollBarHeight}px`;
+// };
 
-onMounted(() => {
-  bus.on(Events.SCROLL_CHANGE, onScrollChange);
-});
+// onMounted(() => {
+//   bus.on(Events.SCROLL_CHANGE, onScrollChange);
+// });
 
-onBeforeMount(() => {
-  bus.off(Events.SCROLL_CHANGE, onScrollChange);
-});
+// onBeforeMount(() => {
+//   bus.off(Events.SCROLL_CHANGE, onScrollChange);
+// });
 
 </script>
 

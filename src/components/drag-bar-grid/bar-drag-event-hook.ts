@@ -31,8 +31,6 @@ export const useBarDragEvent = () => {
   };
 
   const onDragEnd = (e: MouseEvent) => {
-    console.log('onDragEnd');
-    
     bus.emit(Events.BAR_DRAGEND, e, draggingBar.value);
     draggingBar.value = undefined;
   };

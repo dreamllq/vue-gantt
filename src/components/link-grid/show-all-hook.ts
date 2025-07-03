@@ -12,17 +12,22 @@ export const useShowAllHook = () => {
   const { ganttEntity, lazy, bus } = useStore()!;
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
   const lazyCalculate = () => {
-    lazyLinkGrid.value = ganttEntity.links.filter(link => isRectanglesOverlap({
-      x1: visibleAreaStartX.value,
-      y1: visibleAreaStartY.value,
-      x2: visibleAreaEndX.value,
-      y2: visibleAreaEndY.value
-    }, {
-      x1: min(link.path.map(point => point.x)) || 0,
-      y1: min(link.path.map(point => point.y)) || 0,
-      x2: max(link.path.map(point => point.x)) || 0,
-      y2: max(link.path.map(point => point.y)) || 0
-    })).map(link => link.toJSON());
+    lazyLinkGrid.value = ganttEntity.links
+      .filter(link => {
+        link.calculate();
+        return link;
+      })
+      .filter(link => isRectanglesOverlap({
+        x1: visibleAreaStartX.value,
+        y1: visibleAreaStartY.value,
+        x2: visibleAreaEndX.value,
+        y2: visibleAreaEndY.value
+      }, {
+        x1: min(link.path.map(point => point.x)) || 0,
+        y1: min(link.path.map(point => point.y)) || 0,
+        x2: max(link.path.map(point => point.x)) || 0,
+        y2: max(link.path.map(point => point.y)) || 0
+      })).map(link => link.toJSON());
   };
 
   if (lazyReady.value) {
@@ -48,14 +53,14 @@ export const useShowAllHook = () => {
     lazyCalculate();
   };
 
-  const onBarPosChange = (ids:BarId[]) => {
-    const links = uniq(ids.reduce<GanttLinkView[]>((acc, id) => {
-      const links = ganttEntity.links.getLinksByBarId(id);
-      return [...acc, ...links];
-    }, []));
-    links.forEach(link => link.calculate());
-    lazyCalculate();
-  };
+  // const onBarPosChange = (ids:BarId[]) => {
+  //   const links = uniq(ids.reduce<GanttLinkView[]>((acc, id) => {
+  //     const links = ganttEntity.links.getLinksByBarId(id);
+  //     return [...acc, ...links];
+  //   }, []));
+  //   links.forEach(link => link.calculate());
+  //   lazyCalculate();
+  // };
 
   const onBarVisibleChange = () => {
     ganttEntity.links.updateShow();
@@ -66,7 +71,7 @@ export const useShowAllHook = () => {
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.on(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
-    bus.on(Events.BAR_POS_CHANGE, onBarPosChange);
+    bus.on(Events.BAR_POS_CHANGE_FRAGMENTATION, onVisibleAreaChange);
     bus.on(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
     bus.on(Events.LINKS_CHANGE, onVisibleAreaChange);
   });
@@ -74,7 +79,7 @@ export const useShowAllHook = () => {
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.off(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
-    bus.off(Events.BAR_POS_CHANGE, onBarPosChange);
+    bus.off(Events.BAR_POS_CHANGE_FRAGMENTATION, onVisibleAreaChange);
     bus.off(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
     bus.off(Events.LINKS_CHANGE, onVisibleAreaChange);
   });

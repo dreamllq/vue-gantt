@@ -39,8 +39,8 @@
       <div class='main-layer'>
         <slot v-if='layoutReady' name='main-layer' />
       </div>
-      <div ref='mainRef' class='main'>
-        <div class='main-inner' :style='mainStyle'>
+      <div ref='mainRef' class='main' :style='mainStyle'>
+        <div class='main-inner' :style='mainInnerStyle'>
           <slot name='main' />
         </div>
       </div>
@@ -112,17 +112,31 @@ const mainContainerInnerStyle = ref({
 });
 
 const mainStyle = ref({
+  paddingRight: `${ganttEntity.scroll.hasY ? ganttEntity.layoutConfig.SCROLL_WIDTH : 0}px`,
+  paddingBottom: `${ganttEntity.scroll.hasX ? ganttEntity.layoutConfig.SCROLL_HEIGHT : 0}px` 
+});
+
+const mainInnerStyle = ref({
   width: `${max([ganttEntity.config.totalSeconds * ganttEntity.config.secondWidth, ganttEntity.container.width])}px`,
   height: `${ganttEntity.groups.getGroupHeight() + ganttEntity.layoutConfig.HEADER_HEIGHT}px` 
 });
 
 const onLayoutChange = () => {
+  asideMainStyle.value.paddingBottom = `${ganttEntity.scroll.hasX ? ganttEntity.layoutConfig.SCROLL_HEIGHT : 0}px`;
   asideMainInnerStyle.value.height = `${ganttEntity.groups.getGroupHeight()}px`;
 
+  mainHeaderStyle.value.paddingRight = `${ganttEntity.scroll.hasY ? ganttEntity.layoutConfig.SCROLL_WIDTH : 0}px`;
   mainHeaderInnerStyle.value.width = `${max([ganttEntity.config.totalSeconds * ganttEntity.config.secondWidth, ganttEntity.container.width])}px`;
 
+  mainContainerStyle.value.paddingBottom = `${ganttEntity.scroll.hasX ? ganttEntity.layoutConfig.SCROLL_HEIGHT : 0}px`;
+  mainContainerStyle.value.paddingRight = `${ganttEntity.scroll.hasY ? ganttEntity.layoutConfig.SCROLL_WIDTH : 0}px`;
   mainContainerInnerStyle.value.width = `${max([ganttEntity.config.totalSeconds * ganttEntity.config.secondWidth, ganttEntity.container.width])}px`;
   mainContainerInnerStyle.value.height = `${ganttEntity.groups.getGroupHeight()}px`;
+
+  mainStyle.value.paddingBottom = `${ganttEntity.scroll.hasX ? ganttEntity.layoutConfig.SCROLL_HEIGHT : 0}px`;
+  mainStyle.value.paddingRight = `${ganttEntity.scroll.hasY ? ganttEntity.layoutConfig.SCROLL_WIDTH : 0}px`;
+  mainInnerStyle.value.width = `${max([ganttEntity.config.totalSeconds * ganttEntity.config.secondWidth, ganttEntity.container.width])}px`;
+  mainInnerStyle.value.height = `${ganttEntity.groups.getGroupHeight() + ganttEntity.layoutConfig.HEADER_HEIGHT}px`; 
 };
 
 onMounted(() => {

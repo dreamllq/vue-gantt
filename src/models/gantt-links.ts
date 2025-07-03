@@ -14,6 +14,8 @@ export class GanttLinks extends BizArray<GanttLinkView> {
   bars: GanttBars;
   bus: GanttBus;
   config: GanttConfig;
+  sourceBarLinkMap:Record<BarId, BizArray<GanttLinkView>> = {};
+  targetBarLinkMap:Record<BarId, BizArray<GanttLinkView>> = {};
 
   constructor(data:GanttLinksClassConstructor) {
     super();
@@ -21,18 +23,37 @@ export class GanttLinks extends BizArray<GanttLinkView> {
     this.bus = data.bus;
     this.config = data.config;
   }
+
   add(data:GanttLinkViewClassConstructor) {
-    this.push(new GanttLinkView(data));
+    const link = new GanttLinkView(data);
+    this.push(link);
+
+    if (!Array.isArray(this.sourceBarLinkMap[link.source.id])) {
+      this.sourceBarLinkMap[link.source.id] = new BizArray<GanttLinkView>();
+    }
+    this.sourceBarLinkMap[link.source.id].push(link);
+    if (!Array.isArray(this.targetBarLinkMap[link.target.id])) {
+      this.targetBarLinkMap[link.target.id] = new BizArray<GanttLinkView>();
+    }
+    this.targetBarLinkMap[link.target.id].push(link);
   }
 
   removeById(id: LinkId): void {
+    const link = this.getById(id);
+    if (!link) return;
     super.removeById(id);
+    this.sourceBarLinkMap[link.source.id].removeById(link.id);
+    this.targetBarLinkMap[link.target.id].removeById(link.id);
     this.calculateLinkGroupMap();
     this.bus.emit(GanttBusEvents.LINKS_CHANGE);
   }
 
   getLinksByBarId(id:BarId) {
-    return this.filter(link => link.target.id === id || link.source.id === id);
+    const list:GanttLinkView[] = [];
+    
+    this.sourceBarLinkMap[id]?.forEach(link => list.push(link));
+    this.targetBarLinkMap[id]?.forEach(link => list.push(link));
+    return list;
   }
 
   updateShow() {

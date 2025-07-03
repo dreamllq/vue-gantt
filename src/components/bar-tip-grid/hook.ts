@@ -24,13 +24,13 @@ export const useBarTipGridHook = () => {
   onMounted(() => {
     bus.on(Events.BAR_LAZY_CHANGE, onBarLazyChange);
     bus.on(Events.BAR_SELECT_CHANGE, onBarSelectChange);
-    bus.on(Events.BAR_POS_CHANGE, onBarPosChange);
+    bus.on(Events.BAR_POS_CHANGE_FRAGMENTATION, onBarPosChange);
   });
 
   onBeforeUnmount(() => {
     bus.off(Events.BAR_LAZY_CHANGE, onBarLazyChange);
     bus.off(Events.BAR_SELECT_CHANGE, onBarSelectChange);
-    bus.off(Events.BAR_POS_CHANGE, onBarPosChange);
+    bus.off(Events.BAR_POS_CHANGE_FRAGMENTATION, onBarPosChange);
   });
 
   return { tipBars };
