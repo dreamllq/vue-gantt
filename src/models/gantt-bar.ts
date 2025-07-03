@@ -77,7 +77,7 @@ export class GanttBar extends GanttBase {
       const timeRange = timeRangeEntity.calculateTimeRange();
 
       if (!timeRange.end.isAfter(this.config.endDate)) {
-        this.start = data.start;
+        this.start = timeRange.start.format('YYYY-MM-DD HH:mm:ss');
         this.end = timeRange.end.format('YYYY-MM-DD HH:mm:ss');
       } else {
         const timeRangeEntity = new TimeRange({
@@ -104,7 +104,7 @@ export class GanttBar extends GanttBase {
 
       if (!timeRange.start.isBefore(this.config.startDate)) {
         this.start = timeRange.start.format('YYYY-MM-DD HH:mm:ss');
-        this.end = data.end;
+        this.end = timeRange.end.format('YYYY-MM-DD HH:mm:ss');
       } else {
         const timeRangeEntity = new TimeRange({
           startDate: this.config.startDate.format('YYYY-MM-DD HH:mm:ss'),

@@ -1,3 +1,4 @@
+import { LinkShowStrategy } from '@/types/gantt-link';
 import { GanttBar } from '@/models/gantt-bar';
 import { GanttBars } from '@/models/gantt-bars';
 import { GanttBus } from '@/models/gantt-bus';
@@ -12,7 +13,8 @@ describe('gantt-links 合并', () => {
   const config = new GanttConfig({
     endDate: '',
     layoutConfig,
-    startDate: ''
+    startDate: '',
+    linkShowStrategy: LinkShowStrategy.SELECTED_ALL
   });
   const bus = new GanttBus();
   const groups = new GanttGroups({
@@ -36,7 +38,8 @@ describe('gantt-links 合并', () => {
 
   const link = new GanttLinks({
     bars: bars,
-    bus: bus
+    bus: bus,
+    config
   });
 
   link.add({
@@ -172,7 +175,8 @@ describe('gantt-links 合并2', () => {
   const config = new GanttConfig({
     endDate: '',
     layoutConfig,
-    startDate: ''
+    startDate: '',
+    linkShowStrategy: LinkShowStrategy.SELECTED_ALL
   });
   const bus = new GanttBus();
   const groups = new GanttGroups({
@@ -196,7 +200,8 @@ describe('gantt-links 合并2', () => {
 
   const link = new GanttLinks({
     bars: bars,
-    bus: bus
+    bus: bus,
+    config
   });
 
   link.add({
@@ -360,7 +365,8 @@ describe('gantt-links 分叉', () => {
   const config = new GanttConfig({
     endDate: '',
     layoutConfig,
-    startDate: ''
+    startDate: '',
+    linkShowStrategy: LinkShowStrategy.SELECTED_ALL
   });
   const bus = new GanttBus();
   const groups = new GanttGroups({
@@ -384,7 +390,8 @@ describe('gantt-links 分叉', () => {
 
   const link = new GanttLinks({
     bars: bars,
-    bus: bus
+    bus: bus,
+    config
   });
 
   link.add({
@@ -520,7 +527,8 @@ describe('gantt-links 分叉2', () => {
   const config = new GanttConfig({
     endDate: '',
     layoutConfig,
-    startDate: ''
+    startDate: '',
+    linkShowStrategy: LinkShowStrategy.SELECTED_ALL
   });
   const bus = new GanttBus();
   const groups = new GanttGroups({
@@ -544,7 +552,8 @@ describe('gantt-links 分叉2', () => {
 
   const link = new GanttLinks({
     bars: bars,
-    bus: bus
+    bus: bus,
+    config
   });
 
   link.add({
@@ -683,7 +692,8 @@ describe('gantt-links 多条单链', () => {
   const config = new GanttConfig({
     endDate: '',
     layoutConfig,
-    startDate: ''
+    startDate: '',
+    linkShowStrategy: LinkShowStrategy.SELECTED_ALL
   });
   const bus = new GanttBus();
   const groups = new GanttGroups({
@@ -707,7 +717,8 @@ describe('gantt-links 多条单链', () => {
 
   const link = new GanttLinks({
     bars: bars,
-    bus: bus
+    bus: bus,
+    config
   });
 
   link.add({
@@ -848,7 +859,8 @@ describe('gantt-links 菱形', () => {
   const config = new GanttConfig({
     endDate: '',
     layoutConfig,
-    startDate: ''
+    startDate: '',
+    linkShowStrategy: LinkShowStrategy.SELECTED_ALL
   });
   const bus = new GanttBus();
   const groups = new GanttGroups({
@@ -872,7 +884,8 @@ describe('gantt-links 菱形', () => {
 
   const link = new GanttLinks({
     bars: bars,
-    bus: bus
+    bus: bus,
+    config
   });
 
   link.add({
@@ -1009,7 +1022,8 @@ describe('gantt-links 菱形', () => {
   const config = new GanttConfig({
     endDate: '',
     layoutConfig,
-    startDate: ''
+    startDate: '',
+    linkShowStrategy: LinkShowStrategy.SELECTED_ALL
   });
   const bus = new GanttBus();
   const groups = new GanttGroups({
@@ -1033,7 +1047,8 @@ describe('gantt-links 菱形', () => {
 
   const link = new GanttLinks({
     bars: bars,
-    bus: bus
+    bus: bus,
+    config
   });
 
   link.add({

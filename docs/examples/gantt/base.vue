@@ -58,13 +58,13 @@
   <el-button @click='getSelectedBarIds'>
     getSelectedBarIds
   </el-button>
-
-  
-
-  
   
   <div style='height: 400px;'>
-    <gantt-view ref='ganttRef' :data='ganttData'>
+    <gantt-view
+      ref='ganttRef' 
+      :data='ganttData'
+      @bar-drag-change='onBarDragChange'
+    >
       <template #aside-header>
         aaa
       </template>
@@ -192,6 +192,10 @@ const getSelectedBarIds = () => {
   });
 
   console.log(bars);
+};
+
+const onBarDragChange = (ids) => {
+  console.log('onBarDragChange', ids);
 };
 
 </script>

@@ -1,4 +1,4 @@
-import { GanttLinkViewClassConstructor, LinkId } from '@/types/gantt-link';
+import { GanttLinkViewClassConstructor, LinkId, LinkShowStrategy } from '@/types/gantt-link';
 import { BizArray } from './biz-array';
 import { GanttLinkView } from './gantt-link-view';
 import { v4 as uuidv4 } from 'uuid';
@@ -7,16 +7,19 @@ import { BarId } from '@/types/gantt-bar';
 import { GanttLinksClassConstructor } from '@/types/gantt-links';
 import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
+import { GanttConfig } from './gantt-config';
 
 export class GanttLinks extends BizArray<GanttLinkView> {
   linkGroupMap: Record<string, GanttLinkView[]> = {};
   bars: GanttBars;
   bus: GanttBus;
+  config: GanttConfig;
 
   constructor(data:GanttLinksClassConstructor) {
     super();
     this.bars = data.bars;
     this.bus = data.bus;
+    this.config = data.config;
   }
   add(data:GanttLinkViewClassConstructor) {
     this.push(new GanttLinkView(data));
@@ -43,6 +46,8 @@ export class GanttLinks extends BizArray<GanttLinkView> {
   }
 
   calculateLinkGroupMap() {
+    if (this.config.linkShowStrategy !== LinkShowStrategy.SELECTED_ALL) return;
+    this.linkGroupMap = {};
     this.forEach(item => item.linkGroup = '');
 
     const startLinks = this.calculateStartLinks();

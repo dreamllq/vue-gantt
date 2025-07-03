@@ -72,7 +72,8 @@ export class Gantt extends EventEmitter {
 
     this.links = new GanttLinks({
       bars: this.bars,
-      bus: this.bus
+      bus: this.bus,
+      config: this.config
     });
 
     this.milestones = new GanttMilestones();
@@ -219,6 +220,8 @@ export class Gantt extends EventEmitter {
   }
 
   static fromJson(data: GanttJsonData) {
+    console.time('gantt fromJson');
+    console.time('gantt fromJson class init');
     const layoutConfig = new GanttLayoutConfig(data.layoutConfig || {});
     const config = new GanttConfig({
       layoutConfig,
@@ -251,12 +254,22 @@ export class Gantt extends EventEmitter {
     gantt.batchAddAttachedBar(data.attachedBars || []);
     gantt.batchAddLink(data.links || []);
     gantt.batchAddMilestone(data.milestones || []);
+    console.timeEnd('gantt fromJson class init');
 
+    console.time('gantt fromJson data calculate');
+    console.time('gantt fromJson bar data calculate');
     gantt.bars.calculate();
+    console.timeEnd('gantt fromJson bar data calculate');
     gantt.attachedBars.calculate();
+    console.time('gantt fromJson link data calculate');
     gantt.links.calculate();
+    console.timeEnd('gantt fromJson link data calculate');
+    console.time('gantt fromJson link calculateLinkGroupMap calculate');
     gantt.links.calculateLinkGroupMap();
+    console.timeEnd('gantt fromJson link calculateLinkGroupMap calculate');
     gantt.milestones.calculate();
+    console.timeEnd('gantt fromJson data calculate');
+    console.timeEnd('gantt fromJson');
 
     return gantt;
   }

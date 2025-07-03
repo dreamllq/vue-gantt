@@ -32,7 +32,6 @@
             <slot name='attachedBar' v-bind='slotProps' />
           </template>
         </attached-bar-grid>
-        
         <select-bar-grid />
         <contextmenu-bar-grid />
         <link-grid v-if='ganttEntity.config.linkShowStrategy !== LinkShowStrategy.NONE' />
@@ -76,157 +75,33 @@ import BarTipGrid from './bar-tip-grid/index.vue';
 import { GanttLinkAddParams, LinkId, LinkShowStrategy } from '@/types/gantt-link';
 import { Unit } from '@/types/unit';
 import { BarId, GanttBarAddParams, GanttBarUpdateParams } from '@/types/gantt-bar';
-import { isUndefined } from 'lodash';
-import { GanttBusEvents } from '@/types/gantt-bus';
-import { GanttGroup } from '../models/gantt-group';
 import { GroupId } from '@/types/gantt-group';
 import { DateTimeString } from '@/types/date';
-import moment from 'moment';
+import { onBeforeUnmount, onMounted } from 'vue';
+import { Events } from '@/types/events';
+import { useWrapperHook } from './wrapper-hook';
 
 const { entityReady, container, scroll, ganttEntity, bus } = useStore()!;
 const { scrollReady } = scroll;
 
-const setDraggable = (val: boolean) => {
-  ganttEntity.config.draggable = val;
-};
+const { api } = useWrapperHook();
 
-const setSelectable = (val:boolean) => {
-  ganttEntity.config.selectable = val;
-};
-
-const setShowAttachedBars = (val: boolean) => {
-  ganttEntity.config.showAttachedBars = val;
-};
-
-const setDataScaleUnit = (unit: (keyof typeof Unit)) => {
-  ganttEntity.config.dataScaleUnit = Unit[unit];
-};
-
-const setSizeRatioPercent = (sizeRatioPercent:number) => {
-  ganttEntity.layoutConfig.sizeRatioPercent = sizeRatioPercent;
-};
-
-const removeBarById = (id:BarId) => {
-  ganttEntity.bars.removeById(id);
-};
-
-const addBar = (bar:GanttBarAddParams) => {
-  ganttEntity.addBar(bar);
-  const b = ganttEntity.bars.getById(bar.id)!;
-  b.calculate();
-  ganttEntity.bars.calculateGroupOverlap({ groupId: b.group.id });
-  ganttEntity.bus.emit(GanttBusEvents.BARS_CHANGE);
-};
-
-const updateBar = (id:BarId, data:GanttBarUpdateParams) => {
-  const bar = ganttEntity.bars.getById(id);
-  if (bar) {
-    bar.update(data);
+const emits = defineEmits(['bar-drag-change']);
+const onDraggingChange = (ids:BarId, dragging: boolean) => {
+  if (dragging === false) {
+    emits('bar-drag-change', ids);
   }
 };
 
-const removeLinkById = (id:LinkId) => {
-  ganttEntity.links.removeById(id);
-};
-
-const addLink = (data: GanttLinkAddParams) => {
-  ganttEntity.addLink(data);
-  const link = ganttEntity.links.getById(data.id)!;
-  link.calculate();
-  ganttEntity.links.calculateLinkGroupMap();
-  ganttEntity.bus.emit(GanttBusEvents.LINKS_CHANGE);
-};
-
-const setBarSelected = (id: BarId, val: boolean) => {
-  if (ganttEntity.bars.isExist(id)) {
-    const bar = ganttEntity.bars.getById(id)!;
-    bar.selected = val;
-    ganttEntity.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [id]);
-  }
-};
-
-const setBarSelectable = (id: BarId, val: boolean) => {
-  if (ganttEntity.bars.isExist(id)) {
-    const bar = ganttEntity.bars.getById(id)!;
-    bar.selectable = val;
-    bar.selected = false;
-    ganttEntity.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [id]);
-  }
-};
-
-const setBarContextMenuEnable = (id: BarId, val: boolean) => {
-  if (ganttEntity.bars.isExist(id)) {
-    const bar = ganttEntity.bars.getById(id)!;
-    bar.contextMenuEnable = val;
-  }
-};
-
-const setBarDraggable = (id: BarId, val: boolean) => {
-  if (ganttEntity.bars.isExist(id)) {
-    const bar = ganttEntity.bars.getById(id)!;
-    bar.draggable = val;
-  }
-};
-
-const scrollToGroup = (id: GroupId) => {
-  const index = ganttEntity.groups.getIndexById(id);
-  const top = ganttEntity.groups.getGroupTopByIndex(index);
-  scroll.scrollTop.value = top;
-};
-
-const scrollToDatetime = (datetime: DateTimeString) => {
-  const dateMoment = moment(datetime, 'YYYY-MM-DD HH:mm:ss');
-  if (dateMoment.isBefore(ganttEntity.config.endDate) && dateMoment.isAfter(ganttEntity.config.startDate)) {
-    const seconds = dateMoment.diff(ganttEntity.config.startDate, 'second');
-    const left = seconds * ganttEntity.config.secondWidth;
-    scroll.scrollLeft.value = left;
-  }
-};
-
-const getSelectedBarIds = () => ganttEntity.bars.selectedBars.getIds();
-
-const getBarById = (id:BarId) => {
-  if (ganttEntity.bars.isExist(id)) {
-    const bar = ganttEntity.bars.getById(id)!;
-    return {
-      id: bar.id,
-      start: bar.start,
-      end: bar.start,
-      duration: bar.duration,
-      schedulingMode: bar.schedulingMode
-    };
-  } else {
-    return undefined;
-  }
-};
-
-
-defineExpose({
-  api: () => ({
-    setDraggable,
-    setSelectable,
-    setShowAttachedBars,
-    setDataScaleUnit,
-    setSizeRatioPercent,
-    removeBarById,
-    addBar,
-    updateBar,
-    removeLinkById,
-    addLink,
-    setBarSelected,
-    setBarSelectable,
-    setBarContextMenuEnable,
-    setBarDraggable,
-    scrollToGroup,
-    scrollToDatetime,
-    getSelectedBarIds,
-    getBarById,
-    history: {
-      next: () => ganttEntity.history.next(),
-      back: () => ganttEntity.history.back()
-    }
-  }) 
+onMounted(() => {
+  bus.on(Events.BAR_DRAGGING_CHANGE, onDraggingChange);
 });
+
+onBeforeUnmount(() => {
+  bus.off(Events.BAR_DRAGGING_CHANGE, onDraggingChange);
+});
+
+defineExpose({ api: api });
 </script>
 
 <style scoped>
