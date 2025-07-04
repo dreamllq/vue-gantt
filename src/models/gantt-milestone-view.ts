@@ -1,6 +1,8 @@
 import { GanttMilestoneViewClassConstructor } from '@/types/gantt-milestone';
 import { GanttMilestone } from './gantt-milestone';
 import { GanttGroups } from './gantt-groups';
+import { GroupId } from '@/types/gantt-group';
+import { min } from 'lodash';
 
 export class GanttMilestoneView extends GanttMilestone {
   x = 0;

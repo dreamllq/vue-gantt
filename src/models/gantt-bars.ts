@@ -192,4 +192,24 @@ export class GanttBars extends BizArray<GanttBarView> {
     effectBars.forEach(item => item.changeY());
     this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, effectBars.map(item => item.id));
   }
+  
+  push(...items: GanttBarView[]): number {
+    throw new Error('Method not implemented.');
+  }
+    
+  pop(): GanttBarView | undefined {
+    throw new Error('Method not implemented.');
+  }
+    
+  shift(): GanttBarView | undefined {
+    throw new Error('Method not implemented.');
+  }
+    
+  unshift(...items: GanttBarView[]): number {
+    throw new Error('Method not implemented.');
+  }
+    
+  splice(start: number, deleteCount: number, ...items: GanttBarView[]): GanttBarView[] {
+    throw new Error('Method not implemented.');
+  }
 }

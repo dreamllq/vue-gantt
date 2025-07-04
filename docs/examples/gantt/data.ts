@@ -201,6 +201,12 @@ export const data:GanttJsonData = {
       datetime: '2024-01-02 14:00:00',
       groupId: 1,
       text: '111'
+    },
+    {
+      id: 3,
+      datetime: '2024-01-20 14:00:00',
+      groupId: 911,
+      text: '111'
     }
   ],
   hook: {

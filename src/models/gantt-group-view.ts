@@ -6,6 +6,8 @@ import { GanttBarView } from './gantt-bar-view';
 import { max } from 'lodash';
 import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
+import { GanttMilestone } from './gantt-milestone';
+import { GanttMilestoneView } from './gantt-milestone-view';
 
 export class GanttGroupView extends GanttGroup {
   _isExpand = false;
@@ -14,6 +16,7 @@ export class GanttGroupView extends GanttGroup {
   private _height:number;
   bars: BizArray<GanttBarView> = new BizArray<GanttBarView>();
   attachedBars: BizArray<GanttAttachedBarView> = new BizArray<GanttAttachedBarView>();
+  milestones: BizArray<GanttMilestoneView> = new BizArray<GanttMilestoneView>();
   barsHeight = 0;
   attachedBarsHeight = 0;
   bus: GanttBus;

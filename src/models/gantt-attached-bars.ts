@@ -97,4 +97,24 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
     });
     // #endregion
   }
+
+  push(...items: GanttAttachedBarView[]): number {
+    throw new Error('Method not implemented.');
+  }
+  
+  pop(): GanttAttachedBarView | undefined {
+    throw new Error('Method not implemented.');
+  }
+  
+  shift(): GanttAttachedBarView | undefined {
+    throw new Error('Method not implemented.');
+  }
+  
+  unshift(...items: GanttAttachedBarView[]): number {
+    throw new Error('Method not implemented.');
+  }
+  
+  splice(start: number, deleteCount: number, ...items: GanttAttachedBarView[]): GanttAttachedBarView[] {
+    throw new Error('Method not implemented.');
+  }
 }
