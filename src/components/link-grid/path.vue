@@ -4,7 +4,21 @@
     :style='{
       transform: `translateX(${link.arrow!.point.x}px) translateY(${props.link.arrow!.point.y}px)`,
       "--task-color": mergeColor,
+      zIndex: zIndex
     }' />
+  <svg
+    :id='svgId' 
+    :style='{
+      width: "100%",
+      height: "100%",
+      position: "absolute",
+      top: 0,
+      left: 0,
+      "pointer-events": "none",
+      zIndex:zIndex
+    }'>
+    <path />
+  </svg>
 </template>
 
 <script setup lang="ts">
@@ -35,7 +49,7 @@ const props = defineProps({
 });
 
 const { ganttId } = useStore()!;
-const svgId = `#path-svg-${ganttId}`;
+const svgId = `path-svg-${ganttId}-${props.link.id}`;
 const mergeColor = ref(props.selected ? 'var(--link-selected-color)' : (props.color ? props.color : 'var(--link-color)'));
 
 let cp: {remove:()=>void} | null = null;
@@ -43,6 +57,7 @@ let cp: {remove:()=>void} | null = null;
 watch(() => props.link, () => {
   renderLink();
 }, { deep: true });
+
 const renderLink = () => {
   
   if (cp !== null) {
@@ -85,7 +100,7 @@ const renderLink = () => {
   const endIndex = props.link.path.length - 1;
   const endPoint = props.link.path[endIndex];
   p.lineTo(endPoint.x, endPoint.y);
-  const _svg = d3Select(svgId);
+  const _svg = d3Select(`#${svgId}`);
   if (_svg === null) return;
   cp = _svg.append('path');
   // @ts-ignore

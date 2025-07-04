@@ -52,7 +52,7 @@ export const useWorkTimeGridHook = () => {
     groupIds.forEach(groupId => {
       const group = ganttEntity.groups.getById(groupId)!;
       group.workTimes.calculate();
-      groupMap[group.id].forEach(item => {
+      (groupMap[group.id] || []).forEach(item => {
         item.x = group.workTimes.getById(item.id)!.sx;
         item.y = ganttEntity.groups.getGroupTopByIndex(ganttEntity.groups.getIndexById(group.id));
         item.height = group.height;

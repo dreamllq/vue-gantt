@@ -1,24 +1,21 @@
 <template>
   <div class='gantt-link-grid show-selected'>
-    <svg :id='svgId' style='width: 100%; height: 100%;position: absolute;top: 0;left: 0; pointer-events: none;'>
-      <path />
-    </svg>
-    <template v-for='link in lazyLinkGrid' :key='link.id'>
+    <template v-for='link in lazyLinkGrid' :key='`${link.id}_${link.selected}_${link.color}_${link.zIndex}`'>
       <l-path 
         v-if='!draggingBarIds.includes(link.sourceId) && !draggingBarIds.includes(link.targetId)'
         :link='link' 
+        :z-index='link.zIndex'
+        :selected='link.selected'
+        :color='link.color'
       />
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useStore } from '../store';
 import LPath from './path.vue';
 import { useShowSelectedHook } from './show-selected-hook';
 
-const { ganttId } = useStore()!;
-const svgId = `path-svg-${ganttId}`;
 const { lazyLinkGrid, draggingBarIds } = useShowSelectedHook();
 
 </script>

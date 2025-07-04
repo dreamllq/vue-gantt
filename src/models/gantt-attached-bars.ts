@@ -8,6 +8,7 @@ import { GanttLayoutConfig } from './gantt-layout-config';
 import { GanttGroups } from './gantt-groups';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GroupId } from '@/types/gantt-group';
+import { BarId } from '@/types/gantt-bar';
 
 export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
   config: GanttConfig;
@@ -65,24 +66,23 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
       this.bus.emit(GanttBusEvents.ATTACHED_BAR_POS_CHANGE, effectBars.map(item => item.id));
     }
   }
+  updateGroupExpandChangeEffectBar(groupId: GroupId) {
+    const effectBarIds: BarId[] = [];
+    const groupIndex = this.groups.getGroupIndex(this.groups.getById(groupId)!);
+    const ids:GroupId[] = [];
+    for (let i = groupIndex + 1; i < this.groups.expandedGroups.length; i++) {
+      ids.push(this.groups.expandedGroups[i].id);
+    }
+    const bars:GanttAttachedBarView[] = [];
+    ids.forEach(groupId => {
+          this.groups.getById(groupId)!.attachedBars.forEach(bar => bars.push(bar));
+    });
+        
+    bars.forEach(item => {
+      item.changeY();
+      effectBarIds.push(item.id);
+    });
     
-  push(...items: GanttAttachedBarView[]): number {
-    throw new Error('Method not implemented.');
-  }
-    
-  pop(): GanttAttachedBarView | undefined {
-    throw new Error('Method not implemented.');
-  }
-    
-  shift(): GanttAttachedBarView | undefined {
-    throw new Error('Method not implemented.');
-  }
-    
-  unshift(...items: GanttAttachedBarView[]): number {
-    throw new Error('Method not implemented.');
-  }
-    
-  splice(start: number, deleteCount: number, ...items: GanttAttachedBarView[]): GanttAttachedBarView[] {
-    throw new Error('Method not implemented.');
+    return effectBarIds;
   }
 }

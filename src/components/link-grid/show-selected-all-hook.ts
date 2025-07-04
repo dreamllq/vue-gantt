@@ -17,10 +17,6 @@ export const useShowSelectedAllHook = () => {
   const lazyCalculate = () => {
     lazyLinkGrid.value = selectedBarsLinks.value
       .filter(link => link.isShow)
-      .filter(link => {
-        link.calculate();
-        return link;
-      })
       .filter(link => isRectanglesOverlap({
         x1: visibleAreaStartX.value,
         y1: visibleAreaStartY.value,
@@ -34,9 +30,9 @@ export const useShowSelectedAllHook = () => {
       })).map(link => link.toJSON());
   };
 
-  if (lazyReady.value) {
-    lazyCalculate();
-  }
+  // if (lazyReady.value) {
+  //   lazyCalculate();
+  // }
 
   const calculateSelectedBarsLinks = () => {
     selectedBarsLinks.value = uniqBy(ganttEntity.bars.selectedBars
@@ -89,6 +85,11 @@ export const useShowSelectedAllHook = () => {
 
   const onBarSelectChange = (barIds:BarId[]) => {
     calculateSelectedBarsLinks();
+    selectedBarsLinks.value.forEach(link => {
+      if (barIds.includes(link.source.id) || barIds.includes(link.target.id)) {
+        link.calculate();
+      }
+    });
     calculateSelectedZIndex();
     lazyCalculate();
   };
