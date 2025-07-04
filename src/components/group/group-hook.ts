@@ -33,6 +33,7 @@ export const useGroupHook = () => {
     group._isExpand = !group._isExpand;
     const oldExpandedGroupIds = ganttEntity.groups.expandedGroups.map(group => group.id);
     ganttEntity.groups.calculateExpandedGroups();
+    ganttEntity.groups.calculate();
     const newExpandedGroupIds = ganttEntity.groups.expandedGroups.map(group => group.id);
     bus.emit(Events.GROUP_CHANGE, [group.id]);
     bus.emit(Events.GROUP_EXPAND_CHANGE, {

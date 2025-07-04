@@ -43,11 +43,7 @@ const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) =>
     scroll.scrollReady.value = false;
     layout.layoutReady.value = false;
     await nextTick();
-    ganttEntity.groups.calculate();
-    ganttEntity.groups.calculateWorkTime();
-    ganttEntity.bars.calculate();
-    ganttEntity.attachedBars.calculate();
-    ganttEntity.links.calculate();
+    ganttEntity.calculate();
     container.containerReady.value = true;
   };
 

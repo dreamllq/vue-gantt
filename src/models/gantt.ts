@@ -237,29 +237,34 @@ export class Gantt extends EventEmitter {
     gantt.batchAddMilestone(data.milestones || []);
     console.timeEnd('gantt fromJson class init');
 
-    console.time('gantt fromJson data calculate');
-    console.time('gantt fromJson group data calculate');
-    gantt.groups.calculateExpandedGroups();
-    gantt.groups.calculateWorkTime();
-    console.timeEnd('gantt fromJson group data calculate');
-    console.time('gantt fromJson bar data calculate');
-    gantt.bars.updateShow();
-    gantt.bars.calculate();
-    console.timeEnd('gantt fromJson bar data calculate');
-    gantt.attachedBars.updateShow();
-    gantt.attachedBars.calculate();
-    console.time('gantt fromJson link data calculate');
-    gantt.links.updateShow();
-    gantt.links.calculate();
-    console.timeEnd('gantt fromJson link data calculate');
-    console.time('gantt fromJson link calculateLinkGroupMap calculate');
-    gantt.links.calculateLinkGroupMap();
-    console.timeEnd('gantt fromJson link calculateLinkGroupMap calculate');
-    gantt.milestones.updateShow();
-    gantt.milestones.calculate();
-    console.timeEnd('gantt fromJson data calculate');
-    console.timeEnd('gantt fromJson');
+    gantt.calculate();
 
     return gantt;
+  }
+
+  calculate() {
+    console.time('gantt fromJson data calculate');
+    console.time('gantt fromJson group data calculate');
+    this.groups.calculate();
+    this.groups.calculateExpandedGroups();
+    this.groups.calculateWorkTime();
+    console.timeEnd('gantt fromJson group data calculate');
+    console.time('gantt fromJson bar data calculate');
+    this.bars.updateShow();
+    this.bars.calculate();
+    console.timeEnd('gantt fromJson bar data calculate');
+    this.attachedBars.updateShow();
+    this.attachedBars.calculate();
+    console.time('gantt fromJson link data calculate');
+    this.links.updateShow();
+    this.links.calculate();
+    console.timeEnd('gantt fromJson link data calculate');
+    console.time('gantt fromJson link calculateLinkGroupMap calculate');
+    this.links.calculateLinkGroupMap();
+    console.timeEnd('gantt fromJson link calculateLinkGroupMap calculate');
+    this.milestones.updateShow();
+    this.milestones.calculate();
+    console.timeEnd('gantt fromJson data calculate');
+    console.timeEnd('gantt fromJson');
   }
 }
