@@ -22,6 +22,10 @@ export class GanttLinks extends BizArray<GanttLinkView> {
     this.bars = data.bars;
     this.bus = data.bus;
     this.config = data.config;
+
+    this.bus.on(GanttBusEvents.BAR_REMOVE, (ids: BarId[]) => {
+      this.removeLinksBarIds(ids);
+    });
   }
 
   add(data:GanttLinkViewClassConstructor) {
@@ -159,5 +163,14 @@ export class GanttLinks extends BizArray<GanttLinkView> {
       }
     });
     return startLinks;
+  };
+
+  removeLinksBarIds = (ids: BarId[]) => {
+    ids.forEach(id => {
+      const links = this.getLinksByBarId(id);
+      links.forEach(link => {
+        this.removeById(link.id);
+      });
+    });
   };
 }

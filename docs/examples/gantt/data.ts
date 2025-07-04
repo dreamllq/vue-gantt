@@ -9,7 +9,7 @@ export const data:GanttJsonData = {
     'selectable': true,
     'multipleSelectable': true,
     'contextMenuEnable': true,
-    'linkShowStrategy': 'ALL',
+    'linkShowStrategy': 'SELECTED_ALL',
     contextMenuMenus: [
       {
         label: '返回(B)',

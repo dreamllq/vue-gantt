@@ -1,5 +1,9 @@
 <template>
-  <div class='gantt-milestones'>
+  <div
+    class='gantt-milestones'
+    :style='{
+      zIndex: Number.MAX_SAFE_INTEGER
+    }'>
     <template v-for='item in lazyMilestoneGrid' :key='item.id'>
       <milestone-item :item='item' />
     </template>

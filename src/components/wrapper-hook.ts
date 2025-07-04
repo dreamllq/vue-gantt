@@ -54,6 +54,7 @@ export const useWrapperHook = () => {
 
   const addLink = (data: GanttLinkAddParams) => {
     ganttEntity.addLink(data);
+    ganttEntity.links.updateShow();
     const link = ganttEntity.links.getById(data.id)!;
     link.calculate();
     ganttEntity.links.calculateLinkGroupMap();
