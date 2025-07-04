@@ -39,7 +39,7 @@ export const getData = ():GanttJsonData => {
   for (let i = 0; i < groupCount; i++) {
     groups.push({
       id: `g_${i + 1}`,
-      barOverlap: false,
+      barOverlap: true,
       workTimes
     });
   }
@@ -218,6 +218,7 @@ export const getData = ():GanttJsonData => {
       'multipleSelectable': true,
       'contextMenuEnable': true,
       'linkShowStrategy': 'SELECTED_ALL',
+      dragTimeOffset: 0,
       contextMenuMenus: [
         {
           label: '返回(B)',

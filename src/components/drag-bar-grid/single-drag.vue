@@ -5,7 +5,8 @@
       class='dragging-tip' 
       :style='{
         width: `140px`,
-        transform: `translate(${barClone!.sx}px, ${barClone!.sy + ganttEntity.layoutConfig.HEADER_HEIGHT - 20}px)`
+        transform: `translate(${barClone!.sx}px, ${barClone!.sy + ganttEntity.layoutConfig.HEADER_HEIGHT - 20}px)`,
+        zIndex: `${Number.MAX_SAFE_INTEGER}`
       }'>
       {{ barClone!.start }}
     </div>
@@ -16,7 +17,8 @@
       :style='{
         width: `${shadowDraggingBar.width}px`,
         height: `${shadowDraggingBar.height}px`,
-        transform: `translate(${shadowDraggingBar.sx}px, ${shadowDraggingBar.sy + ganttEntity.layoutConfig.HEADER_HEIGHT}px)`
+        transform: `translate(${shadowDraggingBar.sx}px, ${shadowDraggingBar.sy + ganttEntity.layoutConfig.HEADER_HEIGHT}px)`,
+        zIndex: `${Number.MAX_SAFE_INTEGER}`
       }' />
 
     <div
@@ -25,7 +27,8 @@
       :style='{
         width: `${draggingBar.width}px`,
         height: `${draggingBar.height}px`,
-        transform: `translate(${draggingBar.sx}px, ${draggingBar.sy + ganttEntity.layoutConfig.HEADER_HEIGHT}px)`
+        transform: `translate(${draggingBar.sx}px, ${draggingBar.sy + ganttEntity.layoutConfig.HEADER_HEIGHT}px)`,
+        zIndex: `${Number.MAX_SAFE_INTEGER}`
       }'
     >
       <slot :bar='ganttEntity.bars.getById(draggingBar.id)!' />

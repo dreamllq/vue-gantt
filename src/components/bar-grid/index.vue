@@ -8,7 +8,8 @@
         :style='{
           width: `${item.width}px`,
           height: `${item.height}px`,
-          transform: `translate(${item.sx}px, ${item.sy}px)`
+          transform: `translate(${item.sx}px, ${item.sy}px)`,
+          zIndex: item.zIndex
         }'
         :data-id='item.id'
         :data-type='getIdType(item.id)'>

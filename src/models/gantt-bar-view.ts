@@ -34,6 +34,8 @@ export class GanttBarView extends GanttBar {
   overlapBarIds:BarId[] = [];
   isShow = true;
   bus:GanttBus;
+  zIndex = 1;
+  color?:string;
 
   private _selectable?: boolean;
   private _draggable?:boolean;
@@ -45,6 +47,7 @@ export class GanttBarView extends GanttBar {
     this._selectable = data.selectable;
     this._draggable = data.draggable;
     this._contextMenuEnable = data.contextMenuEnable;
+    this.color = data.color;
   }
 
   set group(val: GanttGroup) {
@@ -310,7 +313,8 @@ export class GanttBarView extends GanttBar {
       et: this.et,
       dragging: this.dragging,
       selected: this.selected,
-      rowIndex: this.rowIndex
+      rowIndex: this.rowIndex,
+      zIndex: this.zIndex
     };
   }
 }

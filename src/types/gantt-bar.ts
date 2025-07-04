@@ -15,7 +15,8 @@ export type GanttBarViewClassConstructor = GanttBarClassConstructor & {
   bus: GanttBus,
   selectable?:boolean,
   draggable?:boolean,
-  contextMenuEnable?: boolean
+  contextMenuEnable?: boolean,
+  color?:string
 }
 
 export type GanttBarClassConstructor = {
@@ -37,7 +38,8 @@ export type GanttBarAddParams = {
   schedulingMode?: SchedulingMode | null,
   selectable?:boolean,
   draggable?:boolean,
-  contextMenuEnable?:boolean
+  contextMenuEnable?:boolean,
+  color?:string
 } 
 
 export type GanttBarUpdateParams = {

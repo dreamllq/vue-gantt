@@ -3,13 +3,13 @@
     :class='["path-arrow", link.arrow!.direction]'
     :style='{
       transform: `translateX(${link.arrow!.point.x}px) translateY(${props.link.arrow!.point.y}px)`,
-      "--task-color": "var(--link-color)",
+      "--task-color": mergeColor,
     }' />
 </template>
 
 <script setup lang="ts">
 import { GanttLinkView } from '@/models/gantt-link-view';
-import { onMounted, onUnmounted, PropType, watch } from 'vue';
+import { onMounted, onUnmounted, PropType, ref, watch } from 'vue';
 import { path as d3Path } from 'd3-path';
 import { select as d3Select } from 'd3-selection';
 import { line as d3Line, curveBasis, curveLinear } from 'd3-shape';
@@ -19,11 +19,24 @@ const props = defineProps({
   link: {
     type: Object as PropType<ReturnType<typeof GanttLinkView.prototype.toJSON>>,
     required: true
+  },
+  zIndex: {
+    type: Number,
+    default: 1
+  },
+  selected: {
+    type: Boolean,
+    default: false
+  },
+  color: {
+    type: String,
+    default: undefined
   }
 });
 
 const { ganttId } = useStore()!;
 const svgId = `#path-svg-${ganttId}`;
+const mergeColor = ref(props.selected ? 'var(--link-selected-color)' : (props.color ? props.color : 'var(--link-color)'));
 
 let cp: {remove:()=>void} | null = null;
 
@@ -78,9 +91,9 @@ const renderLink = () => {
   // @ts-ignore
   cp.attr('d', p.toString())
     .style('fill', 'none')
-    .style('stroke', 'var(--link-color)')
-    .style('stroke-width', '2');
-  // .style('z-index', zIndex.value);
+    .style('stroke', mergeColor.value)
+    .style('stroke-width', '2')
+    .style('z-index', props.zIndex);
   // } else {
   //   const l = props.link.path.map(p => [p.x, p.y]);
   //   const line = d3Line().curve(lineTypeMap[props.lineType]).context(null);

@@ -160,10 +160,8 @@ export class Gantt extends EventEmitter {
       }
 
       this.addGroup({
-        id: groupJson.id,
-        workTimes: workTimes,
-        isExpand: groupJson.isExpand,
-        barOverlap: groupJson.barOverlap
+        ...groupJson,
+        workTimes: workTimes
       });
     });
 
@@ -182,15 +180,8 @@ export class Gantt extends EventEmitter {
   batchAddBar(bars:GanttJsonDataBar[]) {
     bars.forEach(barJson => {
       this.addBar({
-        id: barJson.id,
-        duration: barJson.duration,
-        start: barJson.start,
-        end: barJson.end,
-        groupId: barJson.groupId,
-        schedulingMode: barJson.schedulingMode ? SchedulingMode[barJson.schedulingMode] : undefined,
-        draggable: barJson.draggable,
-        selectable: barJson.selectable,
-        contextMenuEnable: barJson.contextMenuEnable
+        ...barJson,
+        schedulingMode: barJson.schedulingMode ? SchedulingMode[barJson.schedulingMode] : undefined
       });
     });
   }
@@ -200,9 +191,7 @@ export class Gantt extends EventEmitter {
       const group = this.groups.getById(barJson.groupId);
       if (group) {
         this.addAttachedBar({
-          id: barJson.id,
-          start: barJson.start,
-          end: barJson.end,
+          ...barJson,
           group: group
         });
       }
@@ -212,9 +201,7 @@ export class Gantt extends EventEmitter {
   batchAddLink(links:GanttJsonDataLink[]) {
     links.forEach(linkJson => {
       this.addLink({
-        id: linkJson.id,
-        sourceId: linkJson.sourceId,
-        targetId: linkJson.targetId,
+        ...linkJson,
         linkType: linkJson.linkType ? GanttLinkType[linkJson.linkType] : undefined
       });
     });
@@ -232,23 +219,11 @@ export class Gantt extends EventEmitter {
     const layoutConfig = new GanttLayoutConfig(data.layoutConfig || {});
     const config = new GanttConfig({
       layoutConfig,
-      endDate: data.config.endDate,
-      startDate: data.config.startDate,
+      ...data.config,
       durationUnit: data.config.durationUnit ? Unit[data.config.durationUnit] : undefined,
       dataScaleUnit: data.config.dataScaleUnit ? Unit[data.config.dataScaleUnit] : undefined,
-      daySplitTime: data.config.daySplitTime,
       schedulingMode: data.config.schedulingMode ? SchedulingMode[data.config.schedulingMode] : undefined,
-      lazyDebounceTime: data.config.lazyDebounceTime,
-      draggable: data.config.draggable,
-      selectable: data.config.selectable,
-      multipleSelectable: data.config.multipleSelectable,
-      multipleDraggable: data.config.multipleDraggable,
-      contextMenuEnable: data.config.contextMenuEnable,
-      contextMenuMenus: data.config.contextMenuMenus,
-      linkShowStrategy: data.config.linkShowStrategy ? LinkShowStrategy[data.config.linkShowStrategy] : undefined,
-      showCurrentTimeLine: data.config.showCurrentTimeLine,
-      showAttachedBars: data.config.showAttachedBars,
-      dragTimeOffset: data.config.dragTimeOffset
+      linkShowStrategy: data.config.linkShowStrategy ? LinkShowStrategy[data.config.linkShowStrategy] : undefined
     });
     const gantt = new Gantt({
       config,

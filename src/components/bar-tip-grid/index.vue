@@ -6,7 +6,8 @@
         class='dragging-tip' 
         :style='{
           width: `${width}px`,
-          transform: `translate(${item.sx}px, ${item.sy + wrapperHeight}px)`
+          transform: `translate(${item.sx}px, ${item.sy + wrapperHeight}px)`,
+          zIndex:`${Number.MAX_SAFE_INTEGER}`
         }'>
         {{ item.start }}~{{ item.end }}
       </div>

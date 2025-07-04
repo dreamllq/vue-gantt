@@ -7,6 +7,9 @@
       <l-path 
         v-if='!draggingBarIds.includes(link.sourceId) && !draggingBarIds.includes(link.targetId)'
         :link='link' 
+        :z-index='link.zIndex'
+        :selected='link.selected'
+        :color='link.color'
       />
     </template>
   </div>
@@ -31,6 +34,5 @@ const { lazyLinkGrid, draggingBarIds } = useShowSelectedAllHook();
   left: 0;
   position: absolute;
   top:0;
-
 }
 </style>

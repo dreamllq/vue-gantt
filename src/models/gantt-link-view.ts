@@ -5,7 +5,7 @@ import { calculateFinishToFinishLink } from '@/utils/link/finish-to-finish-link'
 import { calculateFinishToStartLink } from '@/utils/link/finish-to-start-link';
 import { calculateStartToFinishLink } from '@/utils/link/start-to-finish-link';
 import { calculateStartToStartLink } from '@/utils/link/start-to-start-link';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, max, min } from 'lodash';
 
 const calculateFunction = {
   [GanttLinkType.FINISH_TO_FINISH]: calculateFinishToFinishLink,
@@ -20,6 +20,12 @@ export class GanttLinkView extends GanttLink {
   arrow?: Arrow;
   bars: GanttBars;
   isShow = true;
+  sx = 0;
+  sy = 0;
+  ex = 0;
+  ey = 0;
+  zIndex = 1;
+
   constructor(data: GanttLinkViewClassConstructor) {
     super(data);
     this.bars = data.bars;
@@ -83,6 +89,11 @@ export class GanttLinkView extends GanttLink {
 
     this.arrow = data.arrow;
     this.path = data.path;
+
+    this.sx = min(this.path.map(point => point.x)) || 0;
+    this.sy = min(this.path.map(point => point.y)) || 0;
+    this.ex = max(this.path.map(point => point.x)) || 0;
+    this.ey = max(this.path.map(point => point.y)) || 0;
   }
 
   toJSON() {
@@ -91,7 +102,14 @@ export class GanttLinkView extends GanttLink {
       arrow: cloneDeep(this.arrow),
       path: cloneDeep(this.path),
       sourceId: this.source.id,
-      targetId: this.target.id
+      targetId: this.target.id,
+      sx: this.sx,
+      sy: this.sy,
+      ex: this.ex,
+      ey: this.ey,
+      zIndex: this.zIndex,
+      selected: this.bars.getById(this.source.id)!.selected || this.bars.getById(this.target.id)!.selected,
+      color: this.bars.getById(this.source.id)?.color
     };
   }
 }

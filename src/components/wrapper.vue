@@ -81,7 +81,7 @@ import { onBeforeUnmount, onMounted } from 'vue';
 import { Events } from '@/types/events';
 import { useWrapperHook } from './wrapper-hook';
 
-const { entityReady, container, scroll, ganttEntity, bus } = useStore()!;
+const { entityReady, container, scroll, ganttEntity, bus, onMounted: onStoreMounted, onUnmounted: onStoreUnmounted } = useStore()!;
 const { scrollReady } = scroll;
 
 const { api } = useWrapperHook();
@@ -95,10 +95,12 @@ const onDraggingChange = (ids:BarId, dragging: boolean) => {
 
 onMounted(() => {
   bus.on(Events.BAR_DRAGGING_CHANGE, onDraggingChange);
+  onStoreMounted();
 });
 
 onBeforeUnmount(() => {
   bus.off(Events.BAR_DRAGGING_CHANGE, onDraggingChange);
+  onStoreUnmounted();
 });
 
 defineExpose({ api: api });

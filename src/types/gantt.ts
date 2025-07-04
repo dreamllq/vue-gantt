@@ -63,7 +63,8 @@ export type GanttJsonDataBar = {
   schedulingMode?: keyof typeof SchedulingMode,
   selectable?:boolean,
   draggable?:boolean,
-  contextMenuEnable?:boolean
+  contextMenuEnable?:boolean,
+  color?:string
 };
 
 export type GanttJsonDataAttachedBar = {

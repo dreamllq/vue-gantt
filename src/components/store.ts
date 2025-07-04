@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useEvents } from './hooks/events';
 import { GanttConfig } from '@/models/gantt-config';
 import { GanttLayoutConfig } from '@/models/gantt-layout-config';
+import { useZIndex } from './hooks/z-index';
 
 const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) => {
   const ganttId = uuidv4();
@@ -28,6 +29,7 @@ const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) =>
   const drag = useDrag(ganttEntity, { bus });
   const layout = useLayout(ganttEntity, { bus });
   const scroll = useScroll(ganttEntity, { bus });
+  const zIndex = useZIndex(ganttEntity, { bus });
   const lazy = useLazy(ganttEntity, {
     scroll,
     layout,
@@ -48,12 +50,22 @@ const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) =>
     ganttEntity.links.calculate();
     container.containerReady.value = true;
   };
+
+  const onMounted = () => {
+    ganttEntity.config.on(GanttConfig.Events.DATA_SCALE_UNIT_CHANGE, containerReload);
+    ganttEntity.layoutConfig.on(GanttLayoutConfig.Events.SIZE_RATIO_PERCENT_CHANGE, containerReload);
+    ganttEntity.config.on(GanttConfig.Events.SHOW_ATTACHED_BARS_CHANGE, containerReload); 
+  };
+  const onUnmounted = () => {
+    ganttEntity.config.off(GanttConfig.Events.DATA_SCALE_UNIT_CHANGE, containerReload);
+    ganttEntity.layoutConfig.off(GanttLayoutConfig.Events.SIZE_RATIO_PERCENT_CHANGE, containerReload);
+    ganttEntity.config.off(GanttConfig.Events.SHOW_ATTACHED_BARS_CHANGE, containerReload);
+  };
   
-  ganttEntity.config.on(GanttConfig.Events.DATA_SCALE_UNIT_CHANGE, containerReload);
-  ganttEntity.layoutConfig.on(GanttLayoutConfig.Events.SIZE_RATIO_PERCENT_CHANGE, containerReload);
-  ganttEntity.config.on(GanttConfig.Events.SHOW_ATTACHED_BARS_CHANGE, containerReload);
 
   return {
+    onMounted,
+    onUnmounted,
     ganttId,
     barHtmlClass,
     entityReady,
@@ -63,6 +75,7 @@ const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) =>
     drag,
     layout,
     scroll,
+    zIndex,
     lazy
   };
 });
