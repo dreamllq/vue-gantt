@@ -78,6 +78,7 @@ export const useShowAllHook = () => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.on(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
     bus.on(Events.BAR_POS_CHANGE_FRAGMENTATION, onBarPosChange);
+    bus.on(Events.BAR_SELECT_CHANGE, onVisibleAreaChange);
     bus.on(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
     bus.on(Events.LINKS_CHANGE, onVisibleAreaChange);
   });
@@ -88,6 +89,7 @@ export const useShowAllHook = () => {
     bus.off(Events.BAR_POS_CHANGE_FRAGMENTATION, onBarPosChange);
     bus.off(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
     bus.off(Events.LINKS_CHANGE, onVisibleAreaChange);
+    bus.off(Events.BAR_SELECT_CHANGE, onVisibleAreaChange);
   });
 
   return {
