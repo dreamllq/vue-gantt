@@ -6,9 +6,10 @@ import { GanttBusEvents } from '@/types/gantt-bus';
 import { GroupId } from '@/types/gantt-group';
 import { DateTimeString } from '@/types/date';
 import moment from 'moment';
+import { Events } from '@/types/events';
 export const useWrapperHook = () => {
 
-  const { scroll, ganttEntity } = useStore()!;
+  const { scroll, ganttEntity, bus } = useStore()!;
   const setDraggable = (val: boolean) => {
     ganttEntity.config.draggable = val;
   };
@@ -66,6 +67,7 @@ export const useWrapperHook = () => {
       const bar = ganttEntity.bars.getById(id)!;
       bar.selected = val;
       ganttEntity.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [id]);
+      bus.emit(Events.BAR_SELECT_CHANGE, [id]);
     }
   };
 
