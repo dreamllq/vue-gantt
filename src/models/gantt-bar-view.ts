@@ -12,6 +12,7 @@ import { DateTimeString } from '@/types/date';
 import { GroupId } from '@/types/gantt-group';
 import { GanttBarUpdateOperationData } from '@/types/gantt-operation-history';
 import { GanttBarUpdateOperation } from './gantt-operation';
+import { Events } from '@/types/events';
 
 export class GanttBarView extends GanttBar {
   static Events = { SELECTED_CHANGE: 'SELECTED_CHANGE' };
@@ -72,6 +73,7 @@ export class GanttBarView extends GanttBar {
   }
   
   set selected(val) {
+    if (this.selectable === false) return;
     if (this._selected === val) return;
     
     this._selected = val;
@@ -80,6 +82,9 @@ export class GanttBarView extends GanttBar {
     } else {
       this.bars.selectedBars.removeById(this.id);
     }
+
+    this.bus.emit(GanttBusEvents.BAR_CHANGE, [this.id]);
+    this.bus.emit(GanttBusEvents.BAR_SELECT_CHANGE, [this.id]);
   }
 
   get contextMenuEnable():boolean {

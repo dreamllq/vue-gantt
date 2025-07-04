@@ -39,8 +39,6 @@ export const useMultipleSelectHook = () => {
         barIds.push(bar.id);
       }
     }
-    bus.emit(Events.BAR_CHANGE, barIds);
-    bus.emit(Events.BAR_SELECT_CHANGE, barIds);
   };
 
   const onClickOutside = () => {
@@ -53,8 +51,6 @@ export const useMultipleSelectHook = () => {
         barIds.push(item.id);
         item.selected = false;
       });
-      bus.emit(Events.BAR_CHANGE, barIds);
-      bus.emit(Events.BAR_SELECT_CHANGE, barIds);
     }
   };
 

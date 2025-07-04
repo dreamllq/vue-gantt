@@ -66,16 +66,14 @@ export const useWrapperHook = () => {
     if (ganttEntity.bars.isExist(id)) {
       const bar = ganttEntity.bars.getById(id)!;
       bar.selected = val;
-      ganttEntity.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [id]);
-      bus.emit(Events.BAR_SELECT_CHANGE, [id]);
     }
   };
 
   const setBarSelectable = (id: BarId, val: boolean) => {
     if (ganttEntity.bars.isExist(id)) {
       const bar = ganttEntity.bars.getById(id)!;
-      bar.selectable = val;
       bar.selected = false;
+      bar.selectable = val;
       ganttEntity.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [id]);
     }
   };

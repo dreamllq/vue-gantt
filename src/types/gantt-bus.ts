@@ -15,7 +15,9 @@ export enum GanttBusEvents {
   ATTACHED_BAR_POS_CHANGE='ATTACHED_BAR_POS_CHANGE',
   LINKS_CHANGE='LINKS_CHANGE',
   BAR_CONTEXT_MENU_ENABLE_CHANGE= 'CONTEXT_MENU_ENABLE_CHANGE',
-  BAR_REMOVE='BAR_REMOVE'
+  BAR_REMOVE='BAR_REMOVE',
+  BAR_CHANGE='BAR_CHANGE',
+  BAR_SELECT_CHANGE='BAR_SELECT_CHANGE'
 }
 
 export interface GanttBusEventsInterface {
@@ -37,5 +39,7 @@ export interface GanttBusEventsInterface {
   [GanttBusEvents.BARS_CHANGE]:()=>void,
   [GanttBusEvents.LINKS_CHANGE]:()=>void,
   [GanttBusEvents.BAR_CONTEXT_MENU_ENABLE_CHANGE]:(barIds:BarId[])=>void,
-  [GanttBusEvents.BAR_REMOVE]: (barIds: BarId[]) => void
+  [GanttBusEvents.BAR_REMOVE]: (barIds: BarId[]) => void,
+  [GanttBusEvents.BAR_CHANGE]: (barIds: BarId[]) => void,
+  [GanttBusEvents.BAR_SELECT_CHANGE]: (barIds: BarId[]) => void,
 }

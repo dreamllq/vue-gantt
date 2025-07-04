@@ -60,6 +60,18 @@ export const useEvents = (ganttEntity: Gantt, store:{
     return [];
   }));
 
+  ganttEntity.bus.on(GanttBusEvents.BAR_CHANGE, asyncFragmentation<BarId[]>(async (options) => {
+    const ids = uniq(flatten(options));
+    store.bus.emit(Events.BAR_CHANGE, ids);
+    return [];
+  }));
+
+  ganttEntity.bus.on(GanttBusEvents.BAR_SELECT_CHANGE, asyncFragmentation<BarId[]>(async (options) => {
+    const ids = uniq(flatten(options));
+    store.bus.emit(Events.BAR_SELECT_CHANGE, ids);
+    return [];
+  }));
+
   store.bus.on(Events.BAR_CHANGE, asyncFragmentation<BarId[]>(async (options:BarId[][]) => {
     const ids = uniq(flatten(options));
     store.bus.emit(Events.BAR_CHANGE_FRAGMENTATION, ids);
