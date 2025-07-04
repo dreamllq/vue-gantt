@@ -53,14 +53,14 @@ export const useAttachedBarHook = () => {
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.on(Events.ATTACHED_BAR_VISIBLE_CHANGE, onVisibleAreaChange);
-    bus.on(Events.ATTACHED_BAR_CHANGE, onAttachedBarChange);
+    bus.on(Events.ATTACHED_BAR_CHANGE_FRAGMENTATION, onAttachedBarChange);
     bus.on(Events.GROUP_EXPAND_CHANGE, onGroupExpandChange);
   });
   
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.on(Events.ATTACHED_BAR_VISIBLE_CHANGE, onVisibleAreaChange);
-    bus.off(Events.ATTACHED_BAR_CHANGE, onVisibleAreaChange);
+    bus.off(Events.ATTACHED_BAR_CHANGE_FRAGMENTATION, onVisibleAreaChange);
     bus.off(Events.GROUP_EXPAND_CHANGE, onGroupExpandChange);
   });
 

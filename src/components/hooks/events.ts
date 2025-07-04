@@ -7,7 +7,6 @@ import { flatten, uniq } from 'lodash';
 import asyncFragmentation from 'simple-async-fragmentation';
 import { BarId } from '@/types/gantt-bar';
 import { GroupId } from '@/types/gantt-group';
-
 export const useEvents = (ganttEntity: Gantt, store:{
   bus: ReturnType<typeof useBus>
 }) => {
@@ -69,6 +68,12 @@ export const useEvents = (ganttEntity: Gantt, store:{
   store.bus.on(Events.BAR_POS_CHANGE, asyncFragmentation<BarId[]>(async (options:BarId[][]) => {
     const ids = uniq(flatten(options));
     store.bus.emit(Events.BAR_POS_CHANGE_FRAGMENTATION, ids);
+    return [];
+  }));
+
+  store.bus.on(Events.ATTACHED_BAR_CHANGE, asyncFragmentation<BarId[]>(async (options:BarId[][]) => {
+    const ids = uniq(flatten(options));
+    store.bus.emit(Events.ATTACHED_BAR_CHANGE_FRAGMENTATION, ids);
     return [];
   }));
   
