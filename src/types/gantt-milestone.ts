@@ -3,6 +3,7 @@ import { DateTimeString } from './date';
 import { GanttBaseClassConstructor } from './gantt-base';
 import { Id } from './id';
 import { GanttGroups } from '@/models/gantt-groups';
+import { GroupId } from './gantt-group';
 
 export type MilestoneId = Id;
 
@@ -19,7 +20,7 @@ export type GanttMilestoneClassConstructor = {
 
 export type GanttMilestoneAddParams = {
   id: MilestoneId;
-  groupId: string;
+  groupId: GroupId;
   datetime: DateTimeString;
   text?: string;
 }

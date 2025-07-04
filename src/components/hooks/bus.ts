@@ -3,7 +3,7 @@ import { Events, EventsInterface } from '@/types/events';
 import EventEmitter from '@/utils/eventemitter';
 
 export const useBus = () => {
-  const ee = new EventEmitter<EventsInterface | Events, any>();
+  const ee = new EventEmitter<EventsInterface, any>();
 
   const bus = {
     emit: ee.emit.bind(ee),

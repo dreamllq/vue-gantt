@@ -23,6 +23,7 @@ export const useShowAllHook = () => {
       ready.value = true;
     }
     lazyLinkGrid.value = ganttEntity.links
+      .filter(link => link.isShow)
       .filter(link => isRectanglesOverlap({
         x1: visibleAreaStartX.value,
         y1: visibleAreaStartY.value,

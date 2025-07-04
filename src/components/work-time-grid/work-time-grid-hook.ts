@@ -19,7 +19,7 @@ type GridItem = {
 export const useWorkTimeGridHook = () => {
   const workTimeGrid = ref<GridItem[]>([]);
   const lazyWorkTimeGrid = ref<GridItem[]>([]);
-  const groupMap:Record<GroupId, GridItem[]> = {};
+  let groupMap:Record<GroupId, GridItem[]> = {};
 
 
   const { ganttEntity, lazy, bus } = useStore()!;
@@ -27,13 +27,14 @@ export const useWorkTimeGridHook = () => {
 
   const initData = () => {
     workTimeGrid.value = [];
+    groupMap = {};
     ganttEntity.groups.expandedGroups.forEach((group) => {
       group.workTimes.forEach(wt => {
         const item = {
           id: wt.id,
           seconds: wt.seconds,
           x: wt.sx,
-          y: ganttEntity.groups.getGroupTopByIndex(ganttEntity.groups.getIndexById(group.id)),
+          y: ganttEntity.groups.getGroupTopByIndex(ganttEntity.groups.getGroupIndex(group)),
           width: wt.width,
           height: group.height,
           timeString: wt.startTimeString,
@@ -52,11 +53,32 @@ export const useWorkTimeGridHook = () => {
     groupIds.forEach(groupId => {
       const group = ganttEntity.groups.getById(groupId)!;
       group.workTimes.calculate();
-      (groupMap[group.id] || []).forEach(item => {
-        item.x = group.workTimes.getById(item.id)!.sx;
-        item.y = ganttEntity.groups.getGroupTopByIndex(ganttEntity.groups.getIndexById(group.id));
-        item.height = group.height;
-      });
+      if (Array.isArray(groupMap[group.id])) {
+        groupMap[group.id].forEach(item => {
+          item.x = group.workTimes.getById(item.id)!.sx;
+          item.y = ganttEntity.groups.getGroupTopByIndex(ganttEntity.groups.getGroupIndex(group));
+          item.height = group.height;
+        });
+      } else {
+        groupMap[group.id] = [];
+        group.workTimes.forEach(wt => {
+          const item = {
+            id: wt.id,
+            seconds: wt.seconds,
+            x: wt.sx,
+            y: ganttEntity.groups.getGroupTopByIndex(ganttEntity.groups.getGroupIndex(group)),
+            width: wt.width,
+            height: group.height,
+            timeString: wt.startTimeString,
+            groupId: group.id
+          };
+          workTimeGrid.value.push(item);
+          if (!Array.isArray(groupMap[group.id])) {
+            groupMap[group.id] = [];
+          }
+          groupMap[group.id].push(item);
+        });
+      }
     });
   };
 

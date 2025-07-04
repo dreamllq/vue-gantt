@@ -72,10 +72,10 @@ export const useEvents = (ganttEntity: Gantt, store:{
     return [];
   }));
   
-  store.bus.on(Events.GROUP_EXPAND_CHANGE, (groupIds:GroupId[]) => {
+  store.bus.on(Events.GROUP_EXPAND_CHANGE, (data) => {
     store.bus.emit(Events.SCROLL_CHANGE);
     store.bus.emit(Events.LAYOUT_CHANGE);
     store.bus.emit(Events.DATE_GRID_CHANGE);
-    store.bus.emit(Events.WORK_TIME_GRID_CHANGE, groupIds);
+    store.bus.emit(Events.WORK_TIME_GRID_CHANGE, data.newGroupIds);
   });
 };

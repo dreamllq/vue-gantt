@@ -15,7 +15,7 @@ export class GanttMilestoneView extends GanttMilestone {
   calculate() {
     if (!this.isShow) return;
     this.x = (this.datetimeMoment.diff(this.config.startDate, 'second')) * this.config.secondWidth;
-    const index = this.groups.getIndexById(this.group.id);
+    const index = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
     const top = this.groups.getGroupTopByIndex(index);
     this.y = top + (this.groups.getById(this.group.id)!.height / 2);
   }

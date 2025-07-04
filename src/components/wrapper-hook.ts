@@ -92,7 +92,7 @@ export const useWrapperHook = () => {
   };
 
   const scrollToGroup = (id: GroupId) => {
-    const index = ganttEntity.groups.getIndexById(id);
+    const index = ganttEntity.groups.getGroupIndex(ganttEntity.groups.getById(id)!);
     const top = ganttEntity.groups.getGroupTopByIndex(index);
     scroll.scrollTop.value = top;
   };

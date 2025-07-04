@@ -2,6 +2,7 @@ import { onBeforeUnmount, onMounted, Ref, ref } from 'vue';
 import { useStore } from '../store';
 import { GanttGroupView } from '@/models/gantt-group-view';
 import { Events } from '@/types/events';
+import { difference } from 'lodash';
 
 export const useGroupHook = () => {
   const { ganttEntity, bus, lazy } = useStore()!;
@@ -30,9 +31,16 @@ export const useGroupHook = () => {
 
   const onExpand = (group: GanttGroupView) => {
     group._isExpand = !group._isExpand;
+    const oldExpandedGroupIds = ganttEntity.groups.expandedGroups.map(group => group.id);
     ganttEntity.groups.calculateExpandedGroups();
+    const newExpandedGroupIds = ganttEntity.groups.expandedGroups.map(group => group.id);
     bus.emit(Events.GROUP_CHANGE, [group.id]);
-    bus.emit(Events.GROUP_EXPAND_CHANGE, [group.id]);
+    bus.emit(Events.GROUP_EXPAND_CHANGE, {
+      newGroupIds: newExpandedGroupIds,
+      oldGroupIds: oldExpandedGroupIds,
+      addGroupIds: difference(newExpandedGroupIds, oldExpandedGroupIds),
+      deleteGroupIds: difference(oldExpandedGroupIds, newExpandedGroupIds)
+    });
   };
   
   const onVisibleAreaChange = () => {

@@ -83,7 +83,7 @@ export type GanttJsonDataLink = {
 
 export type GanttJsonDataMilestone = {
   id: MilestoneId;
-  groupId: string;
+  groupId: GroupId;
   datetime: DateTimeString;
   text?: string;
 }

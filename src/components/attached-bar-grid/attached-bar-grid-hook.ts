@@ -44,11 +44,9 @@ export const useAttachedBarHook = () => {
       }
     });
   };
-  const onGroupExpandChange = (ids: GroupId[]) => {
-    ids.forEach(id => {
-      ganttEntity.attachedBars.updateGroupExpandChangeEffectBar(id);
-    });
+  const onGroupExpandChange = (data: { oldGroupIds: GroupId[]; newGroupIds: GroupId[]; addGroupIds: GroupId[]; deleteGroupIds: GroupId[] }) => {
     ganttEntity.attachedBars.updateShow();
+    ganttEntity.attachedBars.updateGroupExpandChangeEffectBar([...data.addGroupIds, ...data.deleteGroupIds]);
     bus.emit(Events.ATTACHED_BAR_VISIBLE_CHANGE);
   };
 

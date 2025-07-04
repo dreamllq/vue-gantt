@@ -30,7 +30,7 @@ export class GanttGroups extends BizArray<GanttGroupView> {
   removeById(id: GroupId): void {
     return super.removeById(id);
   }
-
+  
   getGroupIndexByTop(top:number) {
     let index = 0;
     let tempTop = 0;
@@ -105,7 +105,7 @@ export class GanttGroups extends BizArray<GanttGroupView> {
   }
 
   calculateWorkTime() {
-    this.filter(item => item.isShow).forEach(item => {
+    this.expandedGroups.filter(item => item.isShow).forEach(item => {
       item.workTimes.calculate();
     });
   }

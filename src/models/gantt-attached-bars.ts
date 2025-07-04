@@ -9,6 +9,7 @@ import { GanttGroups } from './gantt-groups';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GroupId } from '@/types/gantt-group';
 import { BarId } from '@/types/gantt-bar';
+import { min } from 'lodash';
 
 export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
   config: GanttConfig;
@@ -66,9 +67,22 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
       this.bus.emit(GanttBusEvents.ATTACHED_BAR_POS_CHANGE, effectBars.map(item => item.id));
     }
   }
-  updateGroupExpandChangeEffectBar(groupId: GroupId) {
-    const effectBarIds: BarId[] = [];
-    const groupIndex = this.groups.getGroupIndex(this.groups.getById(groupId)!);
+  updateGroupExpandChangeEffectBar(changedGroupIds: GroupId[]) {
+    // 计算传入折叠group中最小的index
+    const groupIndex = min(changedGroupIds.map(groupId => this.groups.getGroupIndex(this.groups.getById(groupId)!)))!;
+    
+    // #region 计算多展示出来的group下的bar
+    changedGroupIds.forEach(groupId => {
+      const group = this.groups.getById(groupId)!;
+      if (!group.isShow) return;
+      group.attachedBars.forEach(bar => {
+        if (!bar.isShow) return;
+        bar.calculate();
+      });
+    });
+    // #endregion
+
+    // #region 处理传入groupId之后的group中的bar集合
     const ids:GroupId[] = [];
     for (let i = groupIndex + 1; i < this.groups.expandedGroups.length; i++) {
       ids.push(this.groups.expandedGroups[i].id);
@@ -80,9 +94,7 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
         
     bars.forEach(item => {
       item.changeY();
-      effectBarIds.push(item.id);
     });
-    
-    return effectBarIds;
+    // #endregion
   }
 }

@@ -37,7 +37,7 @@ export const data:GanttJsonData = {
         }
       ],
       'barOverlap': true,
-      isExpand: true
+      isExpand: false
     },
     {
       'id': 911,
@@ -48,7 +48,7 @@ export const data:GanttJsonData = {
           'end': '2024-02-01 12:00:00'
         }
       ],
-      'barOverlap': true,
+      'barOverlap': false,
       isExpand: true
     },
     {
@@ -128,7 +128,7 @@ export const data:GanttJsonData = {
     {
       'duration': 72000,
       'end': null,
-      'groupId': 2,
+      'groupId': 911,
       'id': 4,
       'start': '2024-01-02 00:00:00'
     },
@@ -157,6 +157,12 @@ export const data:GanttJsonData = {
     {
       groupId: 2,
       id: 2,
+      start: '2024-01-02 00:00:00',
+      end: '2024-01-02 12:00:00'
+    },
+    {
+      groupId: 911,
+      id: 3,
       start: '2024-01-02 00:00:00',
       end: '2024-01-02 12:00:00'
     }

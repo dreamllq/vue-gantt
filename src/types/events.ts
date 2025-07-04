@@ -1,6 +1,9 @@
 import { GanttBarView } from '@/models/gantt-bar-view';
 import { BarId } from './gantt-bar';
 import { Id } from './id';
+import { Unit } from './unit';
+import { GroupId } from './gantt-group';
+import { AttachedBarId } from './gantt-attached-bar';
 
 export enum Events {
   DRAGSTART='DRAGSTART',
@@ -30,10 +33,8 @@ export enum Events {
 
   WORK_TIME_GRID_CHANGE='WORK_TIME_GRID_CHANGE',
 
-  GROUP_INIT_END='GROUP_INIT_END',
   GROUP_CHANGE='GROUP_CHANGE',
   GROUP_EXPAND_CHANGE='GROUP_EXPAND_CHANGE',
-
 
   BARS_CHANGE='BARS_CHANGE',
 
@@ -42,7 +43,6 @@ export enum Events {
   BAR_DRAGEND='BAR_DRAGEND',
   BAR_CLICK='BAR_CLICK',
   BAR_CLICK_OUTSIDE='BAR_CLICK_OUTSIDE',
-  BAR_INIT_END = 'BAR_INIT_END',
   BAR_CHANGE='BAR_CHANGE',
   BAR_CHANGE_FRAGMENTATION='BAR_CHANGE_FRAGMENTATION',
   BAR_DRAGGING='BAR_DRAGGING',
@@ -62,6 +62,56 @@ export enum Events {
 }
 
 export interface EventsInterface {
-  [Events.BAR_DRAGSTART]:(e:MouseEvent, bar: GanttBarView)=>void
-  [Events.BAR_CHANGE]:(ids: BarId[])=>void
+  [Events.DRAGSTART]: (e:MouseEvent)=>void;
+  [Events.DRAG]: (e:MouseEvent)=>void;
+  [Events.DRAGEND]: (e:MouseEvent)=>void;
+  [Events.CLICK]: (e:MouseEvent)=>void;
+  [Events.CONTEXTMENU]: (e:MouseEvent)=>void;
+  [Events.WHEEL]: (e:MouseEvent)=>void;
+  [Events.MOUSE_OUTSIDE]: ()=>void;
+  [Events.MOUSE_MAIN_OUTSIDE]: ()=>void;
+  [Events.CONTAINER_SIZE_CHANGE]: (data:{width:number, height: number})=>void;
+  [Events.LAYOUT_MAIN_SIZE_CHANGE]: (data:{width:number, height: number})=>void;
+  [Events.VISIBLE_AREA_CHANGE]: ()=>void;
+
+  [Events.DRAGGABLE_CHANGE]: (val:boolean)=>void;
+  [Events.SELECTABLE_CHANGE]: (val:boolean)=>void;
+  [Events.MULTIPLE_SELECTABLE_CHANGE]: (val:boolean)=>void;
+  [Events.DATA_SCALE_UNIT_CHANGE]: (val:Unit)=>void;
+
+  [Events.SCROLL_CHANGE]: ()=>void;
+  [Events.AUTO_SCROLL_CHANGE]: ()=>void;
+
+  [Events.LAYOUT_CHANGE]: ()=>void;
+
+  [Events.DATE_GRID_CHANGE]: ()=>void;
+
+  [Events.WORK_TIME_GRID_CHANGE]: (groupIds:GroupId[])=>void;
+
+  [Events.GROUP_CHANGE]: (groupIds:GroupId[])=>void;
+  [Events.GROUP_EXPAND_CHANGE]: (data: { oldGroupIds: GroupId[]; newGroupIds: GroupId[]; addGroupIds: GroupId[]; deleteGroupIds: GroupId[] })=>void;
+  
+  [Events.BARS_CHANGE]: ()=>void;
+
+  [Events.BAR_DRAGSTART]:(e:MouseEvent, bar: GanttBarView)=>void;
+  [Events.BAR_DRAG]: (e:MouseEvent, bar: GanttBarView)=>void;
+  [Events.BAR_DRAGEND]: (e:MouseEvent, bar: GanttBarView)=>void;
+  [Events.BAR_CLICK]: (e:MouseEvent, bar: GanttBarView)=>void;
+  [Events.BAR_CLICK_OUTSIDE]: (e:MouseEvent)=>void;
+  [Events.BAR_CHANGE]:(ids: BarId[])=>void;
+  [Events.BAR_CHANGE_FRAGMENTATION]: (ids: BarId[])=>void;
+  [Events.BAR_DRAGGING]: (ids: BarId[])=>void;
+  [Events.BAR_DRAGGING_CHANGE]: (ids: BarId[], dragging: boolean)=>void;
+  [Events.BAR_SELECT_CHANGE]: (ids: BarId[])=>void;
+  [Events.BAR_POS_CHANGE]: (ids: BarId[])=>void;
+  [Events.BAR_POS_CHANGE_FRAGMENTATION]: (ids: BarId[])=>void;
+  [Events.BAR_CONTEXTMENU]: (data: {barId: BarId}, e: MouseEvent)=>void;
+  [Events.BAR_VISIBLE_CHANGE]: ()=>void;
+  [Events.BAR_LAZY_CHANGE]: (ids: BarId[])=>void;
+
+  [Events.LINKS_CHANGE]: ()=>void;
+
+  [Events.ATTACHED_BAR_CHANGE]: (ids: AttachedBarId[])=>void;
+  [Events.ATTACHED_BAR_POS_CHANGE]: (ids: AttachedBarId[])=>void;
+  [Events.ATTACHED_BAR_VISIBLE_CHANGE]: ()=>void;
 }

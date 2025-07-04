@@ -75,6 +75,7 @@ export class GanttBars extends BizArray<GanttBarView> {
     barId?:BarId
   }) {
     const group = this.groups.getById(data.groupId)!;
+    if (!group.isShow) return;
     if (group.barOverlap) return;
     this.calculateGroupBarsRowIndex(data.groupId, data.barId);
     this.updateCurrentGroupBarsPositionByRowIndex(data.groupId);
@@ -147,9 +148,26 @@ export class GanttBars extends BizArray<GanttBarView> {
     this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, effectBarIds);
   }
 
-  updateGroupExpandChangeEffectBar(groupId: GroupId) {
-    const effectBarIds: BarId[] = [];
-    const groupIndex = this.groups.getGroupIndex(this.groups.getById(groupId)!);
+  updateGroupExpandChangeEffectBar(changedGroupIds: GroupId[]) {
+    // 计算传入折叠group中最小的index
+    const groupIndex = min(changedGroupIds.map(groupId => this.groups.getGroupIndex(this.groups.getById(groupId)!)))!;
+
+    // #region 计算多展示出来的group下的bar
+    changedGroupIds.forEach(groupId => {
+      const group = this.groups.getById(groupId)!;
+      if (!group.isShow) return;
+      group.bars.forEach(bar => {
+        if (!bar.isShow) return;
+        bar.resetTimeRange();
+        bar.calculatePos();
+        bar.clearOverlap();
+        bar.calculateOverlapBarIds();
+      });
+      this.calculateGroupOverlap({ groupId: group.id });
+    });
+    // #endregion
+
+    // #region 处理传入groupId之后的group中的bar集合
     const ids:GroupId[] = [];
     for (let i = groupIndex + 1; i < this.groups.expandedGroups.length; i++) {
       ids.push(this.groups.expandedGroups[i].id);
@@ -161,10 +179,9 @@ export class GanttBars extends BizArray<GanttBarView> {
     
     bars.forEach(item => {
       item.changeY();
-      effectBarIds.push(item.id);
     });
+    // #endregion
 
-    return effectBarIds;
   }
 
   updateBarsYByGroupIds(groupIds: GroupId[]) {
