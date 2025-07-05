@@ -45,6 +45,7 @@ export enum Events {
   BAR_CLICK_OUTSIDE='BAR_CLICK_OUTSIDE',
   BAR_CHANGE='BAR_CHANGE',
   BAR_CHANGE_FRAGMENTATION='BAR_CHANGE_FRAGMENTATION',
+  BAR_SELECTED_CHANGE='BAR_SELECTED_CHANGE',
   BAR_DRAGGING='BAR_DRAGGING',
   BAR_DRAGGING_CHANGE='BAR_DRAGGING_CHANGE',
   BAR_CONTEXTMENU='BAR_CONTEXTMENU',
@@ -100,6 +101,7 @@ export interface EventsInterface {
   [Events.BAR_CLICK_OUTSIDE]: (e:MouseEvent)=>void;
   [Events.BAR_CHANGE]:(ids: BarId[])=>void;
   [Events.BAR_CHANGE_FRAGMENTATION]: (ids: BarId[])=>void;
+  [Events.BAR_SELECTED_CHANGE]: (ids: BarId[])=>void;
   [Events.BAR_DRAGGING]: (ids: BarId[])=>void;
   [Events.BAR_DRAGGING_CHANGE]: (ids: BarId[], dragging: boolean)=>void;
   [Events.BAR_CONTEXTMENU]: (data: {barId: BarId}, e: MouseEvent)=>void;

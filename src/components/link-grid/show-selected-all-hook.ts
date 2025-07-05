@@ -75,7 +75,7 @@ export const useShowSelectedAllHook = () => {
       bar.zIndex = zIndex;
     });
   
-    bus.emit(Events.BAR_CHANGE, allBar.map(bar => bar.id));
+    // bus.emit(Events.BAR_CHANGE, allBar.map(bar => bar.id));
   };
   
   const onLinksChange = () => {
@@ -91,6 +91,17 @@ export const useShowSelectedAllHook = () => {
         link.calculate();
       }
     });
+    // calculateSelectedZIndex();
+    lazyCalculate();
+  };
+
+  const onBarSelectedChange = (barIds:BarId[]) => {
+    calculateSelectedBarsLinks();
+    selectedBarsLinks.value.forEach(link => {
+      if (barIds.includes(link.source.id) || barIds.includes(link.target.id)) {
+        link.calculate();
+      }
+    });
     calculateSelectedZIndex();
     lazyCalculate();
   };
@@ -100,6 +111,7 @@ export const useShowSelectedAllHook = () => {
     bus.on(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
     bus.on(Events.LINKS_CHANGE, onLinksChange);
     bus.on(Events.BAR_CHANGE_FRAGMENTATION, onBarChange);
+    bus.on(Events.BAR_SELECTED_CHANGE, onBarSelectedChange);
   });
     
   onBeforeUnmount(() => {
@@ -107,6 +119,7 @@ export const useShowSelectedAllHook = () => {
     bus.off(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
     bus.off(Events.LINKS_CHANGE, onLinksChange);
     bus.off(Events.BAR_CHANGE_FRAGMENTATION, onBarChange);
+    bus.off(Events.BAR_SELECTED_CHANGE, onBarSelectedChange);
   });
 
   return {

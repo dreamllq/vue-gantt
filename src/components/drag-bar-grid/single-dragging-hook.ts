@@ -97,7 +97,6 @@ export const useSingleDraggingHook = () => {
       const flag = ganttEntity.hook.beforeDragEnd({ barId: bar.id });
       if (flag !== true) {
         bar.dragging = false;
-        bus.emit(Events.BAR_CHANGE, [bar.id]);
         bus.emit(Events.BAR_DRAGGING_CHANGE, [bar.id], false);
         draggingBar.value = undefined;
         barClone.value = undefined;
@@ -117,14 +116,23 @@ export const useSingleDraggingHook = () => {
     const dropRowIndex = max([Math.floor(min([(dropY - top), group.barsHeight - 1])! / ganttEntity.layoutConfig.ROW_HEIGHT), 0])!;
         
     bar.dragging = false;
-    bar.update({
-      end: endTime,
-      start: startTime,
-      rowIndex: group.barOverlap === true ? 0 : dropRowIndex,
-      groupId: group.id
-    });
-
+    bar.sx = barClone.value!.sx;
+    bar.sy = barClone.value!.sy;
+    bar.ex = barClone.value!.ex;
+    bar.ey = barClone.value!.ey;
+    bar.width = barClone.value!.width;
+    bar.height = barClone.value!.height;
+    bus.emit(Events.BAR_CHANGE, [bar.id]);
+    setTimeout(() => {
+      bar.update({
+        end: endTime,
+        start: startTime,
+        rowIndex: group.barOverlap === true ? 0 : dropRowIndex,
+        groupId: group.id
+      });
+    }, 0);
     bus.emit(Events.BAR_DRAGGING_CHANGE, [bar.id], false);
+
     draggingBar.value = undefined;
     barClone.value = undefined;
     shadowDraggingBar.value = undefined;

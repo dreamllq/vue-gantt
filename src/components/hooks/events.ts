@@ -66,6 +66,10 @@ export const useEvents = (ganttEntity: Gantt, store:{
     store.bus.emit(Events.GROUP_EXPAND_CHANGE, data);
   });
 
+  ganttEntity.bus.on(GanttBusEvents.BAR_SELECTED_CHANGE, (data) => {
+    store.bus.emit(Events.BAR_SELECTED_CHANGE, data);
+  });
+
   ganttEntity.bus.on(GanttBusEvents.ATTACHED_BAR_CHANGE, (data) => {
     store.bus.emit(Events.ATTACHED_BAR_CHANGE, data);
   });

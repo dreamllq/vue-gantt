@@ -20,7 +20,6 @@ export const useSingleSelectHook = () => {
       bar.selected = true;
     }
     barIds.push(bar.id);
-    // bus.emit(Events.BAR_CHANGE, barIds);
   };
 
   onMounted(() => {

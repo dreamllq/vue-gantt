@@ -81,6 +81,7 @@ export class GanttBarView extends GanttBar {
     }
 
     this.bus.emit(GanttBusEvents.BAR_CHANGE, [this.id]);
+    this.bus.emit(GanttBusEvents.BAR_SELECTED_CHANGE, [this.id]);
   }
 
   get contextMenuEnable():boolean {
