@@ -36,6 +36,13 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
       if (!this.config.showAttachedBars) return; 
       this.updateBarsYByGroupIds(groupIds);
     });
+
+    this.bus.on(GanttBusEvents.GROUPS_CHANGE, (data) => {
+      this.updateShow();
+      const effectAttachedBarIds = this.updateGroupExpandChangeEffectBar([...data.addGroupIds, ...data.deleteGroupIds]);
+      
+      this.bus.emit(GanttBusEvents.ATTACHED_BAR_CHANGE, effectAttachedBarIds);
+    });
   }
   add(data: GanttAttachedBarViewClassConstructor) {
     const attachedBar = new GanttAttachedBarView(data);
@@ -68,6 +75,7 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
     }
   }
   updateGroupExpandChangeEffectBar(changedGroupIds: GroupId[]) {
+    const effectAttachedBarIds:AttachedBarId[] = [];
     // 计算传入折叠group中最小的index
     const groupIndex = min(changedGroupIds.map(groupId => this.groups.getGroupIndex(this.groups.getById(groupId)!)))!;
     
@@ -78,6 +86,7 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
       group.attachedBars.forEach(bar => {
         if (!bar.isShow) return;
         bar.calculate();
+        effectAttachedBarIds.push(bar.id);
       });
     });
     // #endregion
@@ -94,8 +103,11 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
         
     bars.forEach(item => {
       item.changeY();
+      effectAttachedBarIds.push(item.id);
     });
     // #endregion
+
+    return effectAttachedBarIds;
   }
 
   push(...items: GanttAttachedBarView[]): number {

@@ -27,7 +27,7 @@ export const useEvents = (ganttEntity: Gantt, store:{
 
 
   ganttEntity.bus.on(GanttBusEvents.GROUP_HEIGHT_CHANGE, (data) => {
-    store.bus.emit(Events.GROUP_CHANGE, [data.groupId]);
+    store.bus.emit(Events.GROUPS_CHANGE);
     store.bus.emit(Events.LAYOUT_CHANGE);
     store.bus.emit(Events.SCROLL_CHANGE);
     store.bus.emit(Events.DATE_GRID_CHANGE);
@@ -35,7 +35,7 @@ export const useEvents = (ganttEntity: Gantt, store:{
   });
 
   ganttEntity.bus.on(GanttBusEvents.GROUP_TOP_CHANGE, (data: GroupId[]) => {
-    store.bus.emit(Events.GROUP_CHANGE, data);
+    store.bus.emit(Events.GROUPS_CHANGE);
     store.bus.emit(Events.SCROLL_CHANGE);
     store.bus.emit(Events.LAYOUT_CHANGE);
     store.bus.emit(Events.DATE_GRID_CHANGE);
@@ -78,6 +78,15 @@ export const useEvents = (ganttEntity: Gantt, store:{
     store.bus.emit(Events.BAR_SELECT_CHANGE, ids);
     return [];
   }));
+
+  ganttEntity.bus.on(GanttBusEvents.GROUPS_CHANGE, (data) => {
+    store.bus.emit(Events.GROUPS_CHANGE);
+    store.bus.emit(Events.GROUP_EXPAND_CHANGE, data);
+  });
+
+  ganttEntity.bus.on(GanttBusEvents.ATTACHED_BAR_CHANGE, (data) => {
+    store.bus.emit(Events.ATTACHED_BAR_CHANGE, data);
+  });
 
   store.bus.on(Events.BAR_CHANGE, asyncFragmentation<BarId[]>(async (options:BarId[][]) => {
     const ids = uniq(flatten(options));

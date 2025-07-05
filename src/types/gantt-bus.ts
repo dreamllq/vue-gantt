@@ -1,3 +1,4 @@
+import { AttachedBarId } from './gantt-attached-bar';
 import { BarId } from './gantt-bar';
 import { GroupId } from './gantt-group';
 import { OperationInterface } from './gantt-operation-history';
@@ -14,12 +15,16 @@ export enum GanttBusEvents {
   BAR_GROUP_CHANGE='BAR_GROUP_CHANGE',
   BARS_CHANGE='BARS_CHANGE',
   ATTACHED_BAR_POS_CHANGE='ATTACHED_BAR_POS_CHANGE',
+  ATTACHED_BAR_CHANGE='ATTACHED_BAR_CHANGE',
   LINKS_CHANGE='LINKS_CHANGE',
   BAR_CONTEXT_MENU_ENABLE_CHANGE= 'CONTEXT_MENU_ENABLE_CHANGE',
   BAR_REMOVE='BAR_REMOVE',
   BAR_CHANGE='BAR_CHANGE',
   BAR_SELECT_CHANGE='BAR_SELECT_CHANGE',
-  WORK_TIME_CHANGE='WORK_TIME_CHANGE'
+  WORK_TIME_CHANGE='WORK_TIME_CHANGE',
+  GROUP_EXPAND_CHANGE='GROUP_EXPAND_CHANGE',
+  GROUP_CHANGE='GROUP_CHANGE',
+  GROUPS_CHANGE='GROUPS_CHANGE'
 }
 
 export interface GanttBusEventsInterface {
@@ -37,7 +42,7 @@ export interface GanttBusEventsInterface {
     groupId: GroupId,
     barId?: BarId
   })=>void,
-  [GanttBusEvents.ATTACHED_BAR_POS_CHANGE]:(barIds:BarId[])=>void,
+  [GanttBusEvents.ATTACHED_BAR_POS_CHANGE]:(barIds:AttachedBarId[])=>void,
   [GanttBusEvents.BARS_CHANGE]:()=>void,
   [GanttBusEvents.LINKS_CHANGE]:()=>void,
   [GanttBusEvents.BAR_CONTEXT_MENU_ENABLE_CHANGE]:(barIds:BarId[])=>void,
@@ -45,4 +50,8 @@ export interface GanttBusEventsInterface {
   [GanttBusEvents.BAR_CHANGE]: (barIds: BarId[]) => void,
   [GanttBusEvents.BAR_SELECT_CHANGE]: (barIds: BarId[]) => void,
   [GanttBusEvents.WORK_TIME_CHANGE]: (workTimeIds: WorkTimeId[])=>void,
+  [GanttBusEvents.GROUP_EXPAND_CHANGE]: (data:{groupId: GroupId, newValue: boolean, oldValue: boolean})=>void,
+  [GanttBusEvents.GROUP_CHANGE]: (groupIds: GroupId[])=>void,
+  [GanttBusEvents.GROUPS_CHANGE]: (data: { oldGroupIds: GroupId[]; newGroupIds: GroupId[]; addGroupIds: GroupId[]; deleteGroupIds: GroupId[] })=>void,
+  [GanttBusEvents.ATTACHED_BAR_CHANGE]:(barIds: AttachedBarId[])=>void
 }

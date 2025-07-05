@@ -6,6 +6,7 @@ import { GanttLayoutConfig } from './gantt-layout-config';
 import { GanttBus } from './gantt-bus';
 import { GanttGroupsClassConstructor } from '@/types/gantt-groups';
 import { GanttBusEvents } from '@/types/gantt-bus';
+import { difference } from 'lodash';
 
 export class GanttGroups extends BizArray<GanttGroupView> {
   expandedGroups: GanttGroupView[] = [];
@@ -21,7 +22,22 @@ export class GanttGroups extends BizArray<GanttGroupView> {
     this.bus.on(GanttBusEvents.GROUP_HEIGHT_CHANGE, (data) => {
       this.calculateEffectGroupTop(data.groupId);
     });
+
+    this.bus.on(GanttBusEvents.GROUP_EXPAND_CHANGE, () => {
+      const oldExpandedGroupIds = this.expandedGroups.map(group => group.id);
+      this.calculateExpandedGroups();
+      this.calculate();
+      const newExpandedGroupIds = this.expandedGroups.map(group => group.id);
+      
+      this.bus.emit(GanttBusEvents.GROUPS_CHANGE, {
+        newGroupIds: newExpandedGroupIds,
+        oldGroupIds: oldExpandedGroupIds,
+        addGroupIds: difference(newExpandedGroupIds, oldExpandedGroupIds),
+        deleteGroupIds: difference(oldExpandedGroupIds, newExpandedGroupIds)
+      });
+    });
   }
+
   add(data:GanttGroupViewClassConstructor) {
     super.push(new GanttGroupView(data));
   }

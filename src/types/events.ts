@@ -34,7 +34,7 @@ export enum Events {
 
   // WORK_TIME_GRID_CHANGE='WORK_TIME_GRID_CHANGE',
 
-  GROUP_CHANGE='GROUP_CHANGE',
+  GROUPS_CHANGE='GROUPS_CHANGE',
   GROUP_EXPAND_CHANGE='GROUP_EXPAND_CHANGE',
 
   BARS_CHANGE='BARS_CHANGE',
@@ -94,7 +94,7 @@ export interface EventsInterface {
 
   // [Events.WORK_TIME_GRID_CHANGE]: (groupIds:GroupId[])=>void;
 
-  [Events.GROUP_CHANGE]: (groupIds:GroupId[])=>void;
+  [Events.GROUPS_CHANGE]: ()=>void;
   [Events.GROUP_EXPAND_CHANGE]: (data: { oldGroupIds: GroupId[]; newGroupIds: GroupId[]; addGroupIds: GroupId[]; deleteGroupIds: GroupId[] })=>void;
   
   [Events.BARS_CHANGE]: ()=>void;

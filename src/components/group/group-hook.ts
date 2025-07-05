@@ -30,18 +30,7 @@ export const useGroupHook = () => {
   }
 
   const onExpand = (group: GanttGroupView) => {
-    group._isExpand = !group._isExpand;
-    const oldExpandedGroupIds = ganttEntity.groups.expandedGroups.map(group => group.id);
-    ganttEntity.groups.calculateExpandedGroups();
-    ganttEntity.groups.calculate();
-    const newExpandedGroupIds = ganttEntity.groups.expandedGroups.map(group => group.id);
-    bus.emit(Events.GROUP_CHANGE, [group.id]);
-    bus.emit(Events.GROUP_EXPAND_CHANGE, {
-      newGroupIds: newExpandedGroupIds,
-      oldGroupIds: oldExpandedGroupIds,
-      addGroupIds: difference(newExpandedGroupIds, oldExpandedGroupIds),
-      deleteGroupIds: difference(oldExpandedGroupIds, newExpandedGroupIds)
-    });
+    group.isExpand = !group.isExpand;
   };
   
   const onVisibleAreaChange = () => {
@@ -50,12 +39,12 @@ export const useGroupHook = () => {
 
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
-    bus.on(Events.GROUP_CHANGE, onVisibleAreaChange);
+    bus.on(Events.GROUPS_CHANGE, onVisibleAreaChange);
   });
   
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
-    bus.off(Events.GROUP_CHANGE, onVisibleAreaChange);
+    bus.off(Events.GROUPS_CHANGE, onVisibleAreaChange);
   });
 
   return {

@@ -10,7 +10,7 @@ import { GanttMilestoneView } from './gantt-milestone-view';
 import { GanttWorkTimeView } from './gantt-work-time-view';
 
 export class GanttGroupView extends GanttGroup {
-  _isExpand = false;
+  private _isExpand = false;
   barOverlap = false;
   isShow = true;
   private _height:number;
@@ -42,7 +42,16 @@ export class GanttGroupView extends GanttGroup {
   }
 
   set isExpand(val) {
+    if (this._isExpand === val) return;
+    const oldValue = this._isExpand;
     this._isExpand = val;
+    
+    this.bus.emit(GanttBusEvents.GROUP_EXPAND_CHANGE, {
+      groupId: this.id,
+      newValue: val,
+      oldValue
+    });
+    this.bus.emit(GanttBusEvents.GROUP_CHANGE, [this.id]);
   }
 
   get height() {

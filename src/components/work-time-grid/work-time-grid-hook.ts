@@ -69,32 +69,19 @@ export const useWorkTimeGridHook = () => {
   };
   
 
-  const onWorkTimeChange = (workTimeIds: WorkTimeId[]) => {
+  const onWorkTimeChange = () => {
     initData();
     lazyCalculate();
   };
 
-  const onGroupExpandChange = (data: { oldGroupIds: GroupId[]; newGroupIds: GroupId[]; addGroupIds: GroupId[]; deleteGroupIds: GroupId[] }) => {
-    ganttEntity.workTimes.updateShow();
-    data.addGroupIds.forEach(groupId => {
-      ganttEntity.groups.getById(groupId)!.workTimes.forEach(item => {
-        item.calculate();
-      });
-    });
-    initData();
-    lazyCalculate();
-  };  
-
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.on(Events.WORK_TIME_CHANGE, onWorkTimeChange);
-    bus.on(Events.GROUP_EXPAND_CHANGE, onGroupExpandChange);
   });
   
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.off(Events.WORK_TIME_CHANGE, onWorkTimeChange);
-    bus.off(Events.GROUP_EXPAND_CHANGE, onGroupExpandChange);
   });
 
   return {

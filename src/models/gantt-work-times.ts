@@ -32,6 +32,18 @@ export class GanttWorkTimes extends BizArray<GanttWorkTimeView> {
       }, []);
       this.bus.emit(GanttBusEvents.WORK_TIME_CHANGE, workTimeIds);
     });
+
+    this.bus.on(GanttBusEvents.GROUPS_CHANGE, (data) => {
+      const workTimeIds:WorkTimeId[] = [];
+      this.updateShow();
+      data.addGroupIds.forEach(groupId => {
+        this.groups.getById(groupId)!.workTimes.forEach(item => {
+          item.calculate();
+          workTimeIds.push(item.id);
+        });
+      });
+      this.bus.emit(GanttBusEvents.WORK_TIME_CHANGE, workTimeIds);
+    });
   }
  
   add(data:GanttWorkViewTimeConstructor) {
