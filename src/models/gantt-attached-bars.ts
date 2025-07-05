@@ -25,10 +25,10 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
 
     this.bus.on(GanttBusEvents.GROUP_BARS_HEIGHT_CHANGE, (data) => {
       if (!this.config.showAttachedBars) return; 
-      const effectBars = this.filter(bar => bar.group.id === data.groupId);
+      const effectBars = this.groups.getById(data.groupId)!.attachedBars;
       if (effectBars.length > 0) {
         effectBars.forEach(bar => bar.calculate());
-        this.bus.emit(GanttBusEvents.ATTACHED_BAR_POS_CHANGE, effectBars.map(bar => bar.id));
+        this.bus.emit(GanttBusEvents.ATTACHED_BAR_POS_CHANGE, effectBars.getIds());
       }
     });
     

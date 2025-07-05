@@ -20,7 +20,7 @@ type GridItem = {
 export const useWorkTimeGridHook = () => {
   const workTimeGrid = ref<GridItem[]>([]);
   const lazyWorkTimeGrid = ref<GridItem[]>([]);
-  let groupMap:Record<GroupId, GridItem[]> = {};
+  const groupMap:Record<GroupId, GridItem[]> = {};
 
 
   const { ganttEntity, lazy, bus } = useStore()!;
@@ -28,60 +28,21 @@ export const useWorkTimeGridHook = () => {
 
   const initData = () => {
     workTimeGrid.value = [];
-    groupMap = {};
-    ganttEntity.groups.expandedGroups.forEach((group) => {
-      group.workTimes.forEach(wt => {
+    ganttEntity.workTimes
+      .filter(item => item.isShow)
+      .forEach(wt => {
         const item = {
           id: wt.id,
           seconds: wt.seconds,
           x: wt.sx,
-          y: ganttEntity.groups.getGroupTopByIndex(ganttEntity.groups.getGroupIndex(group)),
+          y: ganttEntity.groups.getGroupTopByIndex(ganttEntity.groups.getGroupIndex(ganttEntity.groups.getById(wt.group.id)!)),
           width: wt.width,
-          height: group.height,
+          height: ganttEntity.groups.getById(wt.group.id)!.height,
           timeString: wt.startTimeString,
-          groupId: group.id
+          groupId: wt.group.id
         };
         workTimeGrid.value.push(item);
-        if (!Array.isArray(groupMap[group.id])) {
-          groupMap[group.id] = [];
-        }
-        groupMap[group.id].push(item);
       });
-    });
-  };
-
-  const updateData = (groupIds: GroupId[]) => {
-    groupIds.forEach(groupId => {
-      const group = ganttEntity.groups.getById(groupId)!;
-      ganttEntity.workTimes.updateShow();
-      group.workTimes.forEach(item => item.calculate());
-      if (Array.isArray(groupMap[group.id])) {
-        groupMap[group.id].forEach(item => {
-          item.x = group.workTimes.getById(item.id)!.sx;
-          item.y = ganttEntity.groups.getGroupTopByIndex(ganttEntity.groups.getGroupIndex(group));
-          item.height = group.height;
-        });
-      } else {
-        groupMap[group.id] = [];
-        group.workTimes.forEach(wt => {
-          const item = {
-            id: wt.id,
-            seconds: wt.seconds,
-            x: wt.sx,
-            y: ganttEntity.groups.getGroupTopByIndex(ganttEntity.groups.getGroupIndex(group)),
-            width: wt.width,
-            height: group.height,
-            timeString: wt.startTimeString,
-            groupId: group.id
-          };
-          workTimeGrid.value.push(item);
-          if (!Array.isArray(groupMap[group.id])) {
-            groupMap[group.id] = [];
-          }
-          groupMap[group.id].push(item);
-        });
-      }
-    });
   };
 
   const lazyCalculate = () => {
@@ -107,21 +68,33 @@ export const useWorkTimeGridHook = () => {
     lazyCalculate();
   };
   
-  const onWorkTimeGridChange = (groupIds: GroupId[]) => {
-    console.log('WORK_TIME_GRID_CHANGE');
-    
-    updateData(groupIds);
+
+  const onWorkTimeChange = (workTimeIds: WorkTimeId[]) => {
+    initData();
     lazyCalculate();
   };
 
+  const onGroupExpandChange = (data: { oldGroupIds: GroupId[]; newGroupIds: GroupId[]; addGroupIds: GroupId[]; deleteGroupIds: GroupId[] }) => {
+    ganttEntity.workTimes.updateShow();
+    data.addGroupIds.forEach(groupId => {
+      ganttEntity.groups.getById(groupId)!.workTimes.forEach(item => {
+        item.calculate();
+      });
+    });
+    initData();
+    lazyCalculate();
+  };  
+
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
-    bus.on(Events.WORK_TIME_GRID_CHANGE, onWorkTimeGridChange);
+    bus.on(Events.WORK_TIME_CHANGE, onWorkTimeChange);
+    bus.on(Events.GROUP_EXPAND_CHANGE, onGroupExpandChange);
   });
   
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
-    bus.off(Events.WORK_TIME_GRID_CHANGE, onWorkTimeGridChange);
+    bus.off(Events.WORK_TIME_CHANGE, onWorkTimeChange);
+    bus.off(Events.GROUP_EXPAND_CHANGE, onGroupExpandChange);
   });
 
   return {

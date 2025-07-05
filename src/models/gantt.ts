@@ -52,7 +52,8 @@ export class Gantt extends EventEmitter {
 
     this.workTimes = new GanttWorkTimes({
       config: this.config,
-      groups: this.groups
+      groups: this.groups,
+      bus: this.bus
     });
 
     this.bars = new GanttBars({

@@ -4,6 +4,7 @@ import { Id } from './id';
 import { Unit } from './unit';
 import { GroupId } from './gantt-group';
 import { AttachedBarId } from './gantt-attached-bar';
+import { WorkTimeId } from './gantt-work-time';
 
 export enum Events {
   DRAGSTART='DRAGSTART',
@@ -31,7 +32,7 @@ export enum Events {
 
   DATE_GRID_CHANGE='DATE_GRID_CHANGE',
 
-  WORK_TIME_GRID_CHANGE='WORK_TIME_GRID_CHANGE',
+  // WORK_TIME_GRID_CHANGE='WORK_TIME_GRID_CHANGE',
 
   GROUP_CHANGE='GROUP_CHANGE',
   GROUP_EXPAND_CHANGE='GROUP_EXPAND_CHANGE',
@@ -61,7 +62,9 @@ export enum Events {
   ATTACHED_BAR_POS_CHANGE='ATTACHED_BAR_POS_CHANGE',
   ATTACHED_BAR_VISIBLE_CHANGE='ATTACHED_BAR_VISIBLE_CHANGE',
 
-  MILESTONE_VISIBLE_CHANGE='MILESTONE_VISIBLE_CHANGE'
+  MILESTONE_VISIBLE_CHANGE='MILESTONE_VISIBLE_CHANGE',
+
+  WORK_TIME_CHANGE='WORK_TIME_CHANGE'
 }
 
 export interface EventsInterface {
@@ -89,7 +92,7 @@ export interface EventsInterface {
 
   [Events.DATE_GRID_CHANGE]: ()=>void;
 
-  [Events.WORK_TIME_GRID_CHANGE]: (groupIds:GroupId[])=>void;
+  // [Events.WORK_TIME_GRID_CHANGE]: (groupIds:GroupId[])=>void;
 
   [Events.GROUP_CHANGE]: (groupIds:GroupId[])=>void;
   [Events.GROUP_EXPAND_CHANGE]: (data: { oldGroupIds: GroupId[]; newGroupIds: GroupId[]; addGroupIds: GroupId[]; deleteGroupIds: GroupId[] })=>void;
@@ -120,4 +123,6 @@ export interface EventsInterface {
   [Events.ATTACHED_BAR_VISIBLE_CHANGE]: ()=>void;
 
   [Events.MILESTONE_VISIBLE_CHANGE]: ()=>void;
+
+  [Events.WORK_TIME_CHANGE]: (workTimeIds: WorkTimeId[])=>void;
 }

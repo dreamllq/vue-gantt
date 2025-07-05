@@ -7,6 +7,7 @@ import { flatten, uniq } from 'lodash';
 import asyncFragmentation from 'simple-async-fragmentation';
 import { BarId } from '@/types/gantt-bar';
 import { GroupId } from '@/types/gantt-group';
+import { WorkTimeId } from '@/types/gantt-work-time';
 export const useEvents = (ganttEntity: Gantt, store:{
   bus: ReturnType<typeof useBus>
 }) => {
@@ -30,7 +31,7 @@ export const useEvents = (ganttEntity: Gantt, store:{
     store.bus.emit(Events.LAYOUT_CHANGE);
     store.bus.emit(Events.SCROLL_CHANGE);
     store.bus.emit(Events.DATE_GRID_CHANGE);
-    store.bus.emit(Events.WORK_TIME_GRID_CHANGE, [data.groupId]);
+    // store.bus.emit(Events.WORK_TIME_GRID_CHANGE, [data.groupId]);
   });
 
   ganttEntity.bus.on(GanttBusEvents.GROUP_TOP_CHANGE, (data: GroupId[]) => {
@@ -38,7 +39,7 @@ export const useEvents = (ganttEntity: Gantt, store:{
     store.bus.emit(Events.SCROLL_CHANGE);
     store.bus.emit(Events.LAYOUT_CHANGE);
     store.bus.emit(Events.DATE_GRID_CHANGE);
-    store.bus.emit(Events.WORK_TIME_GRID_CHANGE, data);
+    // store.bus.emit(Events.WORK_TIME_GRID_CHANGE, data);
   });
 
   ganttEntity.bus.on(GanttBusEvents.BAR_POS_CHANGE, (ids) => {
@@ -57,6 +58,12 @@ export const useEvents = (ganttEntity: Gantt, store:{
 
   ganttEntity.bus.on(GanttBusEvents.LINKS_CHANGE, asyncFragmentation<void>(async () => {
     store.bus.emit(Events.LINKS_CHANGE);
+    return [];
+  }));
+
+  ganttEntity.bus.on(GanttBusEvents.WORK_TIME_CHANGE, asyncFragmentation<WorkTimeId[]>(async (options) => {
+    const ids = uniq(flatten(options));
+    store.bus.emit(Events.WORK_TIME_CHANGE, ids);
     return [];
   }));
 
@@ -94,6 +101,6 @@ export const useEvents = (ganttEntity: Gantt, store:{
     store.bus.emit(Events.SCROLL_CHANGE);
     store.bus.emit(Events.LAYOUT_CHANGE);
     store.bus.emit(Events.DATE_GRID_CHANGE);
-    store.bus.emit(Events.WORK_TIME_GRID_CHANGE, data.newGroupIds);
+    // store.bus.emit(Events.WORK_TIME_GRID_CHANGE, data.newGroupIds);
   });
 };

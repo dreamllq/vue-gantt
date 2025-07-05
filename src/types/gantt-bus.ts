@@ -1,6 +1,7 @@
 import { BarId } from './gantt-bar';
 import { GroupId } from './gantt-group';
 import { OperationInterface } from './gantt-operation-history';
+import { WorkTimeId } from './gantt-work-time';
 
 export enum GanttBusEvents {
   HISTORY_PUSH='HISTORY_PUSH',
@@ -17,7 +18,8 @@ export enum GanttBusEvents {
   BAR_CONTEXT_MENU_ENABLE_CHANGE= 'CONTEXT_MENU_ENABLE_CHANGE',
   BAR_REMOVE='BAR_REMOVE',
   BAR_CHANGE='BAR_CHANGE',
-  BAR_SELECT_CHANGE='BAR_SELECT_CHANGE'
+  BAR_SELECT_CHANGE='BAR_SELECT_CHANGE',
+  WORK_TIME_CHANGE='WORK_TIME_CHANGE'
 }
 
 export interface GanttBusEventsInterface {
@@ -42,4 +44,5 @@ export interface GanttBusEventsInterface {
   [GanttBusEvents.BAR_REMOVE]: (barIds: BarId[]) => void,
   [GanttBusEvents.BAR_CHANGE]: (barIds: BarId[]) => void,
   [GanttBusEvents.BAR_SELECT_CHANGE]: (barIds: BarId[]) => void,
+  [GanttBusEvents.WORK_TIME_CHANGE]: (workTimeIds: WorkTimeId[])=>void,
 }
