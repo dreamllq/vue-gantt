@@ -1,7 +1,5 @@
-export interface DisabledFunctions<T>{
-  push(...items: T[]): number ;
-  pop(): T | undefined ;
-  shift(): T | undefined ;
-  unshift(...items: T[]): number ;
-  splice(start: number, deleteCount: number, ...items: T[]): T[] ;
+import { Id } from './id';
+
+export interface WithId {
+  id: Id; // 根据实际情况，可以更精确地定义 id 的类型，例如 string 或 number
 }

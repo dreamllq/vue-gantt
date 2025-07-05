@@ -1,7 +1,7 @@
 import { Id } from '@/types/id';
-import EventEmitter from 'eventemitter3';
 import { CustomArray } from './custom-array';
-export class BizArray<T> extends CustomArray<T> {
+import { WithId } from '@/types/biz-array';
+export class BizArray<T extends WithId> extends CustomArray<T> {
   isExist(id:Id) {
     return this._map.has(id);
   }

@@ -1,22 +1,27 @@
+import { WithId } from '@/types/biz-array';
 import { Id } from '@/types/id';
 import EventEmitter from 'eventemitter3';
 
-export class CustomArray<T> extends Array<T & {id: Id}> {
-  static Events = { CHANGE: 'CHANGE' };
+enum Events {
+  CHANGE = 'CHANGE'
+}
+
+export class CustomArray<T extends WithId> extends Array<T> {
+  static Events = { CHANGE: Events.CHANGE };
   
-  private _ee: EventEmitter = new EventEmitter();
+  private _ee = new EventEmitter<Events>();
   emit = this._ee.emit.bind(this._ee);
   on = this._ee.on.bind(this._ee);
   off = this._ee.off.bind(this._ee);
   // 导致数据变化的方法：push\pop\shift\unshift\splice\
-  _map = new Map<Id, T & {id: Id}>(); 
+  _map = new Map<Id, T>(); 
   
   private idUniqValid(id:Id) {
     if (this._map.has(id)) {
       throw new Error(`id重复: ${id}`);
     }
   }
-  push(...items:(T & { id: Id })[]) {
+  push(...items:(T)[]) {
     items.forEach(item => {
       this.idUniqValid(item.id);
       this._map.set(item.id, item);
@@ -53,7 +58,7 @@ export class CustomArray<T> extends Array<T & {id: Id}> {
     return item;
   }
 
-  unshift(...items: (T & { id: Id; })[]) {
+  unshift(...items: T[]) {
     items.forEach(item => {
       this.idUniqValid(item.id);
       this._map.set(item.id, item);
@@ -66,7 +71,7 @@ export class CustomArray<T> extends Array<T & {id: Id}> {
     return data;
   }
 
-  _slice(start?: number, end?: number): (T & {id: Id;})[]
+  _slice(start?: number, end?: number): T[]
   _slice(start?: number, end?: number): T[] {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const arr = this;
@@ -98,9 +103,9 @@ export class CustomArray<T> extends Array<T & {id: Id}> {
   }
 
     
-  _splice(start: number, deleteCount?: number): (T & { id: Id; })[];
-  _splice(start: number, deleteCount: number, ...items: (T & { id: Id; })[]): (T & { id: Id; })[];
-  _splice(start: number, deleteCount: number, ...items: (T & { id: Id; })[]) {
+  _splice(start: number, deleteCount?: number): T[];
+  _splice(start: number, deleteCount: number, ...items: T[]): T[];
+  _splice(start: number, deleteCount: number, ...items: T[]) {
     // 计算实际的起始位置（处理负数索引）
     const len = this.length;
 
@@ -144,9 +149,9 @@ export class CustomArray<T> extends Array<T & {id: Id}> {
     return removedItems;
   }
   
-  splice(start: number, deleteCount?: number): (T & { id: Id; })[];
-  splice(start: number, deleteCount: number, ...items: (T & { id: Id; })[]): (T & { id: Id; })[];
-  splice(start: number, deleteCount: number, ...items: (T & { id: Id; })[]) {
+  splice(start: number, deleteCount?: number): T[];
+  splice(start: number, deleteCount: number, ...items: T[]): T[];
+  splice(start: number, deleteCount: number, ...items: T[]) {
     const deleteItems = this._splice(start, deleteCount, ...items);
     if (Array.isArray(items)) {
       items.forEach(item => {
@@ -164,10 +169,10 @@ export class CustomArray<T> extends Array<T & {id: Id}> {
     return deleteItems;
   }
 
-  filter<S extends (T & { id: Id; })>(predicate: (value: (T & { id: Id; }), index: number, array: (T & { id: Id; })[]) => value is S, thisArg?: any): S[];
-  filter(predicate: (value: (T & { id: Id; }), index: number, array: (T & { id: Id; })[]) => unknown, thisArg?: any): T[];
+  filter<S extends T>(predicate: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[];
+  filter(predicate: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[];
   filter(fn:any) {
-    const list:(T & {id: Id})[] = [];
+    const list:(T)[] = [];
     this.forEach(item => {
       if (fn(item)) {
         list.push(item);
@@ -176,9 +181,9 @@ export class CustomArray<T> extends Array<T & {id: Id}> {
     return list;
   }
 
-  map<U>(callbackfn: (value: (T & {id: Id}), index: number, array: (T & {id: Id})[]) => U, thisArg?: any): U[];
+  map<U>(callbackfn: (value: (T), index: number, array: (T)[]) => U, thisArg?: any): U[];
   map(fn:any) {
-    const list:(T & {id: Id})[] = [];
+    const list:(T)[] = [];
     this.forEach(item => {
       list.push(fn(item));
     });
