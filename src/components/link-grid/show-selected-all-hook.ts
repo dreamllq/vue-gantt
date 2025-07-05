@@ -30,10 +30,6 @@ export const useShowSelectedAllHook = () => {
       })).map(link => link.toJSON());
   };
 
-  // if (lazyReady.value) {
-  //   lazyCalculate();
-  // }
-
   const calculateSelectedBarsLinks = () => {
     selectedBarsLinks.value = uniqBy(ganttEntity.bars.selectedBars
       .reduce<GanttLinkView[]>((acc, bar) => {
@@ -82,8 +78,13 @@ export const useShowSelectedAllHook = () => {
     bus.emit(Events.BAR_CHANGE, allBar.map(bar => bar.id));
   };
   
+  const onLinksChange = () => {
+    calculateSelectedBarsLinks();
+    lazyCalculate();
+  };
 
-  const onBarSelectChange = (barIds:BarId[]) => {
+  const onBarChange = (barIds:BarId[]) => {
+    ganttEntity.links.updateShow();
     calculateSelectedBarsLinks();
     selectedBarsLinks.value.forEach(link => {
       if (barIds.includes(link.source.id) || barIds.includes(link.target.id)) {
@@ -93,40 +94,19 @@ export const useShowSelectedAllHook = () => {
     calculateSelectedZIndex();
     lazyCalculate();
   };
-
-  const onBarPosChange = (ids:BarId[]) => {
-    const changedLinks = selectedBarsLinks.value.filter(item => ids.includes(item.source.id) || ids.includes(item.target.id));
-    changedLinks.forEach(link => link.calculate());
-    lazyCalculate();
-  };
-
-  const onBarVisibleChange = () => {
-    ganttEntity.links.updateShow();
-    ganttEntity.links.calculate();
-    lazyCalculate();
-  };
-
-  const onLinksChange = () => {
-    calculateSelectedBarsLinks();
-    lazyCalculate();
-  };
   
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.on(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
-    bus.on(Events.BAR_SELECT_CHANGE, onBarSelectChange);
-    bus.on(Events.BAR_POS_CHANGE_FRAGMENTATION, onBarPosChange);
-    bus.on(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
     bus.on(Events.LINKS_CHANGE, onLinksChange);
+    bus.on(Events.BAR_CHANGE_FRAGMENTATION, onBarChange);
   });
     
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.off(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
-    bus.off(Events.BAR_SELECT_CHANGE, onBarSelectChange);
-    bus.off(Events.BAR_POS_CHANGE_FRAGMENTATION, onBarPosChange);
-    bus.off(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
     bus.off(Events.LINKS_CHANGE, onLinksChange);
+    bus.off(Events.BAR_CHANGE_FRAGMENTATION, onBarChange);
   });
 
   return {

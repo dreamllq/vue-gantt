@@ -74,26 +74,9 @@ export const useShowSelectedHook = () => {
   };
   
 
-  const onBarSelectChange = (barIds:BarId[]) => {
-    calculateSelectedBarsLinks();
-    selectedBarsLinks.value.forEach(link => {
-      if (barIds.includes(link.source.id) || barIds.includes(link.target.id)) {
-        link.calculate();
-      }
-    });
-    calculateSelectedZIndex();
-    lazyCalculate();
-  };
-
   const onBarPosChange = (ids:BarId[]) => {
     const changedLinks = selectedBarsLinks.value.filter(item => ids.includes(item.source.id) || ids.includes(item.target.id));
     changedLinks.forEach(link => link.calculate());
-    lazyCalculate();
-  };
-
-  const onBarVisibleChange = () => {
-    ganttEntity.links.updateShow();
-    ganttEntity.links.calculate();
     lazyCalculate();
   };
 
@@ -105,18 +88,14 @@ export const useShowSelectedHook = () => {
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.on(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
-    bus.on(Events.BAR_SELECT_CHANGE, onBarSelectChange);
-    bus.on(Events.BAR_POS_CHANGE_FRAGMENTATION, onBarPosChange);
-    bus.on(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
+    bus.on(Events.BAR_CHANGE_FRAGMENTATION, onBarPosChange);
     bus.on(Events.LINKS_CHANGE, onLinksChange);
   });
     
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
     bus.off(Events.BAR_DRAGGING_CHANGE, onBarDraggingChange);
-    bus.off(Events.BAR_SELECT_CHANGE, onBarSelectChange);
-    bus.off(Events.BAR_POS_CHANGE_FRAGMENTATION, onBarPosChange);
-    bus.off(Events.BAR_VISIBLE_CHANGE, onBarVisibleChange);
+    bus.off(Events.BAR_CHANGE_FRAGMENTATION, onBarPosChange);
     bus.off(Events.LINKS_CHANGE, onLinksChange);
   });
 

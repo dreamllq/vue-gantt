@@ -12,17 +12,19 @@ export const useBarGridHook = () => {
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
 
   const lazyCalculate = () => {
-    lazyBarGrid.value = ganttEntity.bars.filter(bar => bar.isShow).filter(item => isRectanglesOverlap({
-      x1: visibleAreaStartX.value,
-      y1: visibleAreaStartY.value,
-      x2: visibleAreaEndX.value,
-      y2: visibleAreaEndY.value
-    }, {
-      x1: item.sx,
-      y1: item.sy,
-      x2: item.ex,
-      y2: item.ey 
-    })).map(item => item.toJSON());
+    lazyBarGrid.value = ganttEntity.bars
+      .filter(bar => bar.isShow)
+      .filter(item => isRectanglesOverlap({
+        x1: visibleAreaStartX.value,
+        y1: visibleAreaStartY.value,
+        x2: visibleAreaEndX.value,
+        y2: visibleAreaEndY.value
+      }, {
+        x1: item.sx,
+        y1: item.sy,
+        x2: item.ex,
+        y2: item.ey 
+      })).map(item => item.toJSON());
     
     bus.emit(Events.BAR_LAZY_CHANGE, lazyBarGrid.value.map(item => item.id));
   };
@@ -36,33 +38,19 @@ export const useBarGridHook = () => {
   };
 
   const onBarChange = (ids:BarId[]) => {
-    lazyBarGrid.value = lazyBarGrid.value.map(item => {
-      if (ids.includes(item.id)) {
-        return ganttEntity.bars.getById(item.id)!.toJSON();
-      } else {
-        return item;
-      }
-    });
+    lazyCalculate();
   };
-  const onGroupExpandChange = (data: { oldGroupIds: GroupId[]; newGroupIds: GroupId[]; addGroupIds: GroupId[]; deleteGroupIds: GroupId[] }) => {
-    ganttEntity.bars.updateShow();
-    ganttEntity.bars.updateGroupExpandChangeEffectBar([...data.addGroupIds, ...data.deleteGroupIds]);
-    bus.emit(Events.BAR_VISIBLE_CHANGE);
-  };
+ 
 
   onMounted(() => {
     bus.on(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
-    bus.on(Events.BAR_VISIBLE_CHANGE, onVisibleAreaChange);
     bus.on(Events.BAR_CHANGE_FRAGMENTATION, onBarChange);
-    bus.on(Events.GROUP_EXPAND_CHANGE, onGroupExpandChange);
     bus.on(Events.BARS_CHANGE, onVisibleAreaChange);
   });
   
   onBeforeUnmount(() => {
     bus.off(Events.VISIBLE_AREA_CHANGE, onVisibleAreaChange);
-    bus.off(Events.BAR_VISIBLE_CHANGE, onVisibleAreaChange);
     bus.off(Events.BAR_CHANGE_FRAGMENTATION, onBarChange);
-    bus.off(Events.GROUP_EXPAND_CHANGE, onGroupExpandChange);
     bus.off(Events.BARS_CHANGE, onVisibleAreaChange);
   });
 

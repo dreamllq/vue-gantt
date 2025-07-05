@@ -37,7 +37,6 @@ export const useDragRectSelectHook = () => {
     dragRect.value.ex = x;
     dragRect.value.ey = y;
     dragging.value = true;
-    bus.emit(Events.BAR_DRAGGING_CHANGE, [], true);
   };
 
   const onDrag = (e:MouseEvent) => {
@@ -72,9 +71,6 @@ export const useDragRectSelectHook = () => {
     });
 
     dragging.value = false;
-    bus.emit(Events.BAR_DRAGGING_CHANGE, [], false);
-    bus.emit(Events.BAR_CHANGE, effectBarIds);
-    bus.emit(Events.BAR_SELECT_CHANGE, effectBarIds);
   };
 
   const transformContainerPosition = (e:MouseEvent) => {

@@ -30,6 +30,12 @@ export class GanttBars extends BizArray<GanttBarView> {
     this.bus.on(GanttBusEvents.GROUP_TOP_CHANGE, (groupIds) => {
       this.updateBarsYByGroupIds(groupIds);
     });
+
+    this.bus.on(GanttBusEvents.GROUPS_CHANGE, (data) => {
+      this.updateShow();
+      const effectBarIds = this.updateGroupExpandChangeEffectBar([...data.addGroupIds, ...data.deleteGroupIds]);
+      this.bus.emit(GanttBusEvents.BAR_CHANGE, effectBarIds);
+    });
   }
   add(data: GanttBarViewClassConstructor) {
     const bar = new GanttBarView(data);
@@ -147,11 +153,12 @@ export class GanttBars extends BizArray<GanttBarView> {
       effectBarIds.push(item.id);
     });
     if (effectBarIds.length > 0) {
-      this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, effectBarIds);
+      this.bus.emit(GanttBusEvents.BAR_CHANGE, effectBarIds);
     }
   }
 
   updateGroupExpandChangeEffectBar(changedGroupIds: GroupId[]) {
+    const effectBarIds: BarId[] = [];
     // 计算传入折叠group中最小的index
     const groupIndex = min(changedGroupIds.map(groupId => this.groups.getGroupIndex(this.groups.getById(groupId)!)))!;
 
@@ -165,6 +172,7 @@ export class GanttBars extends BizArray<GanttBarView> {
         bar.calculatePos();
         bar.clearOverlap();
         bar.calculateOverlapBarIds();
+        effectBarIds.push(bar.id);
       });
       this.calculateGroupOverlap({ groupId: group.id });
     });
@@ -182,9 +190,10 @@ export class GanttBars extends BizArray<GanttBarView> {
     
     bars.forEach(item => {
       item.changeY();
+      effectBarIds.push(item.id);
     });
     // #endregion
-
+    return effectBarIds;
   }
 
   updateBarsYByGroupIds(groupIds: GroupId[]) {
@@ -193,7 +202,7 @@ export class GanttBars extends BizArray<GanttBarView> {
       this.groups.getById(groupId)!.bars.forEach(bar => effectBars.push(bar));
     });
     effectBars.forEach(item => item.changeY());
-    this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, effectBars.map(item => item.id));
+    this.bus.emit(GanttBusEvents.BAR_CHANGE, effectBars.map(item => item.id));
   }
   
   push(...items: GanttBarView[]): number {

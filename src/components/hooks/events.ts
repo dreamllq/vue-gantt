@@ -31,7 +31,6 @@ export const useEvents = (ganttEntity: Gantt, store:{
     store.bus.emit(Events.LAYOUT_CHANGE);
     store.bus.emit(Events.SCROLL_CHANGE);
     store.bus.emit(Events.DATE_GRID_CHANGE);
-    // store.bus.emit(Events.WORK_TIME_GRID_CHANGE, [data.groupId]);
   });
 
   ganttEntity.bus.on(GanttBusEvents.GROUP_TOP_CHANGE, (data: GroupId[]) => {
@@ -39,12 +38,6 @@ export const useEvents = (ganttEntity: Gantt, store:{
     store.bus.emit(Events.SCROLL_CHANGE);
     store.bus.emit(Events.LAYOUT_CHANGE);
     store.bus.emit(Events.DATE_GRID_CHANGE);
-    // store.bus.emit(Events.WORK_TIME_GRID_CHANGE, data);
-  });
-
-  ganttEntity.bus.on(GanttBusEvents.BAR_POS_CHANGE, (ids) => {
-    store.bus.emit(Events.BAR_CHANGE, ids);
-    store.bus.emit(Events.BAR_POS_CHANGE, ids);
   });
 
   ganttEntity.bus.on(GanttBusEvents.BARS_CHANGE, () => {
@@ -68,12 +61,6 @@ export const useEvents = (ganttEntity: Gantt, store:{
     return [];
   }));
 
-  ganttEntity.bus.on(GanttBusEvents.BAR_SELECT_CHANGE, asyncFragmentation<BarId[]>(async (options) => {
-    const ids = uniq(flatten(options));
-    store.bus.emit(Events.BAR_SELECT_CHANGE, ids);
-    return [];
-  }));
-
   ganttEntity.bus.on(GanttBusEvents.GROUPS_CHANGE, (data) => {
     store.bus.emit(Events.GROUPS_CHANGE);
     store.bus.emit(Events.GROUP_EXPAND_CHANGE, data);
@@ -83,15 +70,13 @@ export const useEvents = (ganttEntity: Gantt, store:{
     store.bus.emit(Events.ATTACHED_BAR_CHANGE, data);
   });
 
+  ganttEntity.bus.on(GanttBusEvents.LINK_CHANGE, (data) => {
+    store.bus.emit(Events.LINK_CHANGE, data);
+  });
+
   store.bus.on(Events.BAR_CHANGE, asyncFragmentation<BarId[]>(async (options:BarId[][]) => {
     const ids = uniq(flatten(options));
     store.bus.emit(Events.BAR_CHANGE_FRAGMENTATION, ids);
-    return [];
-  }));
-
-  store.bus.on(Events.BAR_POS_CHANGE, asyncFragmentation<BarId[]>(async (options:BarId[][]) => {
-    const ids = uniq(flatten(options));
-    store.bus.emit(Events.BAR_POS_CHANGE_FRAGMENTATION, ids);
     return [];
   }));
 
@@ -105,6 +90,5 @@ export const useEvents = (ganttEntity: Gantt, store:{
     store.bus.emit(Events.SCROLL_CHANGE);
     store.bus.emit(Events.LAYOUT_CHANGE);
     store.bus.emit(Events.DATE_GRID_CHANGE);
-    // store.bus.emit(Events.WORK_TIME_GRID_CHANGE, data.newGroupIds);
   });
 };

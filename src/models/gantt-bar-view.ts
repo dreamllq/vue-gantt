@@ -8,11 +8,8 @@ import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GanttGroup } from './gantt-group';
 import { isBoolean, isUndefined } from 'lodash';
-import { DateTimeString } from '@/types/date';
-import { GroupId } from '@/types/gantt-group';
 import { GanttBarUpdateOperationData } from '@/types/gantt-operation-history';
 import { GanttBarUpdateOperation } from './gantt-operation';
-import { Events } from '@/types/events';
 
 export class GanttBarView extends GanttBar {
   static Events = { SELECTED_CHANGE: 'SELECTED_CHANGE' };
@@ -84,7 +81,6 @@ export class GanttBarView extends GanttBar {
     }
 
     this.bus.emit(GanttBusEvents.BAR_CHANGE, [this.id]);
-    this.bus.emit(GanttBusEvents.BAR_SELECT_CHANGE, [this.id]);
   }
 
   get contextMenuEnable():boolean {
@@ -177,7 +173,7 @@ export class GanttBarView extends GanttBar {
     if (oldGroup) {
       this.bars.calculateGroupOverlap({ groupId: oldGroup.id });
     }
-    this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [this.id]);
+    this.bus.emit(GanttBusEvents.BAR_CHANGE, [this.id]);
 
     const operationNewData:GanttBarUpdateOperationData = {
       barId: this.id,

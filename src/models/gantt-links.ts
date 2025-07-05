@@ -8,6 +8,7 @@ import { GanttLinksClassConstructor } from '@/types/gantt-links';
 import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GanttConfig } from './gantt-config';
+import { uniqBy } from 'lodash';
 
 export class GanttLinks extends BizArray<GanttLinkView> {
   linkGroupMap: Record<string, GanttLinkView[]> = {};
@@ -26,6 +27,13 @@ export class GanttLinks extends BizArray<GanttLinkView> {
     this.bus.on(GanttBusEvents.BAR_REMOVE, (ids: BarId[]) => {
       this.removeLinksBarIds(ids);
     });
+
+    // this.bus.on(GanttBusEvents.BAR_CHANGE, (ids: BarId[]) => {
+    //   const links = ids.reduce<GanttLinkView[]>((acc, id) => [...acc, ...this.getLinksByBarId(id)], []);
+    //   this.updateShow();
+    //   links.forEach(link => link.calculate());
+    //   this.bus.emit(GanttBusEvents.LINK_CHANGE, links.map(link => link.id));
+    // });
   }
 
   add(data:GanttLinkViewClassConstructor) {
@@ -57,7 +65,7 @@ export class GanttLinks extends BizArray<GanttLinkView> {
     
     this.sourceBarLinkMap[id]?.forEach(link => list.push(link));
     this.targetBarLinkMap[id]?.forEach(link => list.push(link));
-    return list;
+    return uniqBy(list, item => item.id);
   }
 
   updateShow() {

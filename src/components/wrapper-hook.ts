@@ -74,7 +74,7 @@ export const useWrapperHook = () => {
       const bar = ganttEntity.bars.getById(id)!;
       bar.selected = false;
       bar.selectable = val;
-      ganttEntity.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [id]);
+      ganttEntity.bus.emit(GanttBusEvents.BAR_CHANGE, [id]);
     }
   };
 

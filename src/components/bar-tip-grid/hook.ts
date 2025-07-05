@@ -13,24 +13,18 @@ export const useBarTipGridHook = () => {
     tipBars.value = ganttEntity.bars.selectedBars.filter(item => _barIds.includes(item.id));
   };
 
-  const onBarSelectChange = () => {
-    tipBars.value = ganttEntity.bars.selectedBars.filter(item => barIds.value.includes(item.id));
-  };
-
   const onBarPosChange = () => {
     tipBars.value = ganttEntity.bars.selectedBars.filter(item => barIds.value.includes(item.id));
   };
 
   onMounted(() => {
     bus.on(Events.BAR_LAZY_CHANGE, onBarLazyChange);
-    bus.on(Events.BAR_SELECT_CHANGE, onBarSelectChange);
-    bus.on(Events.BAR_POS_CHANGE_FRAGMENTATION, onBarPosChange);
+    bus.on(Events.BAR_CHANGE_FRAGMENTATION, onBarPosChange);
   });
 
   onBeforeUnmount(() => {
     bus.off(Events.BAR_LAZY_CHANGE, onBarLazyChange);
-    bus.off(Events.BAR_SELECT_CHANGE, onBarSelectChange);
-    bus.off(Events.BAR_POS_CHANGE_FRAGMENTATION, onBarPosChange);
+    bus.off(Events.BAR_CHANGE_FRAGMENTATION, onBarPosChange);
   });
 
   return { tipBars };

@@ -39,7 +39,7 @@ export class GanttBarUpdateOperation implements OperationInterface {
       this.bars.calculateGroupOverlap({ groupId: oldGroup.id });
     }
 
-    this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [bar.id]);
+    this.bus.emit(GanttBusEvents.BAR_CHANGE, [bar.id]);
   }
 
   down () {
@@ -60,6 +60,6 @@ export class GanttBarUpdateOperation implements OperationInterface {
     if (oldGroup) {
       this.bars.calculateGroupOverlap({ groupId: oldGroup.id });
     }
-    this.bus.emit(GanttBusEvents.BAR_POS_CHANGE, [bar.id]);
+    this.bus.emit(GanttBusEvents.BAR_CHANGE, [bar.id]);
   }
 }

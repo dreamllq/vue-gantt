@@ -5,6 +5,7 @@ import { Unit } from './unit';
 import { GroupId } from './gantt-group';
 import { AttachedBarId } from './gantt-attached-bar';
 import { WorkTimeId } from './gantt-work-time';
+import { LinkId } from './gantt-link';
 
 export enum Events {
   DRAGSTART='DRAGSTART',
@@ -32,8 +33,6 @@ export enum Events {
 
   DATE_GRID_CHANGE='DATE_GRID_CHANGE',
 
-  // WORK_TIME_GRID_CHANGE='WORK_TIME_GRID_CHANGE',
-
   GROUPS_CHANGE='GROUPS_CHANGE',
   GROUP_EXPAND_CHANGE='GROUP_EXPAND_CHANGE',
 
@@ -48,18 +47,14 @@ export enum Events {
   BAR_CHANGE_FRAGMENTATION='BAR_CHANGE_FRAGMENTATION',
   BAR_DRAGGING='BAR_DRAGGING',
   BAR_DRAGGING_CHANGE='BAR_DRAGGING_CHANGE',
-  BAR_SELECT_CHANGE='BAR_SELECT_CHANGE',
-  BAR_POS_CHANGE='BAR_POS_CHANGE',
-  BAR_POS_CHANGE_FRAGMENTATION='BAR_POS_CHANGE_FRAGMENTATION',
   BAR_CONTEXTMENU='BAR_CONTEXTMENU',
-  BAR_VISIBLE_CHANGE='BAR_VISIBLE_CHANGE',
   BAR_LAZY_CHANGE='BAR_LAZY_CHANGE',
 
   LINKS_CHANGE='LINKS_CHANGE',
+  LINK_CHANGE='LINK_CHANGE',
 
   ATTACHED_BAR_CHANGE='ATTACHED_BAR_CHANGE',
   ATTACHED_BAR_CHANGE_FRAGMENTATION='ATTACHED_BAR_CHANGE_FRAGMENTATION',
-  ATTACHED_BAR_VISIBLE_CHANGE='ATTACHED_BAR_VISIBLE_CHANGE',
 
   MILESTONE_VISIBLE_CHANGE='MILESTONE_VISIBLE_CHANGE',
 
@@ -107,18 +102,14 @@ export interface EventsInterface {
   [Events.BAR_CHANGE_FRAGMENTATION]: (ids: BarId[])=>void;
   [Events.BAR_DRAGGING]: (ids: BarId[])=>void;
   [Events.BAR_DRAGGING_CHANGE]: (ids: BarId[], dragging: boolean)=>void;
-  [Events.BAR_SELECT_CHANGE]: (ids: BarId[])=>void;
-  [Events.BAR_POS_CHANGE]: (ids: BarId[])=>void;
-  [Events.BAR_POS_CHANGE_FRAGMENTATION]: (ids: BarId[])=>void;
   [Events.BAR_CONTEXTMENU]: (data: {barId: BarId}, e: MouseEvent)=>void;
-  [Events.BAR_VISIBLE_CHANGE]: ()=>void;
   [Events.BAR_LAZY_CHANGE]: (ids: BarId[])=>void;
 
   [Events.LINKS_CHANGE]: ()=>void;
+  [Events.LINK_CHANGE]: (ids: LinkId[])=>void;
 
   [Events.ATTACHED_BAR_CHANGE]: (ids: AttachedBarId[])=>void;
   [Events.ATTACHED_BAR_CHANGE_FRAGMENTATION] : (ids: AttachedBarId[])=>void;
-  [Events.ATTACHED_BAR_VISIBLE_CHANGE]: ()=>void;
 
   [Events.MILESTONE_VISIBLE_CHANGE]: ()=>void;
 
