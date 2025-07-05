@@ -12,7 +12,6 @@ export enum GanttBusEvents {
   GROUP_ATTACHED_BARS_HEIGHT_CHANGE='GROUP_ATTACHED_BARS_HEIGHT_CHANGE',
   GROUP_OVERLAP_CHANGE = 'GROUP_OVERLAP_CHANGE',
   BAR_POS_CHANGE='BAR_POS_CHANGE',
-  BAR_GROUP_CHANGE='BAR_GROUP_CHANGE',
   BARS_CHANGE='BARS_CHANGE',
   ATTACHED_BAR_CHANGE='ATTACHED_BAR_CHANGE',
   LINKS_CHANGE='LINKS_CHANGE',
@@ -31,10 +30,6 @@ export interface GanttBusEventsInterface {
   [GanttBusEvents.GROUP_HEIGHT_CHANGE]: (data: {groupId: GroupId})=> void,
   [GanttBusEvents.GROUP_BARS_HEIGHT_CHANGE]: (data: {groupId: GroupId})=> void,
   [GanttBusEvents.GROUP_ATTACHED_BARS_HEIGHT_CHANGE]: (data: {groupId: GroupId})=> void,
-  [GanttBusEvents.BAR_GROUP_CHANGE]:(data:{
-    groupId: GroupId,
-    barId: BarId
-  })=>void,
   [GanttBusEvents.GROUP_TOP_CHANGE]: (groupIds: GroupId[])=> void,
   [GanttBusEvents.BAR_POS_CHANGE]:(barIds:BarId[])=>void,
   [GanttBusEvents.GROUP_OVERLAP_CHANGE]:(data:{
