@@ -53,6 +53,7 @@ export const useWorkTimeGridHook = () => {
   const updateData = (groupIds: GroupId[]) => {
     groupIds.forEach(groupId => {
       const group = ganttEntity.groups.getById(groupId)!;
+      ganttEntity.workTimes.updateShow();
       group.workTimes.forEach(item => item.calculate());
       if (Array.isArray(groupMap[group.id])) {
         groupMap[group.id].forEach(item => {
@@ -107,6 +108,8 @@ export const useWorkTimeGridHook = () => {
   };
   
   const onWorkTimeGridChange = (groupIds: GroupId[]) => {
+    console.log('WORK_TIME_GRID_CHANGE');
+    
     updateData(groupIds);
     lazyCalculate();
   };

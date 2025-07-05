@@ -163,31 +163,16 @@ export class Gantt extends EventEmitter {
 
   batchAddGroup(groups:GanttJsonDataGroup[]) {
     groups.forEach(groupJson => {
-      // let workTimes: GanttGroupWorkTimes | undefined;
-      // if (Array.isArray(groupJson.workTimes)) {
-      //   workTimes = new GanttGroupWorkTimes();
-      //   groupJson.workTimes.forEach(wt => {
-      //     workTimes!.push(new GanttGroupWorkTimeView({
-      //       config: this.config,
-      //       groupId: groupJson.id,
-      //       groups: this.groups,
-      //       start: wt.start,
-      //       end: wt.end
-      //     }));
-      //   });
-      // }
-
       this.addGroup({ ...groupJson });
     });
-
+    // #region 由于group的顺序不确定，不一定先加入父节点再加入子阶段，所以最后再便利一遍，更新父节点信息
     groups.forEach(groupJson => {
-      let parentGroup: GanttGroup | null = null;
-
       if (groupJson.parentId) {
-        parentGroup = this.groups.getById(groupJson.parentId)!;
+        const parentGroup = this.groups.getById(groupJson.parentId)!;
         this.groups.getById(groupJson.id)!.parent = parentGroup;
       }
     });
+    // #endregion
   }
 
   batchAddWorkTime(workTimes: GanttJsonDataWorkTime[]) {
@@ -270,6 +255,7 @@ export class Gantt extends EventEmitter {
     this.groups.calculateExpandedGroups();
     console.timeEnd('gantt fromJson group data calculate');
     console.time('gantt fromJson workTimes data calculate');
+    this.workTimes.updateShow();
     this.workTimes.calculate();
     console.timeEnd('gantt fromJson workTimes data calculate');
     console.time('gantt fromJson bar data calculate');

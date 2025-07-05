@@ -13,6 +13,7 @@ export class GanttWorkTimeView extends GanttWorkTime {
   width = 0;
   groups: GanttGroups;
   config: GanttConfig;
+  isShow = true;
 
   constructor(data:GanttWorkViewTimeConstructor) {
     super(data);
@@ -21,7 +22,7 @@ export class GanttWorkTimeView extends GanttWorkTime {
   }
 
   calculate() {
-    if (!this.groups.getById(this.group.id)!.isShow) return;
+    if (!this.isShow) return;
     this.sx = this.startMoment.diff(this.config.startDate, 'second') * this.config.secondWidth;
     this.width = this.seconds * this.config.secondWidth;
   }

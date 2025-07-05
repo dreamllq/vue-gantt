@@ -24,4 +24,10 @@ export class GanttWorkTimes extends BizArray<GanttWorkTimeView> {
   calculate() {
     this.forEach(item => item.calculate());
   }
+
+  updateShow() {
+    this.forEach(bar => {
+      bar.isShow = this.groups.getById(bar.group.id)!.isShow;
+    });
+  }
 }
