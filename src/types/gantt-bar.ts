@@ -26,7 +26,8 @@ export type GanttBarClassConstructor = {
   end: DateTimeString | null,
   duration: number | null,
   schedulingMode?: SchedulingMode | null
-  bars: GanttBars
+  bars: GanttBars;
+  groups: GanttGroups;
 } & GanttBaseClassConstructor;
 
 export type GanttBarAddParams = {

@@ -1,4 +1,4 @@
-import { GanttJsonData, GanttJsonDataBar, GanttJsonDataGroup, GanttJsonDataGroupWorkTime, GanttJsonDataLink } from '@/index.ts';
+import { GanttJsonData, GanttJsonDataBar, GanttJsonDataGroup, GanttJsonDataGroupWorkTime, GanttJsonDataLink, GanttJsonDataWorkTime } from '@/index.ts';
 import moment, { Moment } from 'moment';
 
 const makeWorkTimes = (start:Moment, end:Moment): GanttJsonDataGroupWorkTime[] => {
@@ -33,16 +33,29 @@ export const getData = ():GanttJsonData => {
   const orderCount = 1000;
   const startDate = moment();
   const endDate = moment().add(3, 'year');
-  const workTimes = makeWorkTimes(startDate, endDate);
+  const workTimesTemp = makeWorkTimes(startDate, endDate);
 
   const groups:GanttJsonDataGroup[] = [];
   for (let i = 0; i < groupCount; i++) {
     groups.push({
       id: `g_${i + 1}`,
-      barOverlap: true,
-      workTimes
+      barOverlap: true
     });
   }
+  const workTimes:GanttJsonDataWorkTime[] = [];
+  for (let i = 0; i < groupCount; i++) {
+    workTimesTemp.forEach((workTime, index) => {
+      workTimes.push({
+        id: `g_${i + 1}_w_${index + 1}`,
+        groupId: `g_${i + 1}`,
+        start: workTime.start,
+        end: workTime.end
+      });
+    });
+  }
+
+ 
+
   const bars: GanttJsonDataBar[] = [];
   const links:GanttJsonDataLink[] = [];
   let barId = 1;
@@ -237,6 +250,7 @@ export const getData = ():GanttJsonData => {
       'GRID_CELL_WIDTH': 200
     },
     'groups': groups,
+    workTimes: workTimes,
     'bars': bars,
     'links': links
   };

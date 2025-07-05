@@ -30,65 +30,27 @@ export const data:GanttJsonData = {
   'groups': [
     {
       'id': 1,
-      'workTimes': [
-        {
-          'start': '2024-01-01 00:00:00',
-          'end': '2024-02-01 12:00:00'
-        }
-      ],
       'barOverlap': true,
       isExpand: false
     },
     {
       'id': 911,
       'parentId': 1,
-      'workTimes': [
-        {
-          'start': '2024-01-01 00:00:00',
-          'end': '2024-02-01 12:00:00'
-        }
-      ],
       'barOverlap': false,
       isExpand: true
     },
     {
       'id': 9111,
       'parentId': 911,
-      'workTimes': [
-        {
-          'start': '2024-01-01 00:00:00',
-          'end': '2024-02-01 12:00:00'
-        }
-      ],
       'barOverlap': true
     },
-    {
-      'id': 2,
-      'workTimes': [
-        {
-          'start': '2024-01-01 00:00:00',
-          'end': '2024-03-01 12:00:00'
-        }
-      ]
-    },
+    { 'id': 2 },
     {
       'id': 3,
-      'workTimes': [
-        {
-          'start': '2024-01-01 00:00:00',
-          'end': '2024-02-01 12:00:00'
-        }
-      ],
       'barOverlap': true
     },
     {
       'id': 4,
-      'workTimes': [
-        {
-          'start': '2024-01-01 00:00:00',
-          'end': '2024-02-01 12:00:00'
-        }
-      ],
       'barOverlap': true
     },
     { 'id': 5 },
@@ -99,6 +61,45 @@ export const data:GanttJsonData = {
     { 'id': 10 },
     { 'id': 11 },
     { 'id': 12 }
+  ],
+  workTimes: [
+    {
+      id: 1,
+      groupId: 1,
+      'start': '2024-01-01 00:00:00',
+      'end': '2024-02-01 12:00:00'
+    },
+    {
+      id: 2,
+      groupId: 911,
+      'start': '2024-01-01 00:00:00',
+      'end': '2024-02-01 12:00:00'
+    },
+    {
+      id: 3,
+      groupId: 9111,
+      'start': '2024-01-01 00:00:00',
+      'end': '2024-02-01 12:00:00'
+    },
+    {
+      id: 4,
+      groupId: 2,
+      'start': '2024-01-01 00:00:00',
+      'end': '2024-03-01 12:00:00'
+    },
+    {
+      id: 5,
+      groupId: 3,
+      'start': '2024-01-01 00:00:00',
+      'end': '2024-02-01 12:00:00'
+    },
+
+    {
+      id: 6,
+      groupId: 4,
+      'start': '2024-01-01 00:00:00',
+      'end': '2024-02-01 12:00:00'
+    }
   ],
   'bars': [
     {

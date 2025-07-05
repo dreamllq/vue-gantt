@@ -6,6 +6,7 @@ import { GanttBase } from './gantt-base';
 import { SchedulingMode } from '@/types/gantt-config';
 import { cloneDeep } from 'lodash';
 import moment from 'moment';
+import { GanttGroups } from './gantt-groups';
 
 export class GanttBar extends GanttBase {
   id: BarId;
@@ -15,6 +16,7 @@ export class GanttBar extends GanttBase {
   private _group: GanttGroup;
   private _schedulingMode:SchedulingMode | null = null;
   private _hasCalculated = false;
+  groups: GanttGroups;
 
   constructor(data:GanttBarClassConstructor) {
     super(data);
@@ -24,6 +26,7 @@ export class GanttBar extends GanttBase {
     this.duration = data.duration;
     this.start = data.start;
     this.end = data.end;
+    this.groups = data.groups;
   }
 
   get group() {

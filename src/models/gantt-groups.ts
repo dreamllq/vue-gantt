@@ -3,7 +3,6 @@ import { BizArray } from './biz-array';
 import { GanttGroupView } from './gantt-group-view';
 import { GanttConfig } from './gantt-config';
 import { GanttLayoutConfig } from './gantt-layout-config';
-import { Gantt } from './gantt';
 import { GanttBus } from './gantt-bus';
 import { GanttGroupsClassConstructor } from '@/types/gantt-groups';
 import { GanttBusEvents } from '@/types/gantt-bus';
@@ -104,9 +103,9 @@ export class GanttGroups extends BizArray<GanttGroupView> {
     this.bus.emit(GanttBusEvents.GROUP_TOP_CHANGE, effectGroupIds);
   }
 
-  calculateWorkTime() {
-    this.expandedGroups.filter(item => item.isShow).forEach(item => {
-      item.workTimes.calculate();
-    });
-  }
+  // calculateWorkTime() {
+  //   this.expandedGroups.filter(item => item.isShow).forEach(item => {
+  //     item.workTimes.calculate();
+  //   });
+  // }
 }

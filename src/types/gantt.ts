@@ -11,6 +11,7 @@ import { BarId } from './gantt-bar';
 import { AttachedBarId } from './gantt-attached-bar';
 import { MilestoneId } from './gantt-milestone';
 import { GanttGroup } from '@/models/gantt-group';
+import { WorkTimeId } from './gantt-work-time';
 
 export type GanttClassConstructor = { config: GanttConfig, layoutConfig: GanttLayoutConfig, hook?: GanttHook}
 
@@ -50,9 +51,15 @@ export type GanttJsonDataGroup = {
   id: GroupId, 
   parentId?: GroupId, 
   isExpand?: boolean,
-  workTimes?:GanttJsonDataGroupWorkTime[],
   barOverlap?: boolean
 };
+
+export type GanttJsonDataWorkTime = {
+  start: DateTimeString;
+  end: DateTimeString;
+  id: WorkTimeId,
+  groupId: GroupId
+}
 
 export type GanttJsonDataBar = {
   id: BarId,
@@ -92,6 +99,7 @@ export type GanttJsonData = {
   config: GanttJsonDataConfig,
   layoutConfig?: GanttJsonDataLayoutConfig,
   groups: GanttJsonDataGroup[],
+  workTimes: GanttJsonDataWorkTime[],
   bars: GanttJsonDataBar[],
   attachedBars?: GanttJsonDataAttachedBar[],
   links?: GanttJsonDataLink[],

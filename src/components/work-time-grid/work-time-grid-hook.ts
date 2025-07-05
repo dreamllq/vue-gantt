@@ -5,9 +5,10 @@ import { cloneDeep } from 'lodash';
 import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { Events } from '@/types/events';
 import { GroupId } from '@/types/gantt-group';
+import { WorkTimeId } from '@/types/gantt-work-time';
 
 type GridItem = {
-  id: string,
+  id: WorkTimeId,
   seconds: number;
   x: number,
   y: number,
@@ -52,7 +53,7 @@ export const useWorkTimeGridHook = () => {
   const updateData = (groupIds: GroupId[]) => {
     groupIds.forEach(groupId => {
       const group = ganttEntity.groups.getById(groupId)!;
-      group.workTimes.calculate();
+      group.workTimes.forEach(item => item.calculate());
       if (Array.isArray(groupMap[group.id])) {
         groupMap[group.id].forEach(item => {
           item.x = group.workTimes.getById(item.id)!.sx;

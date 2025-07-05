@@ -6,12 +6,10 @@ import { GanttGroup } from './gantt-group';
 import { GanttGroups } from './gantt-groups';
 import { GanttLinks } from './gantt-links';
 import { GanttScroll } from './gantt-scroll';
-import { GanttGroupWorkTimes } from './gantt-group-work-times';
 import { GanttGroupAddParams } from '@/types/gantt-group';
 import { GanttBarAddParams } from '@/types/gantt-bar';
 import { GanttLinkAddParams, GanttLinkType, LinkShowStrategy } from '@/types/gantt-link';
-import { GanttClassConstructor, GanttHook, GanttJsonData, GanttJsonDataAttachedBar, GanttJsonDataBar, GanttJsonDataGroup, GanttJsonDataLink, GanttJsonDataMilestone } from '@/types/gantt';
-import { GanttGroupWorkTime } from './gantt-group-work-time';
+import { GanttClassConstructor, GanttHook, GanttJsonData, GanttJsonDataAttachedBar, GanttJsonDataBar, GanttJsonDataGroup, GanttJsonDataLink, GanttJsonDataMilestone, GanttJsonDataWorkTime } from '@/types/gantt';
 import { GanttLayoutConfig } from './gantt-layout-config';
 import { Unit } from '@/types/unit';
 import { SchedulingMode } from '@/types/gantt-config';
@@ -21,7 +19,8 @@ import { GanttAttachedBarAddParams } from '@/types/gantt-attached-bar';
 import { GanttOperationHistory } from './gantt-operation-history';
 import { GanttMilestones } from './gantt-milestones';
 import { GanttMilestoneAddParams } from '@/types/gantt-milestone';
-import { GanttGroupWorkTimeView } from './gantt-group-work-time-view';
+import { GanttWorkTimes } from './gantt-work-times';
+import { GanttWorkTimeAddParams } from '@/types/gantt-work-time';
 
 export class Gantt extends EventEmitter {
   hook?: GanttHook;
@@ -29,13 +28,14 @@ export class Gantt extends EventEmitter {
   scroll: GanttScroll;
   layoutConfig: GanttLayoutConfig;
   config: GanttConfig;
+  bus: GanttBus = new GanttBus();
+  history: GanttOperationHistory;
   groups: GanttGroups;
+  workTimes: GanttWorkTimes;
   bars: GanttBars;
   attachedBars: GanttAttachedBars;
   links: GanttLinks;
   milestones: GanttMilestones;
-  bus: GanttBus = new GanttBus();
-  history: GanttOperationHistory;
 
   constructor(data:GanttClassConstructor) {
     super();
@@ -48,6 +48,11 @@ export class Gantt extends EventEmitter {
       layoutConfig: this.layoutConfig,
       config: this.config,
       bus: this.bus
+    });
+
+    this.workTimes = new GanttWorkTimes({
+      config: this.config,
+      groups: this.groups
     });
 
     this.bars = new GanttBars({
@@ -87,6 +92,19 @@ export class Gantt extends EventEmitter {
       layoutConfig: this.layoutConfig,
       bus: this.bus
     });
+  }
+
+  addWorkTime(data: GanttWorkTimeAddParams) {
+    const group = this.groups.getById(data.groupId);
+    if (group) {
+      this.workTimes.add({
+        ...data,
+        group,
+        config: this.config,
+        groups: this.groups,
+        layoutConfig: this.layoutConfig
+      });
+    }
   }
 
   addBar(data: GanttBarAddParams) {
@@ -145,24 +163,21 @@ export class Gantt extends EventEmitter {
 
   batchAddGroup(groups:GanttJsonDataGroup[]) {
     groups.forEach(groupJson => {
-      let workTimes: GanttGroupWorkTimes | undefined;
-      if (Array.isArray(groupJson.workTimes)) {
-        workTimes = new GanttGroupWorkTimes();
-        groupJson.workTimes.forEach(wt => {
-          workTimes!.push(new GanttGroupWorkTimeView({
-            config: this.config,
-            groupId: groupJson.id,
-            groups: this.groups,
-            start: wt.start,
-            end: wt.end
-          }));
-        });
-      }
+      // let workTimes: GanttGroupWorkTimes | undefined;
+      // if (Array.isArray(groupJson.workTimes)) {
+      //   workTimes = new GanttGroupWorkTimes();
+      //   groupJson.workTimes.forEach(wt => {
+      //     workTimes!.push(new GanttGroupWorkTimeView({
+      //       config: this.config,
+      //       groupId: groupJson.id,
+      //       groups: this.groups,
+      //       start: wt.start,
+      //       end: wt.end
+      //     }));
+      //   });
+      // }
 
-      this.addGroup({
-        ...groupJson,
-        workTimes: workTimes
-      });
+      this.addGroup({ ...groupJson });
     });
 
     groups.forEach(groupJson => {
@@ -173,7 +188,12 @@ export class Gantt extends EventEmitter {
         this.groups.getById(groupJson.id)!.parent = parentGroup;
       }
     });
+  }
 
+  batchAddWorkTime(workTimes: GanttJsonDataWorkTime[]) {
+    workTimes.forEach(workTime => {
+      this.addWorkTime({ ...workTime });
+    });
   }
 
   batchAddBar(bars:GanttJsonDataBar[]) {
@@ -231,6 +251,7 @@ export class Gantt extends EventEmitter {
     });
 
     gantt.batchAddGroup(data.groups);
+    gantt.batchAddWorkTime(data.workTimes);
     gantt.batchAddBar(data.bars);
     gantt.batchAddAttachedBar(data.attachedBars || []);
     gantt.batchAddLink(data.links || []);
@@ -247,8 +268,10 @@ export class Gantt extends EventEmitter {
     console.time('gantt fromJson group data calculate');
     this.groups.calculate();
     this.groups.calculateExpandedGroups();
-    this.groups.calculateWorkTime();
     console.timeEnd('gantt fromJson group data calculate');
+    console.time('gantt fromJson workTimes data calculate');
+    this.workTimes.calculate();
+    console.timeEnd('gantt fromJson workTimes data calculate');
     console.time('gantt fromJson bar data calculate');
     this.bars.updateShow();
     this.bars.calculate();

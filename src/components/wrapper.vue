@@ -87,7 +87,7 @@ const { scrollReady } = scroll;
 const { api } = useWrapperHook();
 
 const emits = defineEmits(['bar-drag-change']);
-const onDraggingChange = (ids:BarId, dragging: boolean) => {
+const onDraggingChange = (ids:BarId[], dragging: boolean) => {
   if (dragging === false) {
     emits('bar-drag-change', ids);
   }
