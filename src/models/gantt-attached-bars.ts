@@ -28,7 +28,7 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
       const effectBars = this.groups.getById(data.groupId)!.attachedBars;
       if (effectBars.length > 0) {
         effectBars.forEach(bar => bar.calculate());
-        this.bus.emit(GanttBusEvents.ATTACHED_BAR_POS_CHANGE, effectBars.getIds());
+        this.bus.emit(GanttBusEvents.ATTACHED_BAR_CHANGE, effectBars.getIds());
       }
     });
     
@@ -71,7 +71,7 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
     const effectBars = this.filter(item => groupIds.includes(item.group.id));
     if (effectBars.length > 0) {
       effectBars.forEach(item => item.changeY());
-      this.bus.emit(GanttBusEvents.ATTACHED_BAR_POS_CHANGE, effectBars.map(item => item.id));
+      this.bus.emit(GanttBusEvents.ATTACHED_BAR_CHANGE, effectBars.map(item => item.id));
     }
   }
   updateGroupExpandChangeEffectBar(changedGroupIds: GroupId[]) {

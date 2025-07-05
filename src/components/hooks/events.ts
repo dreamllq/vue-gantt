@@ -47,11 +47,6 @@ export const useEvents = (ganttEntity: Gantt, store:{
     store.bus.emit(Events.BAR_POS_CHANGE, ids);
   });
 
-  ganttEntity.bus.on(GanttBusEvents.ATTACHED_BAR_POS_CHANGE, (ids) => {
-    store.bus.emit(Events.ATTACHED_BAR_CHANGE, ids);
-    store.bus.emit(Events.ATTACHED_BAR_POS_CHANGE, ids);
-  });
-
   ganttEntity.bus.on(GanttBusEvents.BARS_CHANGE, () => {
     store.bus.emit(Events.BARS_CHANGE);
   });
