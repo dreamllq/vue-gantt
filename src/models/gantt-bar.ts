@@ -37,7 +37,18 @@ export class GanttBar extends GanttBase {
   }
 
   set group(group: GanttGroup) {
+    if (group.id === this._group.id) return;
+    this.dayList.forEach(day => {
+      this.group.dayBarMap[day].removeById(this.id);
+    });
     this._group = group;
+    this.dayList.forEach(day => {
+      if (!this.group.dayBarMap[day]) {
+        this.group.dayBarMap[day] = new BizArray<GanttBar>();
+      }
+
+      this.group.dayBarMap[day].push(this);
+    });
   }
 
   get schedulingMode():SchedulingMode {
