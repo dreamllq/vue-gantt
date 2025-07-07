@@ -23,7 +23,8 @@ export enum GanttBusEvents {
   WORK_TIME_CHANGE='WORK_TIME_CHANGE',
   GROUP_EXPAND_CHANGE='GROUP_EXPAND_CHANGE',
   GROUP_CHANGE='GROUP_CHANGE',
-  GROUPS_CHANGE='GROUPS_CHANGE'
+  GROUPS_CHANGE='GROUPS_CHANGE',
+  SHOW_CHANGE='SHOW_CHANGE'
 }
 
 export interface GanttBusEventsInterface {
@@ -47,5 +48,6 @@ export interface GanttBusEventsInterface {
   [GanttBusEvents.GROUP_CHANGE]: (groupIds: GroupId[])=>void,
   [GanttBusEvents.GROUPS_CHANGE]: (data: { oldGroupIds: GroupId[]; newGroupIds: GroupId[]; addGroupIds: GroupId[]; deleteGroupIds: GroupId[] })=>void,
   [GanttBusEvents.ATTACHED_BAR_CHANGE]:(barIds: AttachedBarId[])=>void,
-  [GanttBusEvents.LINK_CHANGE]: (linkIds: LinkId[])=>void
+  [GanttBusEvents.LINK_CHANGE]: (linkIds: LinkId[])=>void,
+  [GanttBusEvents.SHOW_CHANGE]: ()=>void
 }

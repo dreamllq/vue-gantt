@@ -17,6 +17,7 @@ export class GanttBar extends GanttBase {
   private _schedulingMode:SchedulingMode | null = null;
   private _hasCalculated = false;
   groups: GanttGroups;
+  dayList: string[] = [];
 
   constructor(data:GanttBarClassConstructor) {
     super(data);
@@ -128,5 +129,13 @@ export class GanttBar extends GanttBase {
       this.start = data.start;
       this.end = data.end;
     }
+
+    this.calculateDayList();
+  }
+
+  calculateDayList():void {
+    // this.dayList = [];
+    // throw Error('not impl');
+     
   }
 }

@@ -252,9 +252,23 @@ export class GanttBarView extends GanttBar {
   }
   calculateOverlapBarIds() {
     if (this.isClone) return;
-    // const groupBars = this.bars.filter(item => item.group.id === this.group.id);
-    const groupBars = this.groups.getById(this.group.id)!.bars;
-    const overlapBars = groupBars.filter(bar => bar.id === this.id ? false : isRectanglesOverlap({
+    const group = this.groups.getById(this.group.id)!;
+
+    if (!group.barOverlap) {
+      const groupBars = this.groups.getById(this.group.id)!.bars;
+      const overlapBars = groupBars.filter(bar => this.isOverlapBar(bar));
+      
+      overlapBars.forEach(bar => {
+        bar.overlapBarIds.push(this.id);
+        this.overlapBarIds.push(bar.id);
+      });
+    }
+  }
+
+  isOverlapBar(bar: GanttBarView) {
+    if (bar.id === this.id) return false;
+    
+    return isRectanglesOverlap({
       x1: this.sx,
       y1: this._sy,
       x2: this.ex,
@@ -264,11 +278,6 @@ export class GanttBarView extends GanttBar {
       y1: bar._sy,
       x2: bar.ex,
       y2: bar.ey
-    }));
-      
-    overlapBars.forEach(bar => {
-      bar.overlapBarIds.push(this.id);
-      this.overlapBarIds.push(bar.id);
     });
   }
 

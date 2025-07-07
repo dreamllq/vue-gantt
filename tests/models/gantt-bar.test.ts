@@ -3,10 +3,11 @@ import { GanttBars } from '@/models/gantt-bars';
 import { GanttBus } from '@/models/gantt-bus';
 import { GanttConfig } from '@/models/gantt-config';
 import { GanttGroup } from '@/models/gantt-group';
-import { GanttGroupWorkTime } from '@/models/gantt-group-work-time';
-import { GanttGroupWorkTimes } from '@/models/gantt-group-work-times';
+
 import { GanttGroups } from '@/models/gantt-groups';
 import { GanttLayoutConfig } from '@/models/gantt-layout-config';
+import { GanttWorkTime } from '@/models/gantt-work-time';
+import { GanttWorkTimes } from '@/models/gantt-work-times';
 
 describe('gantt-bar', () => {
   const layoutConfig = new GanttLayoutConfig({ });
@@ -54,23 +55,31 @@ describe('gantt-bar', () => {
   });
 
   test('有休息日-开始时间在休息时间', () => {
-    const ggwts = new GanttGroupWorkTimes();
-    ggwts.push(new GanttGroupWorkTime({
-      start: '2025-01-01 01:00:00',
-      end: '2025-01-01 02:00:00' 
-    }));
-
     const groups = new GanttGroups({
       bus,
       config,
       layoutConfig
     });
+    const ggwts = new GanttWorkTimes({
+      bus,
+      config,
+      groups
+    });
     groups.add({
       bus,
       config,
       layoutConfig,
+      id: 1
+    });
+
+    ggwts.add({
+      config,
+      start: '2025-01-01 01:00:00',
+      end: '2025-01-01 02:00:00',
+      group: groups.getById(1)!,
+      groups,
       id: 1,
-      workTimes: ggwts
+      layoutConfig
     });
     const bars = new GanttBars({
       config,
@@ -99,11 +108,6 @@ describe('gantt-bar', () => {
   });
 
   test('有休息日-开始时间在工作时间', () => {
-    const ggwts = new GanttGroupWorkTimes();
-    ggwts.push(new GanttGroupWorkTime({
-      start: '2025-01-01 01:00:00',
-      end: '2025-01-01 02:00:00' 
-    }));
 
     const groups = new GanttGroups({
       bus,
@@ -114,8 +118,21 @@ describe('gantt-bar', () => {
       bus,
       config,
       layoutConfig,
+      id: 1
+    });
+    const ggwts = new GanttWorkTimes({
+      bus,
+      config,
+      groups
+    });
+    ggwts.add({
+      start: '2025-01-01 01:00:00',
+      end: '2025-01-01 02:00:00',
+      config,
+      group: groups.getById(1)!,
+      groups,
       id: 1,
-      workTimes: ggwts
+      layoutConfig
     });
     const bars = new GanttBars({
       config,

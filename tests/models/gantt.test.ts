@@ -37,14 +37,9 @@ describe('gantt', () => {
       config: {
         endDate: '',
         startDate: '',
-        durationUnit: 'second'
+        durationUnit: 'SECOND'
       },
-      groups: [
-        {
-          id: 1,
-          parentId: null
-        }
-      ],
+      groups: [{ id: 1 }],
       bars: [
         {
           duration: 10,
@@ -68,7 +63,8 @@ describe('gantt', () => {
           targetId: 2,
           linkType: 'FINISH_TO_START'
         }
-      ]
+      ],
+      workTimes: []
     });
     expect(gantt.groups.getById(1)?.id).toBe(1);
     expect(gantt.groups.getById(1)).toBe(gantt.bars.getById(1)?.group);

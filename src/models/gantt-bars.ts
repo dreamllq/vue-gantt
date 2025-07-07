@@ -22,6 +22,10 @@ export class GanttBars extends BizArray<GanttBarView> {
     this.layoutConfig = data.layoutConfig;
     this.groups = data.groups;
     this.bus = data.bus;
+    
+    this.bus.on(GanttBusEvents.SHOW_CHANGE, () => {
+      this.updateShow();
+    });
 
     this.bus.on(GanttBusEvents.GROUP_OVERLAP_CHANGE, (data) => {
       this.calculateGroupOverlap(data);
@@ -64,16 +68,21 @@ export class GanttBars extends BizArray<GanttBarView> {
   }
 
   calculate() {
-    // this.forEach(bar => bar.calculate());
     this.groups.forEach(group => {
+      console.time('calculate bars calculate');
       group.bars.forEach(bar => {
         if (!bar.isShow) return;
         bar.resetTimeRange();
         bar.calculatePos();
-        bar.clearOverlap();
-        bar.calculateOverlapBarIds();
+        // bar.clearOverlap();
+        if (!group.barOverlap) {
+          bar.calculateOverlapBarIds();
+        }
       });
+      console.timeEnd('calculate bars calculate');
+      console.time('calculate bars calculateGroupOverlap');
       this.calculateGroupOverlap({ groupId: group.id });
+      console.timeEnd('calculate bars calculateGroupOverlap');
     });
   }
 

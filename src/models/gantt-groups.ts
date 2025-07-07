@@ -102,6 +102,7 @@ export class GanttGroups extends BizArray<GanttGroupView> {
     });
 
     this.expandedGroups = list;
+    this.bus.emit(GanttBusEvents.SHOW_CHANGE);
   }
 
   calculate() {

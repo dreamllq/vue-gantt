@@ -38,8 +38,6 @@ export const useBarGridHook = () => {
   };
 
   const onBarChange = (ids:BarId[]) => {
-    console.log('BAR_CHANGE');
-    
     lazyCalculate();
   };
  

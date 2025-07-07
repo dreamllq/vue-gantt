@@ -18,6 +18,10 @@ export class GanttWorkTimes extends BizArray<GanttWorkTimeView> {
     this.groups = data.groups;
     this.bus = data.bus;
 
+    this.bus.on(GanttBusEvents.SHOW_CHANGE, () => {
+      this.updateShow();
+    });
+
     this.bus.on(GanttBusEvents.GROUP_BARS_HEIGHT_CHANGE, (data) => {
       const group = this.groups.getById(data.groupId)!;
       if (group.workTimes.length > 0) {
@@ -35,7 +39,7 @@ export class GanttWorkTimes extends BizArray<GanttWorkTimeView> {
 
     this.bus.on(GanttBusEvents.GROUPS_CHANGE, (data) => {
       const workTimeIds:WorkTimeId[] = [];
-      this.updateShow();
+      // this.updateShow();
       data.addGroupIds.forEach(groupId => {
         this.groups.getById(groupId)!.workTimes.forEach(item => {
           item.calculate();
@@ -57,8 +61,8 @@ export class GanttWorkTimes extends BizArray<GanttWorkTimeView> {
   }
 
   updateShow() {
-    this.forEach(bar => {
-      bar.isShow = this.groups.getById(bar.group.id)!.isShow;
+    this.forEach(workTime => {
+      workTime.isShow = this.groups.getById(workTime.group.id)!.isShow;
     });
   }
 }

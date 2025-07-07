@@ -252,8 +252,8 @@ export class Gantt extends EventEmitter {
   calculate() {
     console.time('gantt fromJson data calculate');
     console.time('gantt fromJson group data calculate');
-    this.groups.calculate();
     this.groups.calculateExpandedGroups();
+    this.groups.calculate();
     console.timeEnd('gantt fromJson group data calculate');
     console.time('gantt fromJson workTimes data calculate');
     this.workTimes.updateShow();

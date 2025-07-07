@@ -116,21 +116,21 @@ export const useSingleDraggingHook = () => {
     const dropRowIndex = max([Math.floor(min([(dropY - top), group.barsHeight - 1])! / ganttEntity.layoutConfig.ROW_HEIGHT), 0])!;
         
     bar.dragging = false;
-    bar.sx = barClone.value!.sx;
-    bar.sy = barClone.value!.sy;
-    bar.ex = barClone.value!.ex;
-    bar.ey = barClone.value!.ey;
-    bar.width = barClone.value!.width;
-    bar.height = barClone.value!.height;
-    bus.emit(Events.BAR_CHANGE, [bar.id]);
-    setTimeout(() => {
-      bar.update({
-        end: endTime,
-        start: startTime,
-        rowIndex: group.barOverlap === true ? 0 : dropRowIndex,
-        groupId: group.id
-      });
-    }, 0);
+    // bar.sx = barClone.value!.sx;
+    // bar.sy = barClone.value!.sy;
+    // bar.ex = barClone.value!.ex;
+    // bar.ey = barClone.value!.ey;
+    // bar.width = barClone.value!.width;
+    // bar.height = barClone.value!.height;
+    // bus.emit(Events.BAR_CHANGE, [bar.id]);
+    // setTimeout(() => {
+    bar.update({
+      end: endTime,
+      start: startTime,
+      rowIndex: group.barOverlap === true ? 0 : dropRowIndex,
+      groupId: group.id
+    });
+    // }, 0);
     bus.emit(Events.BAR_DRAGGING_CHANGE, [bar.id], false);
 
     draggingBar.value = undefined;

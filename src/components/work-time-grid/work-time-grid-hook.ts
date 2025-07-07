@@ -1,4 +1,4 @@
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, Ref, ref } from 'vue';
 import { useStore } from '../store';
 import moment from 'moment';
 import { cloneDeep } from 'lodash';
@@ -6,60 +6,36 @@ import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { Events } from '@/types/events';
 import { GroupId } from '@/types/gantt-group';
 import { WorkTimeId } from '@/types/gantt-work-time';
+import { BizArray } from '@/models/biz-array';
+import { GanttWorkTimeView } from '@/models/gantt-work-time-view';
 
-type GridItem = {
-  id: WorkTimeId,
-  seconds: number;
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-  timeString: string,
-  groupId:GroupId
-}
 export const useWorkTimeGridHook = () => {
-  const workTimeGrid = ref<GridItem[]>([]);
-  const lazyWorkTimeGrid = ref<GridItem[]>([]);
-  const groupMap:Record<GroupId, GridItem[]> = {};
-
+  const lazyWorkTimeGrid: Ref<GanttWorkTimeView[]> = ref([]);
 
   const { ganttEntity, lazy, bus } = useStore()!;
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
 
-  const initData = () => {
-    workTimeGrid.value = [];
-    ganttEntity.workTimes
-      .filter(item => item.isShow)
-      .forEach(wt => {
-        const item = {
-          id: wt.id,
-          seconds: wt.seconds,
-          x: wt.sx,
-          y: ganttEntity.groups.getGroupTopByIndex(ganttEntity.groups.getGroupIndex(ganttEntity.groups.getById(wt.group.id)!)),
-          width: wt.width,
-          height: ganttEntity.groups.getById(wt.group.id)!.height,
-          timeString: wt.startTimeString,
-          groupId: wt.group.id
-        };
-        workTimeGrid.value.push(item);
-      });
-  };
-
   const lazyCalculate = () => {
-    lazyWorkTimeGrid.value = workTimeGrid.value.filter(item => isRectanglesOverlap({
+    lazyWorkTimeGrid.value = ganttEntity.workTimes.filter(item => isRectanglesOverlap({
       x1: visibleAreaStartX.value,
       y1: visibleAreaStartY.value,
       x2: visibleAreaEndX.value,
       y2: visibleAreaEndY.value
     }, {
-      x1: item.x,
-      y1: item.y,
-      x2: item.x + item.width,
-      y2: item.y + item.height
+      x1: item.sx,
+      y1: item.sy,
+      x2: item.sx + item.width,
+      y2: item.sy + item.height
     }));
   };
 
-  initData();
+  const updateData = (workTimeIds: WorkTimeId[]) => {
+    workTimeIds.forEach(workTimeId => {
+      const item = ganttEntity.workTimes.getById(workTimeId)!;
+      item.updateY();
+    });
+  };
+
   if (lazyReady.value) {
     lazyCalculate();
   }
@@ -69,8 +45,12 @@ export const useWorkTimeGridHook = () => {
   };
   
 
-  const onWorkTimeChange = () => {
-    initData();
+  const onWorkTimeChange = (workTimeIds: WorkTimeId[]) => {
+    // console.log(workTimeIds);
+    
+    console.time('onWorkTimeChange updateData');
+    updateData(workTimeIds);
+    console.timeEnd('onWorkTimeChange updateData');
     lazyCalculate();
   };
 
@@ -84,8 +64,5 @@ export const useWorkTimeGridHook = () => {
     bus.off(Events.WORK_TIME_CHANGE, onWorkTimeChange);
   });
 
-  return {
-    lazyWorkTimeGrid,
-    workTimeGrid
-  };
+  return { lazyWorkTimeGrid };
 };

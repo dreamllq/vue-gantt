@@ -9,6 +9,7 @@ export class GanttWorkTime extends GanttBase {
   end: DateTimeString;
   id: WorkTimeId;
   group: GanttGroup;
+  seconds: number;
 
   constructor(data:GanttWorkTimeConstructor) {
     super(data);
@@ -16,6 +17,7 @@ export class GanttWorkTime extends GanttBase {
     this.start = data.start;
     this.end = data.end;
     this.group = data.group;
+    this.seconds = this.endMoment.diff(this.startMoment, 'second');
   }
 
   get startMoment() {
@@ -24,9 +26,5 @@ export class GanttWorkTime extends GanttBase {
 
   get endMoment() {
     return moment(this.end, 'YYYY-MM-DD HH:mm:ss');
-  }
-
-  get seconds () {
-    return this.endMoment.diff(this.startMoment, 'second');
   }
 }

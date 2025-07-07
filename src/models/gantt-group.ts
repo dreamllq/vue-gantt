@@ -11,6 +11,7 @@ export class GanttGroup extends GanttBase {
   _parent:GanttGroup | null;
   children: GanttGroup[] = [];
   bars: BizArray<GanttBar> = new BizArray<GanttBar>();
+  dayBarMap: Record<string, GanttBar[]> = {};
   attachedBars: BizArray<GanttAttachedBar> = new BizArray<GanttAttachedBar>();
   milestones: BizArray<GanttMilestone> = new BizArray<GanttMilestone>();
   workTimes: BizArray<GanttWorkTime> = new BizArray<GanttWorkTime>();

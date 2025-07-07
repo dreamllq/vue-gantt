@@ -10,24 +10,40 @@ import { GanttWorkViewTimeConstructor } from '@/types/gantt-work-time';
 
 export class GanttWorkTimeView extends GanttWorkTime {
   sx = 0;
+  sy = 0;
   width = 0;
+  height = 0;
   groups: GanttGroups;
   config: GanttConfig;
   isShow = true;
+  startTimeString: string;
 
   constructor(data:GanttWorkViewTimeConstructor) {
     super(data);
     this.groups = data.groups;
     this.config = data.config;
+    this.startTimeString = this.startMoment.format('YYYY-MM-DD HH:mm:ss');
   }
 
   calculate() {
-    if (!this.isShow) return;
     this.sx = this.startMoment.diff(this.config.startDate, 'second') * this.config.secondWidth;
     this.width = this.seconds * this.config.secondWidth;
+    if (!this.isShow) {
+      this.sy = 0;
+      this.height = 0;
+    } else {
+      this.height = this.groups.getById(this.group.id)!.height;
+      this.sy = this.groups.getGroupTopByIndex(this.groups.getGroupIndex(this.groups.getById(this.group.id)!));
+    }
   }
 
-  get startTimeString() {
-    return this.startMoment.format('YYYY-MM-DD HH:mm:ss');
+  updateY() {
+    if (!this.isShow) {
+      this.sy = 0;
+      this.height = 0;
+    } else {
+      this.height = this.groups.getById(this.group.id)!.height;
+      this.sy = this.groups.getGroupTopByIndex(this.groups.getGroupIndex(this.groups.getById(this.group.id)!));
+    }
   }
 }

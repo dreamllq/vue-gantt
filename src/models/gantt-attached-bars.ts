@@ -22,6 +22,10 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
     this.layoutConfig = data.layoutConfig;
     this.groups = data.groups;
     this.bus = data.bus;
+    
+    this.bus.on(GanttBusEvents.SHOW_CHANGE, () => {
+      this.updateShow();
+    });
 
     this.bus.on(GanttBusEvents.GROUP_BARS_HEIGHT_CHANGE, (data) => {
       if (!this.config.showAttachedBars) return; 

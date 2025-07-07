@@ -6,8 +6,8 @@
         :style='{
           width: `${item.width}px`,
           height: `${item.height}px`,
-          left: `${item.x}px`,
-          top: `${item.y}px`
+          left: `${item.sx}px`,
+          top: `${item.sy}px`
         }' 
       />
     </template>

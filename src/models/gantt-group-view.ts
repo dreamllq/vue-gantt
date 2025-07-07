@@ -13,7 +13,7 @@ export class GanttGroupView extends GanttGroup {
   private _isExpand = false;
   barOverlap = false;
   isShow = true;
-  private _height:number;
+  private _height = 0;
   bars: BizArray<GanttBarView> = new BizArray<GanttBarView>();
   attachedBars: BizArray<GanttAttachedBarView> = new BizArray<GanttAttachedBarView>();
   milestones: BizArray<GanttMilestoneView> = new BizArray<GanttMilestoneView>();
@@ -27,9 +27,6 @@ export class GanttGroupView extends GanttGroup {
     this._isExpand = data.isExpand || false;
     this.barOverlap = data.barOverlap || false;
     this.bus = data.bus;
-
-    this.barsHeight = this.layoutConfig.ROW_HEIGHT;
-    this._height = this.barsHeight + this.attachedBarsHeight;
 
     this.attachedBars.on(BizArray.Events.CHANGE, () => {
       this.calculateAttachedBarsHeight();
@@ -60,12 +57,14 @@ export class GanttGroupView extends GanttGroup {
 
   calculateBarsHeight() {
     let barRows = 1;
-    let height:number;
-    if (!this.barOverlap) {
-      barRows = max([...this.bars.map(item => item.rowIndex + 1), 1])!;
-      height = this.layoutConfig.ROW_HEIGHT * barRows;
-    } else {
-      height = this.layoutConfig.ROW_HEIGHT * barRows;
+    let height = 0;
+    if (this.isShow) {
+      if (!this.barOverlap) {
+        barRows = max([...this.bars.map(item => item.rowIndex + 1), 1])!;
+        height = this.layoutConfig.ROW_HEIGHT * barRows;
+      } else {
+        height = this.layoutConfig.ROW_HEIGHT * barRows;
+      }
     }
     if (height !== this.barsHeight) {
       this.barsHeight = height;
@@ -75,11 +74,13 @@ export class GanttGroupView extends GanttGroup {
 
   calculateAttachedBarsHeight() {
     let height = 0;
-    if (this.config.showAttachedBars) {
-      if (this.attachedBars.length > 0) {
-        height = this.layoutConfig.ATTACHED_ROW_HEIGHT;
-      }
-    } 
+    if (this.isShow) {
+      if (this.config.showAttachedBars) {
+        if (this.attachedBars.length > 0) {
+          height = this.layoutConfig.ATTACHED_ROW_HEIGHT;
+        }
+      } 
+    }
 
     if (height !== this.attachedBarsHeight) {
       this.attachedBarsHeight = height;
@@ -97,7 +98,12 @@ export class GanttGroupView extends GanttGroup {
   }
 
   calculate() {
-    if (!this.isShow) return;
+    // if (!this.isShow) {
+    //   this.barsHeight = 0;
+    //   this.attachedBarsHeight = 0;
+    //   this._height = 0;
+    //   return;
+    // }
     this.calculateBarsHeight();
     this.calculateAttachedBarsHeight();
     this.calculateHeight();
