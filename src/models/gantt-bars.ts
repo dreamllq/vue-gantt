@@ -9,6 +9,7 @@ import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { max, min } from 'lodash';
 import { GroupId } from '@/types/gantt-group';
+import { GanttJsonDataBar } from '@/types/gantt';
 
 export class GanttBars extends BizArray<GanttBarView> {
   config: GanttConfig;
@@ -228,5 +229,9 @@ export class GanttBars extends BizArray<GanttBarView> {
     
   splice(start: number, deleteCount: number, ...items: GanttBarView[]): GanttBarView[] {
     throw new Error('Method not implemented.');
+  }
+
+  toJSON():GanttJsonDataBar[] {
+    return this.map(item => item.toJSON());
   }
 }

@@ -1,5 +1,5 @@
 import { Gantt } from '@/models/gantt';
-import { GanttJsonData } from '@/types/gantt';
+import { GanttHook, GanttJsonData } from '@/types/gantt';
 import { createInjectionState } from '@vueuse/core';
 import { nextTick, ref } from 'vue';
 import { useContainer } from './hooks/container';
@@ -14,12 +14,12 @@ import { GanttConfig } from '@/models/gantt-config';
 import { GanttLayoutConfig } from '@/models/gantt-layout-config';
 import { useZIndex } from './hooks/z-index';
 
-const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData) => {
+const [useProvideStore, useStore] = createInjectionState((data:GanttJsonData, options: {hook?:GanttHook} = {}) => {
   const ganttId = uuidv4();
   const barHtmlClass = '__gantt-bar-cell__';
   const entityReady = ref(false);
 
-  const ganttEntity = Gantt.fromJson(data);
+  const ganttEntity = Gantt.fromJson(data, { hook: options.hook });
   console.log(ganttEntity);
   
   entityReady.value = true;

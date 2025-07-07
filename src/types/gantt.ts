@@ -104,5 +104,4 @@ export type GanttJsonData = {
   attachedBars?: GanttJsonDataAttachedBar[],
   links?: GanttJsonDataLink[],
   milestones?: GanttJsonDataMilestone[],
-  hook?: GanttHook,
 }

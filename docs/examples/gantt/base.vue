@@ -58,11 +58,15 @@
   <el-button @click='getSelectedBarIds'>
     getSelectedBarIds
   </el-button>
+  <el-button @click='getJSON'>
+    getJSON
+  </el-button>
   
   <div style='height: 400px;'>
     <gantt-view
       ref='ganttRef' 
       :data='ganttData'
+      :hook='hook'
       @bar-drag-change='onBarDragChange'
     >
       <template #aside-header>
@@ -88,6 +92,11 @@ import { ref } from 'vue';
 
 const ganttData = ref<GanttJsonData>(data);
 const ganttRef = ref<GanttViewInstance>();
+
+const hook = {
+  beforeDragStart: (data) => true,
+  beforeDragEnd: (data) => true
+};
 
 let draggable = ganttData.value.config.draggable;
 const changeDraggable = () => {
@@ -196,6 +205,10 @@ const getSelectedBarIds = () => {
 
 const onBarDragChange = (ids) => {
   console.log('onBarDragChange', ids);
+};
+
+const getJSON = () => {
+  console.log(ganttRef.value?.api().getJSON());
 };
 
 </script>

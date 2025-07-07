@@ -3,6 +3,7 @@ import { GanttMilestone } from './gantt-milestone';
 import { GanttGroups } from './gantt-groups';
 import { GroupId } from '@/types/gantt-group';
 import { min } from 'lodash';
+import { GanttJsonDataMilestone } from '@/types/gantt';
 
 export class GanttMilestoneView extends GanttMilestone {
   x = 0;
@@ -22,7 +23,7 @@ export class GanttMilestoneView extends GanttMilestone {
     this.y = top + (this.groups.getById(this.group.id)!.height / 2);
   }
 
-  toJSON() {
+  toUiJSON() {
     return {
       id: this.id,
       text: this.text,
@@ -31,6 +32,15 @@ export class GanttMilestoneView extends GanttMilestone {
       isShow: this.isShow,
       groupId: this.group.id,
       datetime: this.datetime
+    };
+  }
+
+  toJSON():GanttJsonDataMilestone {
+    return {
+      id: this.id,
+      datetime: this.datetime,
+      groupId: this.group.id,
+      text: this.text
     };
   }
 }

@@ -124,6 +124,8 @@ export const useWrapperHook = () => {
     }
   };
 
+  const getJSON = () => ganttEntity.toJSON();
+
   return {
     api: () => ({
       setDraggable,
@@ -144,6 +146,7 @@ export const useWrapperHook = () => {
       scrollToDatetime,
       getSelectedBarIds,
       getBarById,
+      getJSON,
       history: {
         next: () => ganttEntity.history.next(),
         back: () => ganttEntity.history.back()

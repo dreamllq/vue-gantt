@@ -7,6 +7,7 @@ import { GanttConfig } from './gantt-config';
 import { GroupId } from '@/types/gantt-group';
 import { GanttWorkTime } from './gantt-work-time';
 import { GanttWorkViewTimeConstructor } from '@/types/gantt-work-time';
+import { GanttJsonDataWorkTime } from '@/types/gantt';
 
 export class GanttWorkTimeView extends GanttWorkTime {
   sx = 0;
@@ -45,5 +46,14 @@ export class GanttWorkTimeView extends GanttWorkTime {
       this.height = this.groups.getById(this.group.id)!.height;
       this.sy = this.groups.getGroupTopByIndex(this.groups.getGroupIndex(this.groups.getById(this.group.id)!));
     }
+  }
+
+  toJSON():GanttJsonDataWorkTime {
+    return {
+      id: this.id,
+      start: this.start,
+      end: this.end,
+      groupId: this.group.id
+    };
   }
 }

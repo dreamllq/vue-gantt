@@ -9,6 +9,7 @@ import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GanttConfig } from './gantt-config';
 import { uniqBy } from 'lodash';
+import { GanttJsonDataLink } from '@/types/gantt';
 
 export class GanttLinks extends BizArray<GanttLinkView> {
   linkGroupMap: Record<string, GanttLinkView[]> = {};
@@ -181,4 +182,8 @@ export class GanttLinks extends BizArray<GanttLinkView> {
       });
     });
   };
+
+  toJSON(): GanttJsonDataLink[] {
+    return this.map(item => item.toJSON());
+  }
 }

@@ -218,7 +218,7 @@ export class Gantt extends EventEmitter {
     });
   }
 
-  static fromJson(data: GanttJsonData) {
+  static fromJson(data: GanttJsonData, options:{hook?:GanttHook} = {}) {
     console.time('gantt fromJson');
     console.time('gantt fromJson class init');
     const layoutConfig = new GanttLayoutConfig(data.layoutConfig || {});
@@ -233,7 +233,7 @@ export class Gantt extends EventEmitter {
     const gantt = new Gantt({
       config,
       layoutConfig,
-      hook: data.hook
+      hook: options.hook
     });
 
     gantt.batchAddGroup(data.groups);
@@ -275,5 +275,18 @@ export class Gantt extends EventEmitter {
     this.milestones.updateShow();
     this.milestones.calculate();
     console.timeEnd('gantt fromJson data calculate');
+  }
+
+  toJSON():GanttJsonData {
+    return {
+      config: this.config.toJSON(),
+      layoutConfig: this.layoutConfig.toJSON(),
+      groups: this.groups.toJSON(),
+      workTimes: this.workTimes.toJSON(),
+      bars: this.bars.toJSON(),
+      attachedBars: this.attachedBars.toJSON(),
+      links: this.links.toJSON(),
+      milestones: this.milestones.toJSON()
+    };
   }
 }

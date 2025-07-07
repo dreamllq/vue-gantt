@@ -49,9 +49,9 @@ export type Arrow = {direction: ArrowDirection, point: LinkPathPoint}
 export type LinkData = {path: LinkPath, arrow: Arrow}
 
 export enum LinkShowStrategy {
-  NONE,
-  ALL,
-  SELECTED,
-  SELECTED_ALL,
-  CUSTOMIZE
+  NONE='NONE',
+  ALL='ALL',
+  SELECTED='SELECTED',
+  SELECTED_ALL='SELECTED_ALL',
+  CUSTOMIZE='CUSTOMIZE'
 }

@@ -77,7 +77,7 @@ import { Unit } from '@/types/unit';
 import { BarId, GanttBarAddParams, GanttBarUpdateParams } from '@/types/gantt-bar';
 import { GroupId } from '@/types/gantt-group';
 import { DateTimeString } from '@/types/date';
-import { onBeforeUnmount, onMounted } from 'vue';
+import { onBeforeUnmount, onMounted, PropType } from 'vue';
 import { Events } from '@/types/events';
 import { useWrapperHook } from './wrapper-hook';
 

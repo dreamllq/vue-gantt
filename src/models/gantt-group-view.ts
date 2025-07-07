@@ -8,6 +8,7 @@ import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GanttMilestoneView } from './gantt-milestone-view';
 import { GanttWorkTimeView } from './gantt-work-time-view';
+import { GanttJsonDataGroup } from '@/types/gantt';
 
 export class GanttGroupView extends GanttGroup {
   private _isExpand = false;
@@ -98,14 +99,17 @@ export class GanttGroupView extends GanttGroup {
   }
 
   calculate() {
-    // if (!this.isShow) {
-    //   this.barsHeight = 0;
-    //   this.attachedBarsHeight = 0;
-    //   this._height = 0;
-    //   return;
-    // }
     this.calculateBarsHeight();
     this.calculateAttachedBarsHeight();
     this.calculateHeight();
+  }
+
+  toJSON():GanttJsonDataGroup {
+    return {
+      id: this.id,
+      barOverlap: this.barOverlap,
+      isExpand: this.isExpand,
+      parentId: this.parent?.id
+    };
   }
 }

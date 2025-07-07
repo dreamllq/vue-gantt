@@ -133,4 +133,8 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
   splice(start: number, deleteCount: number, ...items: GanttAttachedBarView[]): GanttAttachedBarView[] {
     throw new Error('Method not implemented.');
   }
+
+  toJSON() {
+    return this.map(item => item.toJSON());
+  }
 }

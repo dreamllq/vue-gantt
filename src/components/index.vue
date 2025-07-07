@@ -2,6 +2,7 @@
   <root :data='data'>
     <wrapper 
       ref='wrapperRef' 
+      :hook='hook'
       @bar-drag-change='(...args)=>emits("bar-drag-change",...args)'
     >
       <template #aside-header>
@@ -24,12 +25,16 @@
 import { PropType, ref } from 'vue';
 import Root from './root.vue';
 import Wrapper from './wrapper.vue';
-import { GanttJsonData } from '@/types/gantt';
+import { GanttHook, GanttJsonData } from '@/types/gantt';
 
 const props = defineProps({
   data: {
     type: Object as PropType<GanttJsonData>,
     required: true
+  },
+  hook: {
+    type: Object as PropType<GanttHook>,
+    default: undefined
   }
 });
 

@@ -6,6 +6,7 @@ import { calculateFinishToStartLink } from '@/utils/link/finish-to-start-link';
 import { calculateStartToFinishLink } from '@/utils/link/start-to-finish-link';
 import { calculateStartToStartLink } from '@/utils/link/start-to-start-link';
 import { cloneDeep, max, min } from 'lodash';
+import { GanttJsonDataLink } from '@/types/gantt';
 
 const calculateFunction = {
   [GanttLinkType.FINISH_TO_FINISH]: calculateFinishToFinishLink,
@@ -96,7 +97,7 @@ export class GanttLinkView extends GanttLink {
     this.ey = max(this.path.map(point => point.y)) || 0;
   }
 
-  toJSON() {
+  toUiJSON() {
     return {
       id: this.id,
       arrow: cloneDeep(this.arrow),
@@ -110,6 +111,15 @@ export class GanttLinkView extends GanttLink {
       zIndex: this.zIndex,
       selected: this.bars.getById(this.source.id)!.selected || this.bars.getById(this.target.id)!.selected,
       color: this.bars.getById(this.source.id)?.color
+    };
+  }
+
+  toJSON():GanttJsonDataLink {
+    return {
+      id: this.id,
+      sourceId: this.source.id,
+      targetId: this.target.id,
+      linkType: this.linkType
     };
   }
 }

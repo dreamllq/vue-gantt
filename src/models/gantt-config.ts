@@ -6,6 +6,7 @@ import moment from 'moment';
 import { LinkShowStrategy } from '@/types/gantt-link';
 import EventEmitter from '@/utils/eventemitter';
 import { menusItemType } from '@/types/contextmenu-menus';
+import { GanttJsonDataConfig } from '@/types/gantt';
 
 export class GanttConfig extends EventEmitter {
   static Events = {
@@ -146,5 +147,27 @@ export class GanttConfig extends EventEmitter {
 
   get dataUnitCount() {
     return this.endDate.diff(this.startDate, this.dataScaleUnit);
+  }
+
+  toJSON():GanttJsonDataConfig {
+    return {
+      startDate: this._startDate,
+      endDate: this._endDate,
+      contextMenuEnable: this.contextMenuEnable,
+      contextMenuMenus: this.contextMenuMenus,
+      dataScaleUnit: Object.keys(Unit).find(key => Unit[key] === this._dataScaleUnit) as keyof typeof Unit,
+      daySplitTime: Object.keys(Unit).find(key => Unit[key] === this._dataScaleUnit) as keyof typeof Unit,
+      draggable: this.draggable,
+      dragTimeOffset: this.dragTimeOffset,
+      durationUnit: Object.keys(Unit).find(key => Unit[key] === this.durationUnit) as keyof typeof Unit,
+      lazyDebounceTime: this.lazyDebounceTime,
+      linkShowStrategy: Object.keys(LinkShowStrategy).find(key => LinkShowStrategy[key] === this.linkShowStrategy) as keyof typeof LinkShowStrategy,
+      multipleDraggable: this.multipleDraggable,
+      multipleSelectable: this.multipleSelectable,
+      schedulingMode: Object.keys(SchedulingMode).find(key => SchedulingMode[key] === this.schedulingMode) as keyof typeof SchedulingMode,
+      selectable: this.selectable,
+      showAttachedBars: this.showAttachedBars,
+      showCurrentTimeLine: this.showAttachedBars
+    };
   }
 }

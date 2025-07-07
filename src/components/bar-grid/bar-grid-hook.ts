@@ -5,7 +5,7 @@ import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { BarId } from '@/types/gantt-bar';
 import { Events } from '@/types/events';
 export const useBarGridHook = () => {
-  const lazyBarGrid = shallowRef<ReturnType<typeof GanttBarView.prototype.toJSON>[]>([]);
+  const lazyBarGrid = shallowRef<ReturnType<typeof GanttBarView.prototype.toUiJSON>[]>([]);
 
   const { ganttEntity, lazy, bus } = useStore()!;
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
@@ -23,7 +23,7 @@ export const useBarGridHook = () => {
         y1: item.sy,
         x2: item.ex,
         y2: item.ey 
-      })).map(item => item.toJSON());
+      })).map(item => item.toUiJSON());
     
     bus.emit(Events.BAR_LAZY_CHANGE, lazyBarGrid.value.map(item => item.id));
   };

@@ -6,14 +6,14 @@ import { Events } from '@/types/events';
 import { GroupId } from '@/types/gantt-group';
 
 export const useMilestoneHook = () => {
-  const lazyMilestoneGrid:ShallowRef<ReturnType<typeof GanttMilestoneView.prototype.toJSON>[]> = shallowRef([]);
+  const lazyMilestoneGrid:ShallowRef<ReturnType<typeof GanttMilestoneView.prototype.toUiJSON>[]> = shallowRef([]);
 
   const { ganttEntity, bus } = useStore()!;
 
   const showCalculate = () => {
     lazyMilestoneGrid.value = ganttEntity.milestones
       .filter(item => item.isShow)
-      .map(item => item.toJSON());
+      .map(item => item.toUiJSON());
   };
 
   const onGroupExpandChange = (data: { oldGroupIds: GroupId[]; newGroupIds: GroupId[]; addGroupIds: GroupId[]; deleteGroupIds: GroupId[] }) => {

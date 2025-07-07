@@ -16,7 +16,7 @@ export class GanttBar extends GanttBase {
   end: DateTimeString | null = null;
   duration: number | null = null;
   private _group: GanttGroup;
-  private _schedulingMode:SchedulingMode | null = null;
+  protected _schedulingMode?:SchedulingMode;
   private _hasCalculated = false;
   groups: GanttGroups;
   dayList: string[] = [];
@@ -25,7 +25,7 @@ export class GanttBar extends GanttBase {
     super(data);
     this.id = data.id;
     this._group = data.group;
-    this._schedulingMode = data.schedulingMode || null;
+    this._schedulingMode = data.schedulingMode || undefined;
     this.duration = data.duration;
     this.start = data.start;
     this.end = data.end;
@@ -56,7 +56,7 @@ export class GanttBar extends GanttBase {
     else return this.config.schedulingMode;
   }
 
-  set schedulingMode(val:SchedulingMode | null) {
+  set schedulingMode(val:SchedulingMode | undefined) {
     this._schedulingMode = val;
   }
 
@@ -159,6 +159,5 @@ export class GanttBar extends GanttBase {
 
       this.group.dayBarMap[day].push(this);
     });
-
   }
 }

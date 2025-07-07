@@ -6,7 +6,7 @@ import { Events } from '@/types/events';
 import { GanttAttachedBarView } from '@/models/gantt-attached-bar-view';
 
 export const useAttachedBarHook = () => {
-  const lazyAttachedBarGrid = shallowRef<ReturnType<typeof GanttAttachedBarView.prototype.toJSON>[]>([]);
+  const lazyAttachedBarGrid = shallowRef<ReturnType<typeof GanttAttachedBarView.prototype.toUiJSON>[]>([]);
 
   const { ganttEntity, lazy, bus } = useStore()!;
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
@@ -24,7 +24,7 @@ export const useAttachedBarHook = () => {
         y1: item.sy,
         x2: item.ex,
         y2: item.ey 
-      })).map(item => item.toJSON());
+      })).map(item => item.toUiJSON());
   };
 
   if (lazyReady.value) {

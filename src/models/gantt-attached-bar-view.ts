@@ -4,6 +4,7 @@ import { GanttBus } from './gantt-bus';
 import { GanttAttachedBars } from './gantt-attached-bars';
 import { GanttGroups } from './gantt-groups';
 import moment from 'moment';
+import { GanttJsonDataAttachedBar } from '@/types/gantt';
 
 export class GanttAttachedBarView extends GanttAttachedBar {
   sx = 0;
@@ -77,7 +78,7 @@ export class GanttAttachedBarView extends GanttAttachedBar {
     this.ey = ey;
   }
 
-  toJSON() {
+  toUiJSON() {
     return {
       id: this.id,
       sx: this.sx,
@@ -89,6 +90,15 @@ export class GanttAttachedBarView extends GanttAttachedBar {
       st: this.st,
       et: this.et,
       rowIndex: this.rowIndex
+    };
+  }
+
+  toJSON(): GanttJsonDataAttachedBar {
+    return {
+      id: this.id,
+      start: this.start,
+      end: this.end,
+      groupId: this.group.id
     };
   }
 }

@@ -7,6 +7,7 @@ import { GanttBus } from './gantt-bus';
 import { GanttGroupsClassConstructor } from '@/types/gantt-groups';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { difference } from 'lodash';
+import { GanttJsonDataGroup } from '@/types/gantt';
 
 export class GanttGroups extends BizArray<GanttGroupView> {
   expandedGroups: GanttGroupView[] = [];
@@ -125,4 +126,8 @@ export class GanttGroups extends BizArray<GanttGroupView> {
   //     item.workTimes.calculate();
   //   });
   // }
+
+  toJSON():GanttJsonDataGroup[] {
+    return this.map(item => item.toJSON());
+  }
 }

@@ -1,3 +1,4 @@
+import { GanttJsonDataLayoutConfig } from '@/types/gantt';
 import { GanttLayoutConfigClassConstructor } from '@/types/gantt-layout-config';
 import EventEmitter from '@/utils/eventemitter';
 
@@ -138,5 +139,26 @@ export class GanttLayoutConfig extends EventEmitter {
 
   set ATTACHED_ROW_HEIGHT(val) {
     this._ATTACHED_ROW_HEIGHT = val;
+  }
+
+  toJSON():GanttJsonDataLayoutConfig {
+    return {
+      ATTACHED_BAR_HEIGHT: this._ATTACHED_BAR_HEIGHT,
+      ATTACHED_ROW_HEIGHT: this._ATTACHED_ROW_HEIGHT,
+      AUTO_SCROLL_AREA_SIZE: this.AUTO_SCROLL_AREA_SIZE,
+      AUTO_SCROLL_INTERVAL_MS: this.AUTO_SCROLL_INTERVAL_MS,
+      AUTO_SCROLL_SHIFT_AMOUNT_X: this.AUTO_SCROLL_SHIFT_AMOUNT_X,
+      AUTO_SCROLL_SHIFT_AMOUNT_Y: this.AUTO_SCROLL_SHIFT_AMOUNT_Y,
+      BAR_HEIGHT: this._BAR_HEIGHT,
+      GRID_CELL_WIDTH: this._GRID_CELL_WIDTH,
+      GRID_HEAD_CELL_WIDTH: this._GRID_HEAD_CELL_WIDTH,
+      HEADER_HEIGHT: this._HEADER_HEIGHT,
+      MILESTONE_WIDTH: this._MILESTONE_WIDTH,
+      ROW_HEIGHT: this._ROW_HEIGHT,
+      SCROLL_HEIGHT: this.SCROLL_HEIGHT,
+      SCROLL_WIDTH: this.SCROLL_WIDTH,
+      sizeRatioPercent: this.sizeRatioPercent,
+      TIME_UNIT_WIDTH: this._TIME_UNIT_WIDTH
+    };
   }
 }

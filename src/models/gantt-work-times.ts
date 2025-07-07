@@ -6,6 +6,7 @@ import { GanttGroups } from './gantt-groups';
 import { GanttWorkTimesClassConstructor } from '@/types/gantt-work-times';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GanttBus } from './gantt-bus';
+import { GanttJsonDataWorkTime } from '@/types/gantt';
 
 export class GanttWorkTimes extends BizArray<GanttWorkTimeView> {
   config: GanttConfig;
@@ -64,5 +65,9 @@ export class GanttWorkTimes extends BizArray<GanttWorkTimeView> {
     this.forEach(workTime => {
       workTime.isShow = this.groups.getById(workTime.group.id)!.isShow;
     });
+  }
+
+  toJSON():GanttJsonDataWorkTime[] {
+    return this.map(item => item.toJSON());
   }
 }

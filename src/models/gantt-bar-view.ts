@@ -10,6 +10,8 @@ import { GanttGroup } from './gantt-group';
 import { isBoolean, isUndefined, uniq, uniqBy } from 'lodash';
 import { GanttBarUpdateOperationData } from '@/types/gantt-operation-history';
 import { GanttBarUpdateOperation } from './gantt-operation';
+import { GanttJsonDataBar } from '@/types/gantt';
+import { SchedulingMode } from '@/types/gantt-config';
 
 export class GanttBarView extends GanttBar {
   static Events = { SELECTED_CHANGE: 'SELECTED_CHANGE' };
@@ -314,7 +316,7 @@ export class GanttBarView extends GanttBar {
     });
   }
 
-  toJSON() {
+  toUiJSON() {
     return {
       id: this.id,
       sx: this.sx,
@@ -329,6 +331,21 @@ export class GanttBarView extends GanttBar {
       selected: this.selected,
       rowIndex: this.rowIndex,
       zIndex: this.zIndex
+    };
+  }
+
+  toJSON():GanttJsonDataBar {
+    return {
+      id: this.id,
+      start: this.start,
+      end: this.end,
+      duration: this.duration,
+      groupId: this.group.id,
+      schedulingMode: this._schedulingMode ? (Object.keys(SchedulingMode).find(key => SchedulingMode[key] === this._schedulingMode) as keyof typeof SchedulingMode) : undefined,
+      color: this.color,
+      contextMenuEnable: this._contextMenuEnable,
+      draggable: this._draggable,
+      selectable: this._selectable
     };
   }
 }

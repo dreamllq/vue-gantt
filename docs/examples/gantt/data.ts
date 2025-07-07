@@ -209,9 +209,5 @@ export const data:GanttJsonData = {
       groupId: 911,
       text: '111'
     }
-  ],
-  hook: {
-    beforeDragStart: (data) => true,
-    beforeDragEnd: (data) => true
-  }
+  ]
 };

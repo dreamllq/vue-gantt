@@ -6,6 +6,7 @@ import { GanttGroups } from './gantt-groups';
 import { GanttMilestonesClassConstructor } from '@/types/gantt-milestones';
 import { GroupId } from '@/types/gantt-group';
 import { min } from 'lodash';
+import { GanttJsonDataMilestone } from '@/types/gantt';
 
 export class GanttMilestones extends BizArray<GanttMilestoneView> {
   groups:GanttGroups;
@@ -87,5 +88,9 @@ export class GanttMilestones extends BizArray<GanttMilestoneView> {
       
   splice(start: number, deleteCount: number, ...items: GanttMilestoneView[]): GanttMilestoneView[] {
     throw new Error('Method not implemented.');
+  }
+
+  toJSON():GanttJsonDataMilestone[] {
+    return this.map(item => item.toJSON());
   }
 }
