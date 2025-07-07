@@ -7,6 +7,8 @@ import { SchedulingMode } from '@/types/gantt-config';
 import { cloneDeep } from 'lodash';
 import moment from 'moment';
 import { GanttGroups } from './gantt-groups';
+import { getDatesBetween } from '@/utils/get-dates-between';
+import { BizArray } from './biz-array';
 
 export class GanttBar extends GanttBase {
   id: BarId;
@@ -134,8 +136,18 @@ export class GanttBar extends GanttBase {
   }
 
   calculateDayList():void {
-    // this.dayList = [];
-    // throw Error('not impl');
-     
+    if (this.isClone) return;
+    this.dayList.forEach(day => {
+      this.group.dayBarMap[day].removeById(this.id);
+    });
+    this.dayList = getDatesBetween(this.start!, this.end!); 
+    this.dayList.forEach(day => {
+      if (!this.group.dayBarMap[day]) {
+        this.group.dayBarMap[day] = new BizArray<GanttBar>();
+      }
+
+      this.group.dayBarMap[day].push(this);
+    });
+
   }
 }

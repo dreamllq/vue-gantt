@@ -41,6 +41,8 @@ export const useShowSelectedAllHook = () => {
         const links = ganttEntity.links.linkGroupMap[item!];
         return [...acc, ...links];
       }, []), item => item.id);
+     
+    selectedBarsLinks.value.forEach(link => link.calculate());
   };
   const onBarDraggingChange = (ids:BarId[], dragging: boolean) => {
     if (dragging) {
@@ -62,6 +64,8 @@ export const useShowSelectedAllHook = () => {
   };
 
   const calculateSelectedZIndex = () => {
+    console.log('calculateSelectedZIndex');
+    
     const zIndex = upZIndex(); 
     selectedBarsLinks.value.forEach(link => {
       link.zIndex = zIndex;
@@ -74,8 +78,6 @@ export const useShowSelectedAllHook = () => {
     allBar.forEach(bar => {
       bar.zIndex = zIndex;
     });
-  
-    // bus.emit(Events.BAR_CHANGE, allBar.map(bar => bar.id));
   };
   
   const onLinksChange = () => {
@@ -86,23 +88,14 @@ export const useShowSelectedAllHook = () => {
   const onBarChange = (barIds:BarId[]) => {
     ganttEntity.links.updateShow();
     calculateSelectedBarsLinks();
-    selectedBarsLinks.value.forEach(link => {
-      if (barIds.includes(link.source.id) || barIds.includes(link.target.id)) {
-        link.calculate();
-      }
-    });
-    // calculateSelectedZIndex();
     lazyCalculate();
   };
 
-  const onBarSelectedChange = (barIds:BarId[]) => {
+  const onBarSelectedChange = (data:{barId:BarId, selected:boolean}[]) => {
     calculateSelectedBarsLinks();
-    selectedBarsLinks.value.forEach(link => {
-      if (barIds.includes(link.source.id) || barIds.includes(link.target.id)) {
-        link.calculate();
-      }
-    });
-    calculateSelectedZIndex();
+    if (data.some(item => item.selected === true)) {
+      calculateSelectedZIndex();
+    }
     lazyCalculate();
   };
   

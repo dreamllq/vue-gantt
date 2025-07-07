@@ -30,7 +30,7 @@ const makeWorkTimes = (start:Moment, end:Moment): GanttJsonDataGroupWorkTime[] =
 
 export const getData = ():GanttJsonData => {
   const groupCount = 10;
-  const orderCount = 5000;
+  const orderCount = 10000;
   const startDate = moment();
   const endDate = moment().add(3, 'year');
   const workTimesTemp = makeWorkTimes(startDate, endDate);

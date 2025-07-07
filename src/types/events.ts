@@ -101,7 +101,7 @@ export interface EventsInterface {
   [Events.BAR_CLICK_OUTSIDE]: (e:MouseEvent)=>void;
   [Events.BAR_CHANGE]:(ids: BarId[])=>void;
   [Events.BAR_CHANGE_FRAGMENTATION]: (ids: BarId[])=>void;
-  [Events.BAR_SELECTED_CHANGE]: (ids: BarId[])=>void;
+  [Events.BAR_SELECTED_CHANGE]: (data:{ barId: BarId, selected: boolean }[])=>void;
   [Events.BAR_DRAGGING]: (ids: BarId[])=>void;
   [Events.BAR_DRAGGING_CHANGE]: (ids: BarId[], dragging: boolean)=>void;
   [Events.BAR_CONTEXTMENU]: (data: {barId: BarId}, e: MouseEvent)=>void;

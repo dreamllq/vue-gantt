@@ -14,6 +14,8 @@ export const useZIndex = (ganttEntity:Gantt, store:{
 
   const upZIndex = () => ++zIndex.value;
 
+  
+
   return {
     upZIndex,
     zIndex

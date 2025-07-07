@@ -42,7 +42,7 @@ export interface GanttBusEventsInterface {
   [GanttBusEvents.BAR_CONTEXT_MENU_ENABLE_CHANGE]:(barIds:BarId[])=>void,
   [GanttBusEvents.BAR_REMOVE]: (barIds: BarId[]) => void,
   [GanttBusEvents.BAR_CHANGE]: (barIds: BarId[]) => void,
-  [GanttBusEvents.BAR_SELECTED_CHANGE]: (barIds: BarId[]) => void,
+  [GanttBusEvents.BAR_SELECTED_CHANGE]: (data:{barId:BarId, selected: boolean}) => void,
   [GanttBusEvents.WORK_TIME_CHANGE]: (workTimeIds: WorkTimeId[])=>void,
   [GanttBusEvents.GROUP_EXPAND_CHANGE]: (data:{groupId: GroupId, newValue: boolean, oldValue: boolean})=>void,
   [GanttBusEvents.GROUP_CHANGE]: (groupIds: GroupId[])=>void,

@@ -4,7 +4,6 @@ import { useStore } from '../store';
 import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { BarId } from '@/types/gantt-bar';
 import { Events } from '@/types/events';
-import { GroupId } from '@/types/gantt-group';
 export const useBarGridHook = () => {
   const lazyBarGrid = shallowRef<ReturnType<typeof GanttBarView.prototype.toJSON>[]>([]);
 

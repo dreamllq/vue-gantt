@@ -7,7 +7,7 @@ import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GanttGroup } from './gantt-group';
-import { isBoolean, isUndefined } from 'lodash';
+import { isBoolean, isUndefined, uniq, uniqBy } from 'lodash';
 import { GanttBarUpdateOperationData } from '@/types/gantt-operation-history';
 import { GanttBarUpdateOperation } from './gantt-operation';
 
@@ -81,7 +81,10 @@ export class GanttBarView extends GanttBar {
     }
 
     this.bus.emit(GanttBusEvents.BAR_CHANGE, [this.id]);
-    this.bus.emit(GanttBusEvents.BAR_SELECTED_CHANGE, [this.id]);
+    this.bus.emit(GanttBusEvents.BAR_SELECTED_CHANGE, {
+      barId: this.id,
+      selected: this.selected 
+    });
   }
 
   get contextMenuEnable():boolean {
@@ -255,8 +258,8 @@ export class GanttBarView extends GanttBar {
     const group = this.groups.getById(this.group.id)!;
 
     if (!group.barOverlap) {
-      const groupBars = this.groups.getById(this.group.id)!.bars;
-      const overlapBars = groupBars.filter(bar => this.isOverlapBar(bar));
+      const bars = uniqBy(this.dayList.reduce<GanttBar[]>((acc, day) => [...acc, ...this.group.dayBarMap[day]], []), bar => bar.id).map(bar => this.bars.getById(bar.id)!);
+      const overlapBars = bars.filter(bar => this.isOverlapBar(bar));
       
       overlapBars.forEach(bar => {
         bar.overlapBarIds.push(this.id);

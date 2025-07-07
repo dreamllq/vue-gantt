@@ -245,7 +245,7 @@ export class Gantt extends EventEmitter {
     console.timeEnd('gantt fromJson class init');
 
     gantt.calculate();
-
+    console.timeEnd('gantt fromJson');
     return gantt;
   }
 
@@ -275,6 +275,5 @@ export class Gantt extends EventEmitter {
     this.milestones.updateShow();
     this.milestones.calculate();
     console.timeEnd('gantt fromJson data calculate');
-    console.timeEnd('gantt fromJson');
   }
 }
