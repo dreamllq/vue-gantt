@@ -4,11 +4,14 @@ import { onBeforeUnmount, onMounted, ref, shallowRef } from 'vue';
 import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { cloneDeep } from 'lodash';
 import { Events } from '@/types/events';
+import { strToDate } from '@/utils/to-date';
+import { Unit } from '@/types/unit';
+import { dateTimeFormat } from '@/utils/date-time-format';
+import { dateDiff } from '@/utils/date-diff';
 
 type GridItem = {
   index: number,
   seconds: number;
-  date: moment.Moment;
   x: number,
   y: number,
   width: number,
@@ -25,18 +28,18 @@ export const useDateGridHook = () => {
 
   const calculate = () => {
     grid.value = [];
-    const dl = computeDayList(ganttEntity.config.startDate, ganttEntity.config.dataUnitCount, ganttEntity.config.dataScaleUnit);
+    const dl = computeDayList(strToDate(ganttEntity.config.start), ganttEntity.config.dataUnitCount, ganttEntity.config.dataScaleUnit);
+     
     ganttEntity.groups.expandedGroups.forEach((item, index) => {
       dl.forEach(dItem => {
         grid.value.push({
           index,
           seconds: dItem.seconds,
-          date: dItem.date,
-          x: dItem.date.diff(ganttEntity.config.startDate, 'second') * ganttEntity.config.secondWidth,
+          x: dateDiff(dItem.date, strToDate(ganttEntity.config.start), Unit.SECOND) * ganttEntity.config.secondWidth,
           y: ganttEntity.groups.getGroupTopByIndex(index),
           width: dItem.seconds * ganttEntity.config.secondWidth,
           height: item.height,
-          timeString: dItem.date.format('YYYY-MM-DD HH:mm:ss')
+          timeString: dateTimeFormat(dItem.date)
         });
       });
     });

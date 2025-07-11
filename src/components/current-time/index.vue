@@ -4,12 +4,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import moment from 'moment';
 import { useStore } from '../store';
+import { dateDiff } from '@/utils/date-diff';
+import { strToDate } from '@/utils/to-date';
+import { Unit } from '@/types/unit';
 
 const { ganttEntity } = useStore()!;
 
-const style = ref({ left: `${moment().diff(ganttEntity.config.startDate, 'second') * ganttEntity.config.secondWidth}px` });
+const style = ref({ left: `${dateDiff(new Date(), strToDate(ganttEntity.config.start), Unit.SECOND) * ganttEntity.config.secondWidth}px` });
 
 </script>
 

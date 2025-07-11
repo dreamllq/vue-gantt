@@ -3,6 +3,7 @@
     <gantt-view
       ref='ganttRef' 
       :data='ganttData'
+      @ready='onReady'
     >
       <template #aside-header>
         aaa
@@ -30,6 +31,10 @@ console.log(data);
 
 const ganttData = ref<GanttJsonData>(data);
 const ganttRef = ref<GanttViewInstance>();
+
+const onReady = () => {
+  console.log('ready');
+};
 
 </script>
 

@@ -15,9 +15,7 @@ export const useContainer = (ganttEntity: Gantt, store:{
   const setSize = (data: {width: number, height: number}) => {
     ganttEntity.container.width = data.width;
     ganttEntity.container.height = data.height;
-
-    containerReady.value = true;
-    
+    // containerReady.value = true;
     store.bus.emit(Events.CONTAINER_SIZE_CHANGE, {
       width: data.width,
       height: data.height 

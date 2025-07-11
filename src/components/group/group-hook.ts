@@ -10,19 +10,20 @@ export const useGroupHook = () => {
 
   const lazyGroup: Ref<{
     index: number,
-    group: GanttGroupView
+    group: ReturnType<typeof GanttGroupView.prototype.toUiJSON>
   }[]> = ref([]);
   const lazyCalculate = () => {
     lazyGroup.value = [];
     
-    ganttEntity.groups.expandedGroups.forEach((group, index) => {
+    ganttEntity.groups.expandedGroups.filter((group, index) => {
       if (index >= visibleAreaStartGroupIndex.value && index <= visibleAreaEndGroupIndex.value) {
         lazyGroup.value.push({
           index,
-          group
+          group: group.toUiJSON()
         });
       }
     });
+
   };
 
   if (lazyReady.value) {

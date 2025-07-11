@@ -3,8 +3,8 @@ import { GanttAttachedBar } from './gantt-attached-bar';
 import { GanttBus } from './gantt-bus';
 import { GanttAttachedBars } from './gantt-attached-bars';
 import { GanttGroups } from './gantt-groups';
-import moment from 'moment';
 import { GanttJsonDataAttachedBar } from '@/types/gantt';
+import { strToDate } from '@/utils/to-date';
 
 export class GanttAttachedBarView extends GanttAttachedBar {
   sx = 0;
@@ -30,20 +30,13 @@ export class GanttAttachedBarView extends GanttAttachedBar {
     this.bus = data.bus;
   }
 
-  get startMoment() {
-    return moment(this.start, 'YYYY-MM-DD HH:mm:ss');
-  }
-  
-  get endMoment() {
-    return moment(this.end, 'YYYY-MM-DD HH:mm:ss');
-  }
-
   calculate() {
     if (!this.isShow) return;
-    const startSecond = Math.floor(this.startMoment.toDate().getTime() / 1000);
-    const endSecond = Math.floor(this.endMoment.toDate().getTime() / 1000);
+    
+    const startSecond = Math.floor(strToDate(this.start).getTime() / 1000);
+    const endSecond = Math.floor(strToDate(this.end).getTime() / 1000);
 
-    const sx = (startSecond - Math.floor(this.config.startDate.toDate().getTime() / 1000)) * this.config.secondWidth;
+    const sx = (startSecond - Math.floor(strToDate(this.config.start).getTime() / 1000)) * this.config.secondWidth;
     const width = (endSecond - startSecond) * this.config.secondWidth;
     const ex = sx + width;
         
@@ -51,7 +44,7 @@ export class GanttAttachedBarView extends GanttAttachedBar {
     const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
     const barCenterTop = this.layoutConfig.ATTACHED_ROW_HEIGHT / 2;
     const _sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
-    const sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2) + (this.rowIndex * this.layoutConfig.ATTACHED_ROW_HEIGHT) + this.groups.getById(this.group.id)!.barsHeight;
+    const sy = _sy + (this.rowIndex * this.layoutConfig.ATTACHED_ROW_HEIGHT) + this.groups.getById(this.group.id)!.barsHeight;
     const ey = sy + height;
    
     this.sx = sx;
@@ -70,7 +63,7 @@ export class GanttAttachedBarView extends GanttAttachedBar {
     const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
     const height = this.layoutConfig.ATTACHED_BAR_HEIGHT;
     const _sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
-    const sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2) + (this.rowIndex * this.layoutConfig.ATTACHED_ROW_HEIGHT) + this.groups.getById(this.group.id)!.barsHeight;
+    const sy = _sy + (this.rowIndex * this.layoutConfig.ATTACHED_ROW_HEIGHT) + this.groups.getById(this.group.id)!.barsHeight;
     const ey = sy + height;
    
     this._sy = _sy;

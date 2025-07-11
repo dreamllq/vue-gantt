@@ -1,3 +1,4 @@
+import { dateTimeFormat } from '@/utils/date-time-format';
 import TimeRange from '@/utils/time-range/index.ts';
 
 describe('time-range 倒序', () => {
@@ -27,8 +28,8 @@ describe('time-range 倒序', () => {
     });
 
     const timeRange = timeRangeEntity.calculateTimeRange();
-    expect(timeRange.start.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 23:00:00');
-    expect(timeRange.end.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-03 01:00:00');
+    expect(dateTimeFormat(timeRange.start)).toBe('2023-03-02 23:00:00');
+    expect(dateTimeFormat(timeRange.end)).toBe('2023-03-03 01:00:00');
   });
   test('测试获取可用的时间周期，结束时间在休息时段', () => {
     const endDate = '2023-03-02 08:20:00';
@@ -56,8 +57,8 @@ describe('time-range 倒序', () => {
     });
 
     const timeRange = timeRangeEntity.calculateTimeRange();
-    expect(timeRange.start.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 06:00:00');
-    expect(timeRange.end.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 08:00:00');
+    expect(dateTimeFormat(timeRange.start)).toBe('2023-03-02 06:00:00');
+    expect(dateTimeFormat(timeRange.end)).toBe('2023-03-02 08:00:00');
   });
   test('测试获取可用的时间周期，开始时间在休息时段', () => {
     const endDate = '2023-03-02 10:10:00';
@@ -85,8 +86,8 @@ describe('time-range 倒序', () => {
     });
 
     const timeRange = timeRangeEntity.calculateTimeRange();
-    expect(timeRange.start.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 07:40:00');
-    expect(timeRange.end.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 10:10:00');
+    expect(dateTimeFormat(timeRange.start)).toBe('2023-03-02 07:40:00');
+    expect(dateTimeFormat(timeRange.end)).toBe('2023-03-02 10:10:00');
   });
   test('测试获取可用的时间周期，开始时间跨越休息时段', () => {
     const endDate = '2023-03-02 09:00:00';
@@ -114,8 +115,8 @@ describe('time-range 倒序', () => {
     });
 
     const timeRange = timeRangeEntity.calculateTimeRange();
-    expect(timeRange.start.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 06:30:00');
-    expect(timeRange.end.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 09:00:00');
+    expect(dateTimeFormat(timeRange.start)).toBe('2023-03-02 06:30:00');
+    expect(dateTimeFormat(timeRange.end)).toBe('2023-03-02 09:00:00');
   }); 
   test('测试获取可用的时间周期，结束时间为休息日开始时间', () => {
     const endDate = '2023-03-02 08:30:00';
@@ -143,8 +144,8 @@ describe('time-range 倒序', () => {
     });
 
     const timeRange = timeRangeEntity.calculateTimeRange();
-    expect(timeRange.start.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 06:00:00');
-    expect(timeRange.end.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 08:00:00');
+    expect(dateTimeFormat(timeRange.start)).toBe('2023-03-02 06:00:00');
+    expect(dateTimeFormat(timeRange.end)).toBe('2023-03-02 08:00:00');
   });
 
   test('空时间 duration = 0', () => {
@@ -173,8 +174,8 @@ describe('time-range 倒序', () => {
     });
 
     const timeRange = timeRangeEntity.calculateTimeRange();
-    expect(timeRange.start.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 09:30:00');
-    expect(timeRange.end.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 09:30:00');
+    expect(dateTimeFormat(timeRange.start)).toBe('2023-03-02 09:30:00');
+    expect(dateTimeFormat(timeRange.end)).toBe('2023-03-02 09:30:00');
   });
 
   test('多班次', () => {
@@ -211,8 +212,8 @@ describe('time-range 倒序', () => {
     });
 
     const timeRange = timeRangeEntity.calculateTimeRange();
-    expect(timeRange.start.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-03 09:00:00');
-    expect(timeRange.end.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-03 11:00:00');
+    expect(dateTimeFormat(timeRange.start)).toBe('2023-03-03 09:00:00');
+    expect(dateTimeFormat(timeRange.end)).toBe('2023-03-03 11:00:00');
   });
 
   describe('非贪婪模式', () => {
@@ -241,8 +242,8 @@ describe('time-range 倒序', () => {
       });
   
       const timeRange = timeRangeEntity.calculateTimeRange();
-      expect(timeRange.start.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 08:30:00');
-      expect(timeRange.end.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 09:30:00');
+      expect(dateTimeFormat(timeRange.start)).toBe('2023-03-02 08:30:00');
+      expect(dateTimeFormat(timeRange.end)).toBe('2023-03-02 09:30:00');
     });
     
     test('测试结束时间命中到休息日的结束时间，结束时间为休息日的开始时间', () => {
@@ -257,8 +258,8 @@ describe('time-range 倒序', () => {
       });
   
       const timeRange = timeRangeEntity.calculateTimeRange();
-      expect(timeRange.start.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 07:00:00');
-      expect(timeRange.end.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 08:00:00');
+      expect(dateTimeFormat(timeRange.start)).toBe('2023-03-02 07:00:00');
+      expect(dateTimeFormat(timeRange.end)).toBe('2023-03-02 08:00:00');
     });
   });
 
@@ -289,8 +290,8 @@ describe('time-range 倒序', () => {
       });
   
       const timeRange = timeRangeEntity.calculateTimeRange({ greed: true });
-      expect(timeRange.start.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 08:00:00');
-      expect(timeRange.end.format('YYYY-MM-DD HH:mm:ss')).toBe('2023-03-02 09:30:00');
+      expect(dateTimeFormat(timeRange.start)).toBe('2023-03-02 08:00:00');
+      expect(dateTimeFormat(timeRange.end)).toBe('2023-03-02 09:30:00');
       // expect(timeRangeEntity.holidayTimeList.length).toBe(1);
       // expect(timeRangeEntity.holidayTimeList[0].isEdge).toBe(true);
     });

@@ -5,6 +5,11 @@ import { max, min } from 'lodash';
 import { GanttBarView } from '@/models/gantt-bar-view';
 import { BarId } from '@/types/gantt-bar';
 import { roundDownTimeToNearestSeconds } from '@/utils/round-down-time-to-nearest-seconds';
+import { dateAdd } from '@/utils/date-add';
+import { strToDate } from '@/utils/to-date';
+import { Unit } from '@/types/unit';
+import { dateTimeFormat } from '@/utils/date-time-format';
+import { SchedulingMode } from '@/types/gantt-config';
 
 type DraggingBar = {
   id: BarId,
@@ -12,6 +17,7 @@ type DraggingBar = {
   sy :number;
   width :number;
   height :number;
+  schedulingMode: SchedulingMode
 }
 export const useSingleDraggingHook = () => {
   const draggingBar = ref<DraggingBar>();
@@ -43,7 +49,8 @@ export const useSingleDraggingHook = () => {
       id: bar.id,
       sx: bar.sx,
       sy: bar.sy,
-      width: bar.width
+      width: bar.width,
+      schedulingMode: bar.schedulingMode
     };
     bar.dragging = true;
     bus.emit(Events.BAR_CHANGE, [bar.id]);
@@ -65,7 +72,8 @@ export const useSingleDraggingHook = () => {
       id: barClone.value.id,
       sx: barClone.value.sx,
       sy: barClone.value.sy,
-      width: barClone.value.width
+      width: barClone.value.width,
+      schedulingMode: barClone.value.schedulingMode
     };
   };
 
@@ -87,7 +95,8 @@ export const useSingleDraggingHook = () => {
       id: barClone.value.id,
       sx: barClone.value.sx,
       sy: barClone.value.sy,
-      width: barClone.value.width
+      width: barClone.value.width,
+      schedulingMode: barClone.value.schedulingMode
     };
   };
   const onDragEnd = (e:MouseEvent, bar:GanttBarView) => {
@@ -107,8 +116,27 @@ export const useSingleDraggingHook = () => {
 
     const dropX = draggingBar.value.sx;
     const dropY = draggingBar.value.sy + (ganttEntity.layoutConfig.BAR_HEIGHT / 2);
-    const startTime = roundDownTimeToNearestSeconds(ganttEntity.config.startDate.clone().add(Math.floor(dropX / ganttEntity.config.secondWidth), 'second'), ganttEntity.config.dragTimeOffset).format('YYYY-MM-DD HH:mm:ss');
-    const endTime = roundDownTimeToNearestSeconds(ganttEntity.config.startDate.clone().add(Math.floor((dropX + draggingBar.value.width) / ganttEntity.config.secondWidth), 'second'), ganttEntity.config.dragTimeOffset).format('YYYY-MM-DD HH:mm:ss');
+    const startTime = dateTimeFormat(
+      roundDownTimeToNearestSeconds(
+        dateAdd(
+          strToDate(ganttEntity.config.start), 
+          Math.floor(dropX / ganttEntity.config.secondWidth),
+          Unit.SECOND
+        ), 
+        ganttEntity.config.dragTimeOffset
+      )
+    );
+    
+    const endTime = dateTimeFormat(
+      roundDownTimeToNearestSeconds(
+        dateAdd(
+          strToDate(ganttEntity.config.start), 
+          Math.floor((dropX + draggingBar.value.width) / ganttEntity.config.secondWidth), 
+          Unit.SECOND
+        ), 
+        ganttEntity.config.dragTimeOffset
+      )
+    );
 
     const index = ganttEntity.groups.getGroupIndexByTop(dropY);
     const group = ganttEntity.groups.expandedGroups[index];
@@ -144,8 +172,25 @@ export const useSingleDraggingHook = () => {
     const dropX = draggingBar.value.sx;
     const dropY = draggingBar.value.sy + (ganttEntity.layoutConfig.BAR_HEIGHT / 2);
     
-    const startTime = roundDownTimeToNearestSeconds(ganttEntity.config.startDate.clone().add(Math.floor(dropX / ganttEntity.config.secondWidth), 'second'), ganttEntity.config.dragTimeOffset).format('YYYY-MM-DD HH:mm:ss');
-    const endTime = roundDownTimeToNearestSeconds(ganttEntity.config.startDate.clone().add(Math.floor((dropX + draggingBar.value.width) / ganttEntity.config.secondWidth), 'second'), ganttEntity.config.dragTimeOffset).format('YYYY-MM-DD HH:mm:ss');
+    const startTime = dateTimeFormat(
+      roundDownTimeToNearestSeconds(
+        dateAdd(
+          strToDate(ganttEntity.config.start), 
+          Math.floor(dropX / ganttEntity.config.secondWidth), 
+          Unit.SECOND
+        ), 
+        ganttEntity.config.dragTimeOffset
+      )
+    );
+    const endTime = dateTimeFormat(
+      roundDownTimeToNearestSeconds(
+        dateAdd(
+          strToDate(ganttEntity.config.start), 
+          Math.floor((dropX + draggingBar.value.width) / ganttEntity.config.secondWidth), 
+          Unit.SECOND
+        ), 
+        ganttEntity.config.dragTimeOffset)
+    );
     const index = ganttEntity.groups.getGroupIndexByTop(dropY);
     const group = ganttEntity.groups.expandedGroups[index];
     const top = ganttEntity.groups.getGroupTopByIndex(index);

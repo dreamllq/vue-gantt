@@ -1,5 +1,9 @@
 <template>
-  <drag-render v-if='renderFlag' />
+  <drag-render v-if='renderFlag'>
+    <template #draggingBar='slotProps'>
+      <slot name='draggingBar' v-bind='slotProps' />
+    </template>
+  </drag-render>
 </template>
 
 <script setup lang="ts">

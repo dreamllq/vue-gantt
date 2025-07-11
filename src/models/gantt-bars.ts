@@ -67,7 +67,6 @@ export class GanttBars extends BizArray<GanttBarView> {
       bar.isShow = this.groups.getById(bar.group.id)!.isShow;
     });
   }
-
   calculate() {
     this.groups.forEach(group => {
       group.bars.forEach(bar => {
@@ -75,11 +74,50 @@ export class GanttBars extends BizArray<GanttBarView> {
         bar.resetTimeRange();
         bar.calculatePos();
         bar.clearOverlap();
-        if (!group.barOverlap) {
-          bar.calculateOverlapBarIds();
-        }
+        bar.calculateOverlapBarIds();
       });
       this.calculateGroupOverlap({ groupId: group.id });
+    });
+  }
+  initX() {
+    this.groups.expandedGroups.forEach(group => {
+      // console.time('resetTimeRange');
+      // group.bars.forEach(bar => {
+      //   bar.resetTimeRange();
+      // });
+      // console.timeEnd('resetTimeRange');
+      // console.time('calculatePosX');
+      // group.bars.forEach(bar => {
+      //   bar.calculatePosX();
+      // });
+      // console.timeEnd('calculatePosX');
+      // console.time('clearOverlap');
+      // group.bars.forEach(bar => {
+      //   bar.clearOverlap();
+      // });
+      // console.timeEnd('clearOverlap');
+      // console.time('calculateOverlapBarIds');
+      // group.bars.forEach(bar => {
+      //   bar.calculateOverlapBarIds();
+      // });
+      // console.timeEnd('calculateOverlapBarIds');
+
+
+      group.bars.forEach(bar => {
+        bar.resetTimeRange();
+        bar.calculatePosX();
+        bar.clearOverlap();
+        bar.calculateOverlapBarIds();
+      });
+      this.calculateGroupBarsRowIndex(group.id);
+    });
+  }
+
+  initY() {
+    this.groups.expandedGroups.forEach(group => {
+      group.bars.forEach(bar => {
+        bar.changeY();
+      });
     });
   }
 
@@ -91,6 +129,8 @@ export class GanttBars extends BizArray<GanttBarView> {
     if (!group.isShow) return;
     if (group.barOverlap) return;
     this.calculateGroupBarsRowIndex(data.groupId, data.barId);
+    group.calculateBarsHeight();
+    group.calculateHeight();
     this.updateCurrentGroupBarsPositionByRowIndex(data.groupId);
   }
 
@@ -141,8 +181,6 @@ export class GanttBars extends BizArray<GanttBarView> {
         changeIds.push(bar.id);
       }
     });
-    group.calculateBarsHeight();
-    group.calculateHeight();
   }
 
   /**

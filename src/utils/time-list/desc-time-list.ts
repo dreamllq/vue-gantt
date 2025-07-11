@@ -1,7 +1,11 @@
-import moment from 'moment';
 import BaseTimeList from './base-time-list';
+import { strToDate } from '../to-date';
+import WorkTime from '../work-times/work-time';
+import { dateSubtract } from '../date-subtract';
 
 export default class DescTimeList extends BaseTimeList {
+  endDate: Date;
+
   constructor({
     duration,
     step,
@@ -15,32 +19,38 @@ export default class DescTimeList extends BaseTimeList {
       workTimes,
       unit
     });
-    this.endDate = moment(endDate, 'YYYY-MM-DD HH:mm:ss');
+    this.endDate = strToDate(endDate);
   }
 
-  calculateTimeRange({ workTime, date, residueUnitCount }) {
-    const time = date.unix() * 1000;
-    let end = null;
+  calculateTimeRange({ workTime, date, residueUnitCount } :{workTime: WorkTime, date: Date, residueUnitCount: number}) : {
+    start: Date,
+    end: Date,
+    unitCount: number,
+    isStart: boolean
+  } | null {
+    const time = date.getTime();
+    let end: Date;
     if (workTime.isAfterEnd(time)) {
-      end = workTime.endMoment.clone();
+      end = workTime.endDate;
     } else if (workTime.isAfterAndEqualStart(time) && workTime.isBeforeAndEqualEnd(time)) {
-      end = date.clone();
+      end = date;
     } else {
       return null;
     }
-    const unitCount = workTime.getDescUnitCountByDate(end.clone(), this.unit);
+    const unitCount = workTime.getDescUnitCountByDate(end, this.unit);
     if (residueUnitCount >= unitCount) {
       return {
-        start: workTime.startMoment,
-        end: end.clone(),
+        start: workTime.startDate,
+        end: end,
         unitCount: unitCount,
         isStart: false
       };
     } else {
-      const start = moment(end).subtract(residueUnitCount, this.unit);
+      const start = dateSubtract(end, residueUnitCount, this.unit);
+
       return {
-        start: start,
-        end: end.clone(),
+        start: start!,
+        end: end,
         unitCount: residueUnitCount,
         isStart: true
       };
@@ -48,13 +58,27 @@ export default class DescTimeList extends BaseTimeList {
   }
 
 
-  calculate({ greed = false } = {}) {
-    let date = this.endDate.clone();
+  calculate({ greed = false } = {}): {
+    timeList: {
+      start: Date,
+      end: Date,
+      unitCount: number,
+      isStart?: boolean,
+      isEnd?: boolean
+    }[]
+  } {
+    let date:Date = this.endDate;
     const allUnitCount = this.duration * this.step;
     let tempUnitCount = 0;
-    const timeList = [];
+    const timeList:{
+      start: Date,
+      end: Date,
+      unitCount: number,
+      isStart?: boolean,
+      isEnd?: boolean
+    }[] = [];
     this.workTimes.workTimes.reverse();
-    let matchedWorkTimes = this.workTimes.workTimes;
+    const matchedWorkTimes = this.workTimes.workTimes;
     let isMatchWorkTimeStart = false;
 
     matchedWorkTimes.forEach(workTime => {
@@ -69,7 +93,7 @@ export default class DescTimeList extends BaseTimeList {
         return;
       }
 
-      date = workTime.startMoment.clone();
+      date = workTime.startDate;
       tempUnitCount += tr.unitCount;
       isMatchWorkTimeStart = tr.isStart;
       
@@ -82,10 +106,12 @@ export default class DescTimeList extends BaseTimeList {
       }
     });
 
+    const start = dateSubtract(this.endDate, this.duration * this.step, this.unit);
+
     if (timeList.length === 0) {
       timeList.push({
-        start: this.endDate.clone().subtract(this.duration * this.step, this.unit),
-        end: this.endDate.clone(),
+        start: start!,
+        end: this.endDate,
         unitCount: this.duration * this.step,
         isEnd: true
       });

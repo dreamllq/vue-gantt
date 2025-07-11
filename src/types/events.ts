@@ -8,6 +8,7 @@ import { WorkTimeId } from './gantt-work-time';
 import { LinkId } from './gantt-link';
 
 export enum Events {
+  READY='READY',
   DRAGSTART='DRAGSTART',
   DRAG='DRAG',
   DRAGEND='DRAGEND',
@@ -63,6 +64,7 @@ export enum Events {
 }
 
 export interface EventsInterface {
+  [Events.READY]: ()=>void,
   [Events.DRAGSTART]: (e:MouseEvent)=>void;
   [Events.DRAG]: (e:MouseEvent)=>void;
   [Events.DRAGEND]: (e:MouseEvent)=>void;

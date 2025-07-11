@@ -24,7 +24,7 @@ export type GanttBarUpdateOperationData = {
   start: DateTimeString | null,
   end: DateTimeString | null,
   rowIndex: number,
-  schedulingMode: SchedulingMode | null,
+  schedulingMode?: SchedulingMode,
   selectable:boolean,
   draggable:boolean,
 }

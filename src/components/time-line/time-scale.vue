@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, PropType } from 'vue';
 import { SECOND_MAP } from '@/constants/time-transform';
 import { STEP_LIST, MIN_SCALE_STEP_WIDTH } from '@/constants/scale-config';
 import { cloneDeep } from 'lodash';
@@ -29,8 +29,8 @@ import { useStore } from '../store';
 
 const props = defineProps({
   date: {
-    type: Object,
-    default: undefined
+    type: Date as PropType<Date>,
+    required: true
   }
 });
 

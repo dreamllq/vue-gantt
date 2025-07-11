@@ -1,7 +1,13 @@
-.gantt {
+.gantt-v2-root {
   --border-color: var(--el-border-color);
   --bar-color: var(--el-color-primary-light-3);
   --link-color: var(--el-color-primary-light-3);
   --link-selected-color: var(--el-color-success);
   --drag-rect-border-color: var(--el-color-primary-light-3);
+}
+
+.alsi-gantt-v2 {
+  *, ::before, ::after {
+    box-sizing: border-box;
+  }
 }

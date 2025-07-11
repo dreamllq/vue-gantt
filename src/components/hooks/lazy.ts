@@ -5,6 +5,9 @@ import { computed, ref, watch } from 'vue';
 import { debounce, max, min } from 'lodash';
 import { useBus } from './bus';
 import { Events } from '@/types/events';
+import { dateAdd } from '@/utils/date-add';
+import { strToDate } from '@/utils/to-date';
+import { Unit } from '@/types/unit';
 
 export const useLazy = (ganttEntity: Gantt, store:{
   scroll: ReturnType<typeof useScroll>;
@@ -31,14 +34,15 @@ export const useLazy = (ganttEntity: Gantt, store:{
     visibleAreaStartY.value = max([0, scrollTop.value - mainHeight.value]) || 0;
     visibleAreaEndY.value = min([scrollTop.value + (mainHeight.value * 2), ganttEntity.groups.getGroupHeight]) || 0;
 
-    visibleAreaStartDate.value = ganttEntity.config.startDate.clone().add(Math.floor(visibleAreaStartX.value / ganttEntity.config.secondWidth), 'second');
-    visibleAreaEndDate.value = ganttEntity.config.startDate.clone().add(Math.floor(visibleAreaEndX.value / ganttEntity.config.secondWidth), 'second');
+    
+    visibleAreaStartDate.value = dateAdd(strToDate(ganttEntity.config.start), Math.floor(visibleAreaStartX.value / ganttEntity.config.secondWidth), Unit.SECOND);
+    visibleAreaEndDate.value = dateAdd(strToDate(ganttEntity.config.start), Math.floor(visibleAreaEndX.value / ganttEntity.config.secondWidth), Unit.SECOND);
     visibleAreaStartGroupIndex.value = ganttEntity.groups.getGroupIndexByTop(visibleAreaStartY.value);
     visibleAreaEndGroupIndex.value = ganttEntity.groups.getGroupIndexByTop(visibleAreaEndY.value) + 1;
     lazyReady.value = true;
     store.bus.emit(Events.VISIBLE_AREA_CHANGE);
   };
-  const calculateVisibleAreaDebounce = debounce(calculateVisibleArea, ganttEntity.config.lazyDebounceTime);
+  const calculateVisibleAreaDebounce = debounce(calculateVisibleArea, max([ganttEntity.config.lazyDebounceTime, 10])!);
 
   watch(() => [
     scrollLeft.value,

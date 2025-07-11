@@ -31,7 +31,7 @@ import { useStore } from '../store';
 
 const props = defineProps({
   link: {
-    type: Object as PropType<ReturnType<typeof GanttLinkView.prototype.toJSON>>,
+    type: Object as PropType<ReturnType<typeof GanttLinkView.prototype.toUiJSON>>,
     required: true
   },
   zIndex: {

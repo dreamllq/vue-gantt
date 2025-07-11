@@ -7,7 +7,7 @@ import { Events } from '@/types/events';
 import { BarId } from '@/types/gantt-bar';
 
 export const useShowAllHook = () => {
-  const lazyLinkGrid: Ref<ReturnType<typeof GanttLinkView.prototype.toJSON>[]> = ref([]);
+  const lazyLinkGrid: Ref<ReturnType<typeof GanttLinkView.prototype.toUiJSON>[]> = ref([]);
   const draggingBarIds = ref<BarId[]>([]);
   const { ganttEntity, lazy, bus } = useStore()!;
   const { visibleAreaStartX, visibleAreaEndX, visibleAreaStartY, visibleAreaEndY, lazyReady } = lazy;
@@ -34,7 +34,7 @@ export const useShowAllHook = () => {
         y1: min(link.path.map(point => point.y)) || 0,
         x2: max(link.path.map(point => point.x)) || 0,
         y2: max(link.path.map(point => point.y)) || 0
-      })).map(link => link.toJSON());
+      })).map(link => link.toUiJSON());
   };
 
   if (lazyReady.value) {

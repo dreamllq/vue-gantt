@@ -64,8 +64,6 @@ export const useShowSelectedAllHook = () => {
   };
 
   const calculateSelectedZIndex = () => {
-    console.log('calculateSelectedZIndex');
-    
     const zIndex = upZIndex(); 
     selectedBarsLinks.value.forEach(link => {
       link.zIndex = zIndex;

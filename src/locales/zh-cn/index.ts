@@ -8,5 +8,5 @@ export default {
     fri: '星期五',
     sat: '星期六'
   },
-  weekFormat: 'YYYY 第 ww 周'
+  weekFormat: '{year} 第 {week} 周'
 };

@@ -1,7 +1,7 @@
 <template>
   <div
     ref='containerRef'
-    class='gantt gantt-container'
+    class='gantt gantt-container gantt-v2-root alsi-gantt-v2'
     @wheel.prevent.stop='scroll.onWheel'
     @contextmenu.prevent
     @mousedown.prevent='drag.onMouseDown'

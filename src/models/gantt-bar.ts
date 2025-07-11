@@ -4,11 +4,11 @@ import TimeRange from '@/utils/time-range/index.ts';
 import { BarId, GanttBarClassConstructor } from '@/types/gantt-bar';
 import { GanttBase } from './gantt-base';
 import { SchedulingMode } from '@/types/gantt-config';
-import { cloneDeep } from 'lodash';
-import moment from 'moment';
 import { GanttGroups } from './gantt-groups';
 import { getDatesBetween } from '@/utils/get-dates-between';
 import { BizArray } from './biz-array';
+import { strToDate } from '@/utils/to-date';
+import { dateTimeFormat } from '@/utils/date-time-format';
 
 export class GanttBar extends GanttBase {
   id: BarId;
@@ -20,6 +20,8 @@ export class GanttBar extends GanttBase {
   private _hasCalculated = false;
   groups: GanttGroups;
   dayList: string[] = [];
+  startTimeMills = 0;
+  endTimeMills = 0;
 
   constructor(data:GanttBarClassConstructor) {
     super(data);
@@ -71,18 +73,22 @@ export class GanttBar extends GanttBase {
     if (resetTimeByMode) {
       if (this.schedulingMode === SchedulingMode.FORWARD) {
         data.end = null;
-        if (moment(data.start, 'YYYY-MM-DD HH:mm:ss').isBefore(this.config.startDate)) {
-          data.start = this.config.startDate.format('YYYY-MM-DD HH:mm:ss');
+        if (strToDate(data.start!).getTime() < strToDate(this.config.start).getTime()) {
+          data.start = this.config.start;
         }
       } else if (this.schedulingMode === SchedulingMode.BACKWARD) {
         data.start = null;
-        if (moment(data.end, 'YYYY-MM-DD HH:mm:ss').isAfter(this.config.endDate)) {
-          data.end = this.config.endDate.format('YYYY-MM-DD HH:mm:ss');
+        if (strToDate(data.end!).getTime() > strToDate(this.config.end).getTime()) {
+          data.end = this.config.end;
         }
       }
     }
-    
-    if (data.start !== null && this.duration !== null && data.end === null) {
+
+    if (data.start && data.end) {
+      this.start = data.start;
+      this.end = data.end;
+
+    } else if (data.start !== null && this.duration !== null && data.end === null) {
       // 开始时间存在，计算结束时间 正排
       const timeRangeEntity = new TimeRange({
         startDate: data.start,
@@ -93,20 +99,20 @@ export class GanttBar extends GanttBase {
       });
       const timeRange = timeRangeEntity.calculateTimeRange();
 
-      if (!timeRange.end.isAfter(this.config.endDate)) {
-        this.start = timeRange.start.format('YYYY-MM-DD HH:mm:ss');
-        this.end = timeRange.end.format('YYYY-MM-DD HH:mm:ss');
+      if (!(timeRange.end.getTime() > strToDate(this.config.end).getTime())) {
+        this.start = dateTimeFormat(timeRange.start);
+        this.end = dateTimeFormat(timeRange.end);
       } else {
         const timeRangeEntity = new TimeRange({
-          endDate: this.config.endDate.format('YYYY-MM-DD HH:mm:ss'),
+          endDate: this.config.end,
           duration: this.duration,
           step: 1,
           unit: this.config.durationUnit,
           workTimes: this.group.workTimes
         });
         const timeRange = timeRangeEntity.calculateTimeRange();
-        this.start = timeRange.start.format('YYYY-MM-DD HH:mm:ss');
-        this.end = this.config.endDate.format('YYYY-MM-DD HH:mm:ss');
+        this.start = dateTimeFormat(timeRange.start);
+        this.end = this.config.end;
       }
     } else if (data.end !== null && this.duration !== null && data.start === null) {
       // 结束时间存在，计算开始时间 倒排
@@ -119,29 +125,30 @@ export class GanttBar extends GanttBase {
       });
       const timeRange = timeRangeEntity.calculateTimeRange();
 
-      if (!timeRange.start.isBefore(this.config.startDate)) {
-        this.start = timeRange.start.format('YYYY-MM-DD HH:mm:ss');
-        this.end = timeRange.end.format('YYYY-MM-DD HH:mm:ss');
+      
+      if (!(timeRange.start.getTime() < strToDate(this.config.start).getTime())) {
+        this.start = dateTimeFormat(timeRange.start);
+        this.end = dateTimeFormat(timeRange.end);
       } else {
         const timeRangeEntity = new TimeRange({
-          startDate: this.config.startDate.format('YYYY-MM-DD HH:mm:ss'),
+          startDate: this.config.start,
           duration: this.duration,
           step: 1,
           unit: this.config.durationUnit,
           workTimes: this.group.workTimes
         });
         const timeRange = timeRangeEntity.calculateTimeRange();
-        this.start = this.config.startDate.format('YYYY-MM-DD HH:mm:ss');
-        this.end = timeRange.end.format('YYYY-MM-DD HH:mm:ss');
+        this.start = this.config.start;
+        this.end = dateTimeFormat(timeRange.end);
       }
-    } else if (data.end === null || data.start === null) {
+    } else {
+      //  (data.end === null || data.start === null)
       console.error(`bar ${this.id} 时间异常：{start: ${this.start}, end: ${this.end}}`);
       this.start = data.start || data.end;
       this.end = data.start || data.end;
-    } else {
-      this.start = data.start;
-      this.end = data.end;
     }
+    this.startTimeMills = strToDate(this.start!).getTime();
+    this.endTimeMills = strToDate(this.end!).getTime();
 
     this.calculateDayList();
   }

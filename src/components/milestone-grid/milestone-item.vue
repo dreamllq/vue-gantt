@@ -39,7 +39,7 @@ import { GanttMilestoneView } from '../../models/gantt-milestone-view';
 
 const props = defineProps({
   item: {
-    type: Object as PropType<ReturnType<typeof GanttMilestoneView.prototype.toJSON>>,
+    type: Object as PropType<ReturnType<typeof GanttMilestoneView.prototype.toUiJSON>>,
     required: true
   }
 });

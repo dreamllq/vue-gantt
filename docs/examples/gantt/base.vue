@@ -6,6 +6,9 @@
     <el-button @click='onHistoryNext'>
       next
     </el-button>
+    <el-button @click='changeHeight'>
+      changeHeight
+    </el-button>
   </div>
   <el-button @click='changeDraggable'>
     changeDraggable
@@ -62,12 +65,13 @@
     getJSON
   </el-button>
   
-  <div style='height: 400px;'>
+  <div :style='{height: `${height}px`}'>
     <gantt-view
       ref='ganttRef' 
       :data='ganttData'
       :hook='hook'
       @bar-drag-change='onBarDragChange'
+      @ready='onReady'
     >
       <template #aside-header>
         aaa
@@ -76,7 +80,7 @@
         {{ group.id }} / {{ group.deep }}
       </template>
       <template #bar='{bar}'>
-        {{ bar.id }} \ {{ bar.selected }} \ {{ bar.rowIndex }} \ {{ bar.group.id }}
+        {{ bar.id }} \ {{ bar.selected }} \ {{ bar.rowIndex }}
       </template>
       <template #attachedBar='{bar}'>
         {{ bar.id }} \ {{ bar.rowIndex }}
@@ -87,18 +91,24 @@
 
 <script setup lang="ts">
 import { GanttView, GanttJsonData, GanttViewInstance } from '@/index.ts';
-import { data } from './data.ts';
+import { data } from './a.ts';
 import { ref } from 'vue';
 
 const ganttData = ref<GanttJsonData>(data);
 const ganttRef = ref<GanttViewInstance>();
+const height = ref(400);
 
 const hook = {
   beforeDragStart: (data) => true,
   beforeDragEnd: (data) => true
 };
 
+
 let draggable = ganttData.value.config.draggable;
+
+const changeHeight = () => {
+  height.value = 300;
+};
 const changeDraggable = () => {
   draggable = !draggable;
   ganttRef.value!.api().setDraggable(draggable);
@@ -111,7 +121,7 @@ const changeSelectable = () => {
 };
 
 const setDataScaleUnit = () => {
-  ganttRef.value?.api().setDataScaleUnit('WEEK');
+  ganttRef.value?.api().setDataScaleUnit('DAY');
 };
 
 const setSizeRatioPercent = () => {
@@ -211,6 +221,9 @@ const getJSON = () => {
   console.log(ganttRef.value?.api().getJSON());
 };
 
+const onReady = () => {
+  console.log('ready');
+};
 </script>
 
 <style scoped>

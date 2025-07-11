@@ -1,29 +1,38 @@
-import { onBeforeMount, onMounted, ref } from 'vue';
-import { menusEvent, menusItemType } from 'vue3-menus';
+import { nextTick, onBeforeMount, onMounted, ref } from 'vue';
+import { menusItemType } from 'vue3-menus';
 import { useStore } from '../store';
 import { Events } from '@/types/events';
 import { BarId } from '@/types/gantt-bar';
 export const useMenuHook = () => {
   const { bus, ganttEntity } = useStore()!;
   const menusZIndex = ref(Number.MAX_SAFE_INTEGER);
-
-  const onContextmenu = (data: {barId: BarId}, e: MouseEvent) => {
+  
+  const menus = ref<menusItemType[]>([]);
+  const eventVal = ref<MouseEvent>({} as MouseEvent);
+  const isOpen = ref(false);
+  
+  const onContextmenu = async (data: {barId: BarId}, e: MouseEvent) => {
+    isOpen.value = false;
+    eventVal.value = {} as MouseEvent;
+    await nextTick();
     if (Array.isArray(ganttEntity.config.contextMenuMenus)) {
-      const menus: menusItemType[] = [];
+      const _menus: menusItemType[] = [];
       ganttEntity.config.contextMenuMenus.forEach(item => {
         if (item.click) {
-          menus.push({
+          _menus.push({
             ...item,
-            click: (menuItem) => item.click(menuItem, data)
+            click: (menuItem) => {
+              item.click(menuItem, data);
+            }
           });
         } else {
-          return menus.push(item as menusItemType);
+          return _menus.push(item as menusItemType);
         }
       });
-      menusEvent(e, {
-        menus,
-        zIndex: menusZIndex.value
-      }, null);
+
+      menus.value = _menus;
+      eventVal.value = e;
+      isOpen.value = true;
     }
   };
 
@@ -34,4 +43,11 @@ export const useMenuHook = () => {
   onBeforeMount(() => {
     bus.off(Events.BAR_CONTEXTMENU, onContextmenu);
   });
+
+  return {
+    menus,
+    eventVal,
+    isOpen,
+    menusZIndex
+  };
 };

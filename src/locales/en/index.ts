@@ -6,5 +6,5 @@ export default {
   'weeks.thu': 'Thursday',
   'weeks.fri': 'Friday',
   'weeks.sat': 'Saturday',
-  'weekFormat': 'YYYY [Week] ww'
+  'weekFormat': '{year} [Week] {week}'
 };

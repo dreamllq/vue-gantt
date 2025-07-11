@@ -8,7 +8,7 @@ import { BarId } from '@/types/gantt-bar';
 import { GanttBarView } from '@/models/gantt-bar-view';
 
 export const useShowSelectedHook = () => {
-  const lazyLinkGrid: ShallowRef<ReturnType<typeof GanttLinkView.prototype.toJSON>[]> = shallowRef([]);
+  const lazyLinkGrid: ShallowRef<ReturnType<typeof GanttLinkView.prototype.toUiJSON>[]> = shallowRef([]);
   const selectedBarsLinks: ShallowRef<GanttLinkView[]> = shallowRef([]);
   const draggingBarIds = ref<BarId[]>([]);
   const { ganttEntity, lazy, bus, zIndex } = useStore()!;
@@ -27,7 +27,7 @@ export const useShowSelectedHook = () => {
         y1: link.sy,
         x2: link.ex,
         y2: link.ey
-      })).map(link => link.toJSON());
+      })).map(link => link.toUiJSON());
   };
 
   const calculateSelectedBarsLinks = () => {

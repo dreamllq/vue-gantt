@@ -4,6 +4,9 @@ import { GanttGroups } from './gantt-groups';
 import { GroupId } from '@/types/gantt-group';
 import { min } from 'lodash';
 import { GanttJsonDataMilestone } from '@/types/gantt';
+import { dateDiff } from '@/utils/date-diff';
+import { strToDate } from '@/utils/to-date';
+import { Unit } from '@/types/unit';
 
 export class GanttMilestoneView extends GanttMilestone {
   x = 0;
@@ -17,7 +20,8 @@ export class GanttMilestoneView extends GanttMilestone {
 
   calculate() {
     if (!this.isShow) return;
-    this.x = (this.datetimeMoment.diff(this.config.startDate, 'second')) * this.config.secondWidth;
+    
+    this.x = dateDiff(strToDate(this.datetime), strToDate(this.config.start), Unit.SECOND) * this.config.secondWidth;
     const index = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
     const top = this.groups.getGroupTopByIndex(index);
     this.y = top + (this.groups.getById(this.group.id)!.height / 2);

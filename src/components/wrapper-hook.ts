@@ -5,8 +5,8 @@ import { BarId, GanttBarAddParams, GanttBarUpdateParams } from '@/types/gantt-ba
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GroupId } from '@/types/gantt-group';
 import { DateTimeString } from '@/types/date';
-import moment from 'moment';
-import { Events } from '@/types/events';
+import { strToDate } from '@/utils/to-date';
+import { dateDiff } from '@/utils/date-diff';
 export const useWrapperHook = () => {
 
   const { scroll, ganttEntity, bus } = useStore()!;
@@ -19,14 +19,17 @@ export const useWrapperHook = () => {
   };
 
   const setShowAttachedBars = (val: boolean) => {
+    scroll.saveCurrentPos();
     ganttEntity.config.showAttachedBars = val;
   };
 
   const setDataScaleUnit = (unit: (keyof typeof Unit)) => {
+    scroll.saveCurrentPos();
     ganttEntity.config.dataScaleUnit = Unit[unit];
   };
 
   const setSizeRatioPercent = (sizeRatioPercent:number) => {
+    scroll.saveCurrentPos();
     ganttEntity.layoutConfig.sizeRatioPercent = sizeRatioPercent;
   };
 
@@ -99,9 +102,9 @@ export const useWrapperHook = () => {
   };
 
   const scrollToDatetime = (datetime: DateTimeString) => {
-    const dateMoment = moment(datetime, 'YYYY-MM-DD HH:mm:ss');
-    if (dateMoment.isBefore(ganttEntity.config.endDate) && dateMoment.isAfter(ganttEntity.config.startDate)) {
-      const seconds = dateMoment.diff(ganttEntity.config.startDate, 'second');
+    const date = strToDate(datetime);
+    if ((date.getTime() < ganttEntity.config.endTimeMills) && (date.getTime() > ganttEntity.config.startTimeMills)) {
+      const seconds = dateDiff(date, strToDate(ganttEntity.config.start), Unit.SECOND);
       const left = seconds * ganttEntity.config.secondWidth;
       scroll.scrollLeft.value = left;
     }
@@ -112,13 +115,7 @@ export const useWrapperHook = () => {
   const getBarById = (id:BarId) => {
     if (ganttEntity.bars.isExist(id)) {
       const bar = ganttEntity.bars.getById(id)!;
-      return {
-        id: bar.id,
-        start: bar.start,
-        end: bar.start,
-        duration: bar.duration,
-        schedulingMode: bar.schedulingMode
-      };
+      return bar.toJSON();
     } else {
       return undefined;
     }

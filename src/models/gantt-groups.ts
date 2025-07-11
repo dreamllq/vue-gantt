@@ -77,7 +77,7 @@ export class GanttGroups extends BizArray<GanttGroupView> {
     return this.expandedGroups.reduce((acc, item) => acc + item.height, 0);
   }
 
-  calculateExpandedGroups() {
+  calculateExpandedGroups(emit = true) {
     const list:GanttGroupView[] = [];
     const walk = (group:GanttGroupView, cb:(data: GanttGroupView)=>void) => {
       cb(group);
@@ -103,12 +103,18 @@ export class GanttGroups extends BizArray<GanttGroupView> {
     });
 
     this.expandedGroups = list;
-    this.bus.emit(GanttBusEvents.SHOW_CHANGE);
+    emit && this.bus.emit(GanttBusEvents.SHOW_CHANGE);
   }
 
   calculate() {
     this.forEach(item => {
       item.calculate();
+    });
+  }
+
+  initHeight() {
+    this.forEach(item => {
+      item.initHeight();
     });
   }
 

@@ -32,7 +32,7 @@ export const getData = ():GanttJsonData => {
   const groupCount = 10;
   const orderCount = 10000;
   const startDate = moment();
-  const endDate = moment().add(3, 'year');
+  const endDate = moment().add(20, 'year');
   const workTimesTemp = makeWorkTimes(startDate, endDate);
 
   const groups:GanttJsonDataGroup[] = [];
@@ -226,6 +226,7 @@ export const getData = ():GanttJsonData => {
       'startDate': startDate.format('YYYY-MM-DD'),
       'endDate': endDate.format('YYYY-MM-DD'),
       'durationUnit': 'SECOND',
+      dataScaleUnit: 'DAY',
       'draggable': true,
       'selectable': true,
       'multipleSelectable': true,

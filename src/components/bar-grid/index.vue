@@ -9,11 +9,12 @@
           width: `${item.width}px`,
           height: `${item.height}px`,
           transform: `translate(${item.sx}px, ${item.sy}px)`,
-          zIndex: item.zIndex
+          zIndex: item.zIndex,
+          "--bar-custom-color": item.color || "var(--bar-color)"
         }'
         :data-id='item.id'
         :data-type='getIdType(item.id)'>
-        <slot :bar='ganttEntity.bars.getById(item.id)' />
+        <slot :bar='item' />
       </div>
     </template>
   </div>

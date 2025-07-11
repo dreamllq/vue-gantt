@@ -251,23 +251,31 @@ export class Gantt extends EventEmitter {
 
   calculate() {
     console.time('gantt fromJson data calculate');
-    console.time('gantt fromJson group data calculate');
-    this.groups.calculateExpandedGroups();
-    this.groups.calculate();
-    console.timeEnd('gantt fromJson group data calculate');
+    console.time('gantt fromJson group data calculateExpandedGroups');
+    this.groups.calculateExpandedGroups(false);
+    // this.groups.calculate();
+    console.timeEnd('gantt fromJson group data calculateExpandedGroups');
+    this.bars.updateShow();
+    console.time('gantt fromJson bar data calculate initX');
+    this.bars.initX();
+    console.timeEnd('gantt fromJson bar data calculate initX');
+    console.time('gantt fromJson group data calculate initHeight');
+    this.groups.initHeight();
+    console.timeEnd('gantt fromJson group data calculate initHeight');
+    console.time('gantt fromJson bar data calculate initY');
+    this.bars.initY();
+    console.timeEnd('gantt fromJson bar data calculate initY');
+    this.attachedBars.updateShow();
+    this.attachedBars.calculate();
     console.time('gantt fromJson workTimes data calculate');
     this.workTimes.updateShow();
     this.workTimes.calculate();
     console.timeEnd('gantt fromJson workTimes data calculate');
-    console.time('gantt fromJson bar data calculate');
-    this.bars.updateShow();
-    this.bars.calculate();
-    console.timeEnd('gantt fromJson bar data calculate');
-    this.attachedBars.updateShow();
-    this.attachedBars.calculate();
     console.time('gantt fromJson link data calculate');
     this.links.updateShow();
-    this.links.calculate();
+    if (this.config.linkShowStrategy === LinkShowStrategy.ALL) {
+      this.links.calculate();
+    }
     console.timeEnd('gantt fromJson link data calculate');
     console.time('gantt fromJson link calculateLinkGroupMap calculate');
     this.links.calculateLinkGroupMap();

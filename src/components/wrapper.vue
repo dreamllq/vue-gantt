@@ -39,7 +39,7 @@
       <template #main>
         <drag-bar-grid>
           <template #draggingBar='slotProps'>
-            <slot name='bar' v-bind='slotProps' />
+            <slot name='draggingBar' v-bind='slotProps' />
           </template>
         </drag-bar-grid>
         <bar-tip-grid />
@@ -86,20 +86,26 @@ const { scrollReady } = scroll;
 
 const { api } = useWrapperHook();
 
-const emits = defineEmits(['bar-drag-change']);
+const emits = defineEmits(['ready', 'bar-drag-change']);
 const onDraggingChange = (ids:BarId[], dragging: boolean) => {
   if (dragging === false) {
     emits('bar-drag-change', ids);
   }
 };
 
+const onReady = () => {
+  emits('ready');
+};
+
 onMounted(() => {
   bus.on(Events.BAR_DRAGGING_CHANGE, onDraggingChange);
+  bus.once(Events.READY, onReady);
   onStoreMounted();
 });
 
 onBeforeUnmount(() => {
   bus.off(Events.BAR_DRAGGING_CHANGE, onDraggingChange);
+  bus.off(Events.READY, onReady);
   onStoreUnmounted();
 });
 

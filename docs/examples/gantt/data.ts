@@ -5,11 +5,13 @@ export const data:GanttJsonData = {
     'endDate': '2025-08-14',
     'startDate': '2024-01-01',
     'durationUnit': 'SECOND',
+    dataScaleUnit: 'DAY',
     'draggable': true,
     'selectable': true,
     'multipleSelectable': true,
     'contextMenuEnable': true,
     'linkShowStrategy': 'SELECTED_ALL',
+    schedulingMode: 'BACKWARD',
     contextMenuMenus: [
       {
         label: '返回(B)',

@@ -1,5 +1,4 @@
 import { DateTimeString } from '@/types/date';
-import moment from 'moment';
 import { GanttGroupView } from './gantt-group-view';
 import { GanttGroup } from './gantt-group';
 import { GanttGroups } from './gantt-groups';
@@ -8,6 +7,9 @@ import { GroupId } from '@/types/gantt-group';
 import { GanttWorkTime } from './gantt-work-time';
 import { GanttWorkViewTimeConstructor } from '@/types/gantt-work-time';
 import { GanttJsonDataWorkTime } from '@/types/gantt';
+import { getSecondsBetween } from '@/utils/get-seconds-between';
+import { dateTimeFormat } from '@/utils/date-time-format';
+import { strToDate } from '@/utils/to-date';
 
 export class GanttWorkTimeView extends GanttWorkTime {
   sx = 0;
@@ -23,11 +25,11 @@ export class GanttWorkTimeView extends GanttWorkTime {
     super(data);
     this.groups = data.groups;
     this.config = data.config;
-    this.startTimeString = this.startMoment.format('YYYY-MM-DD HH:mm:ss');
+    this.startTimeString = dateTimeFormat(strToDate(this.start));
   }
 
   calculate() {
-    this.sx = this.startMoment.diff(this.config.startDate, 'second') * this.config.secondWidth;
+    this.sx = Math.floor((this.startTimeMills - this.config.startTimeMills) / 1000) * this.config.secondWidth;
     this.width = this.seconds * this.config.secondWidth;
     if (!this.isShow) {
       this.sy = 0;

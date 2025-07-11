@@ -1,9 +1,11 @@
 <template>
-  <root :data='data'>
+  <root
+    :data='data' 
+    :hook='hook'>
     <wrapper 
-      ref='wrapperRef' 
-      :hook='hook'
+      ref='wrapperRef'
       @bar-drag-change='(...args)=>emits("bar-drag-change",...args)'
+      @ready='()=>emits("ready")'
     >
       <template #aside-header>
         <slot name='aside-header' />
@@ -40,7 +42,7 @@ const props = defineProps({
 
 const wrapperRef = ref<InstanceType<typeof Wrapper>>();
 
-const emits = defineEmits(['bar-drag-change']);
+const emits = defineEmits(['ready', 'bar-drag-change']);
 
 defineExpose({ api: () => wrapperRef.value!.api() });
 </script>

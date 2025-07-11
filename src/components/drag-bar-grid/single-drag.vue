@@ -1,7 +1,7 @@
 <template>
   <div class='gantt-single-drag'>
     <div
-      v-if='shadowDraggingBar && draggingBar'
+      v-if='shadowDraggingBar && draggingBar && draggingBar.schedulingMode === SchedulingMode.FORWARD'
       class='dragging-tip' 
       :style='{
         width: `140px`,
@@ -9,6 +9,16 @@
         zIndex: `${Number.MAX_SAFE_INTEGER}`
       }'>
       {{ barClone!.start }}
+    </div>
+    <div
+      v-else-if='shadowDraggingBar && draggingBar && draggingBar.schedulingMode === SchedulingMode.BACKWARD'
+      class='dragging-tip' 
+      :style='{
+        width: `140px`,
+        transform: `translate(${barClone!.ex - 140}px, ${barClone!.sy + ganttEntity.layoutConfig.HEADER_HEIGHT - 20}px)`,
+        zIndex: `${Number.MAX_SAFE_INTEGER}`,
+      }'>
+      {{ barClone!.end }}
     </div>
 
     <div
@@ -31,12 +41,13 @@
         zIndex: `${Number.MAX_SAFE_INTEGER}`
       }'
     >
-      <slot :bar='ganttEntity.bars.getById(draggingBar.id)!' />
+      <slot :bar='ganttEntity.bars.getById(draggingBar.id)!.toUiJSON()' />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { SchedulingMode } from '@/types/gantt-config';
 import { useStore } from '../store';
 import { useSingleDraggingHook } from './single-dragging-hook';
 

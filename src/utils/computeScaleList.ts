@@ -1,12 +1,18 @@
-import { Moment } from 'moment';
 import { computeDayScale } from './computeDayScale';
 import { Unit } from '@/types/unit';
+import { dateAdd } from './date-add';
 
-export const computeScaleList = ({ dataScaleUnit, date, step, thWidth, secondWidth }) => {
+export const computeScaleList = ({ dataScaleUnit, date, step, thWidth, secondWidth }:{
+  dataScaleUnit:Unit;
+  date: Date;
+  step: number,
+  thWidth: number,
+  secondWidth: number,
+}) => {
   const list:{
     scale: number,
     left: number,
-    date: Moment
+    date: Date
   }[] = [];
   // 判断 日 周 月
   if (dataScaleUnit === Unit.DAY) {
@@ -33,7 +39,7 @@ export const computeScaleList = ({ dataScaleUnit, date, step, thWidth, secondWid
     const stepCount = 7 / stepNum;
     for (let i = 0; i < stepCount; i++) {
       list.push({
-        date: date.clone().add(i * stepNum, 'day'),
+        date: dateAdd(date, i * stepNum, Unit.DAY),
         scale: day + i,
         left: i * stepWidth 
       });
@@ -49,7 +55,7 @@ export const computeScaleList = ({ dataScaleUnit, date, step, thWidth, secondWid
       list.push({
         scale: (day + i * stepNum) % 30,
         left: i * stepWidth,
-        date: date.clone().add(i * stepNum, 'day')
+        date: dateAdd(date, i * stepNum, Unit.DAY)
       });
     }
     return list;

@@ -1,17 +1,17 @@
 import { BarId, GanttBarUpdateParams, GanttBarViewClassConstructor } from '@/types/gantt-bar';
 import { GanttBar } from './gantt-bar';
 import { GanttGroups } from './gantt-groups';
-import moment from 'moment';
 import { GanttBars } from './gantt-bars';
 import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GanttGroup } from './gantt-group';
-import { isBoolean, isUndefined, uniq, uniqBy } from 'lodash';
+import { cloneDeep, isBoolean, isUndefined, uniq, uniqBy } from 'lodash';
 import { GanttBarUpdateOperationData } from '@/types/gantt-operation-history';
 import { GanttBarUpdateOperation } from './gantt-operation';
 import { GanttJsonDataBar } from '@/types/gantt';
 import { SchedulingMode } from '@/types/gantt-config';
+import { getSecondsBetween } from '@/utils/get-seconds-between';
 
 export class GanttBarView extends GanttBar {
   static Events = { SELECTED_CHANGE: 'SELECTED_CHANGE' };
@@ -101,14 +101,6 @@ export class GanttBarView extends GanttBar {
     if (this._contextMenuEnable === val) return;
     this._contextMenuEnable = val;
     this.bus.emit(GanttBusEvents.BAR_CONTEXT_MENU_ENABLE_CHANGE, [this.id]);
-  }
-
-  get startMoment() {
-    return moment(this.start, 'YYYY-MM-DD HH:mm:ss');
-  }
-
-  get endMoment() {
-    return moment(this.end, 'YYYY-MM-DD HH:mm:ss');
   }
 
   get selectable(): boolean {
@@ -212,29 +204,33 @@ export class GanttBarView extends GanttBar {
   }
 
   calculatePos() {
-    const startSecond = Math.floor(this.startMoment.toDate().getTime() / 1000);
-    const endSecond = Math.floor(this.endMoment.toDate().getTime() / 1000);
+    this.calculatePosX();
+    this.calculatePosY();
+  }
 
-    const sx = (startSecond - Math.floor(this.config.startDate.toDate().getTime() / 1000)) * this.config.secondWidth;
-    const width = (endSecond - startSecond) * this.config.secondWidth;
+  calculatePosX() {
+    if (!this.isShow) return;
+    const sx = Math.floor((this.startTimeMills - this.config.startTimeMills) / 1000) * this.config.secondWidth;
+    const width = Math.floor((this.endTimeMills - this.startTimeMills) / 1000) * this.config.secondWidth;
     const ex = sx + width;
-        
+    this.sx = sx;
+    this.ex = ex;
+    this.width = width;
+  }
+
+  calculatePosY() {
+    if (!this.isShow) return;
     const height = this.layoutConfig.BAR_HEIGHT;
     const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
     const barCenterTop = this.layoutConfig.ROW_HEIGHT / 2;
     const _sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
-    const sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
+    const sy = _sy;
     const ey = sy + height;
    
-    this.sx = sx;
-    this.ex = ex;
-    this.width = width;
     this._sy = _sy;
     this.sy = sy;
     this.ey = ey;
     this.height = height;
-    this.st = startSecond * 1000;
-    this.et = endSecond * 1000;
   }
 
   clearOverlap() {
@@ -247,8 +243,8 @@ export class GanttBarView extends GanttBar {
   calculateOverlap() {
     if (this.isClone) return;
     const group = this.groups.getById(this.group.id)!;
+    this.calculateOverlapBarIds();
     if (!group.barOverlap) {
-      this.calculateOverlapBarIds();
       this.bus.emit(GanttBusEvents.GROUP_OVERLAP_CHANGE, {
         barId: this.id,
         groupId: group.id
@@ -259,44 +255,49 @@ export class GanttBarView extends GanttBar {
     if (this.isClone) return;
     const group = this.groups.getById(this.group.id)!;
 
-    if (!group.barOverlap) {
-      const bars = uniqBy(this.dayList.reduce<GanttBar[]>((acc, day) => [...acc, ...this.group.dayBarMap[day]], []), bar => bar.id).map(bar => this.bars.getById(bar.id)!);
-      const overlapBars = bars.filter(bar => this.isOverlapBar(bar));
+    const bars = uniqBy(this.dayList.reduce<GanttBar[]>((acc, day) => [...acc, ...this.group.dayBarMap[day]], []), bar => bar.id).map(bar => this.bars.getById(bar.id)!);
+    const overlapBars = bars.filter(bar => this.isOverlapBar(bar));
       
-      overlapBars.forEach(bar => {
-        bar.overlapBarIds.push(this.id);
-        this.overlapBarIds.push(bar.id);
-      });
+    overlapBars.forEach(bar => {
+      bar.overlapBarIds.push(this.id);
+      this.overlapBarIds.push(bar.id);
+    });
+  }
+
+  isRectanglesOverlap (rect1:{x1:number, x2: number}, rect2:{x1:number, x2: number}) {
+    if (rect1.x2 <= rect2.x1 || rect2.x2 <= rect1.x1) {
+      return false;
     }
+
+    // 如果上述条件都不满足，则两个矩形重叠
+    return true;
   }
 
   isOverlapBar(bar: GanttBarView) {
     if (bar.id === this.id) return false;
     
-    return isRectanglesOverlap({
-      x1: this.sx,
-      y1: this._sy,
-      x2: this.ex,
-      y2: this.ey
+    return this.isRectanglesOverlap({
+      x1: this.startTimeMills,
+      x2: this.endTimeMills
     }, {
-      x1: bar.sx,
-      y1: bar._sy,
-      x2: bar.ex,
-      y2: bar.ey
+      x1: bar.startTimeMills,
+      x2: bar.endTimeMills
     });
   }
 
   changeY() {
+    if (!this.isShow) return;
     const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
     const barCenterTop = this.layoutConfig.ROW_HEIGHT / 2;
     const height = this.layoutConfig.BAR_HEIGHT;
     const _sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
-    const sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2) + (this.rowIndex * this.layoutConfig.ROW_HEIGHT);
+    const sy = _sy + (this.rowIndex * this.layoutConfig.ROW_HEIGHT);
     const ey = sy + height;
 
     this._sy = _sy;
     this.sy = sy;
     this.ey = ey;
+    this.height = height;
   }
 
   clone() {
@@ -330,7 +331,12 @@ export class GanttBarView extends GanttBar {
       dragging: this.dragging,
       selected: this.selected,
       rowIndex: this.rowIndex,
-      zIndex: this.zIndex
+      zIndex: this.zIndex,
+      color: this.color,
+      start: this.start,
+      end: this.end,
+      overlapBarIds: cloneDeep(this.overlapBarIds),
+      groupId: this.group.id
     };
   }
 

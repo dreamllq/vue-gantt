@@ -6,5 +6,5 @@ export default {
   'weeks.thu': '木曜日',
   'weeks.fri': '金曜日',
   'weeks.sat': '土曜日',
-  'weekFormat': 'YYYY第ww週'
+  'weekFormat': '{year}第{week}週'
 };

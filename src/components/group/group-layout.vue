@@ -11,9 +11,9 @@
       >
         <div class='group-inner'>
           <div
-            v-if='item.group.children.length>0'
+            v-if='item.group.hasChildren'
             class='operator' 
-            @click='onExpand(item.group)'>
+            @click='onExpand(ganttEntity.groups.getById(item.group.id)!)'>
             <el-icon
               size='12'
               class='icon'

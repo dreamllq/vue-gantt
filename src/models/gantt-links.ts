@@ -84,37 +84,23 @@ export class GanttLinks extends BizArray<GanttLinkView> {
     this.linkGroupMap = {};
     this.forEach(item => item.linkGroup = '');
 
-    const sourceBarLinkMap:Record<BarId, GanttLinkView[]> = {};
-    const targetBarLinkMap:Record<BarId, GanttLinkView[]> = {};
-    this.forEach(item => {
-      if (!Array.isArray(sourceBarLinkMap[item.source.id])) {
-        sourceBarLinkMap[item.source.id] = [];
-      }
-      sourceBarLinkMap[item.source.id].push(item);
-      if (!Array.isArray(targetBarLinkMap[item.target.id])) {
-        targetBarLinkMap[item.target.id] = [];
-      }
-      targetBarLinkMap[item.target.id].push(item);
-    });
     const startLinks = this.calculateStartLinks();
     startLinks.forEach(link => {
-      const sameSourceLink = sourceBarLinkMap[link.source.id].find(item => item.linkGroup);
-      const sameTargetLink = targetBarLinkMap[link.target.id].find(item => item.linkGroup);
+      // #region 此link的下一个link是否已经赋值过linkGroup,有linkGroup则赋值给当前link，否则初始化当前link.linkGroup
+      const sameSourceLink = this.sourceBarLinkMap[link.source.id].find(item => item.linkGroup);
       if (sameSourceLink) {
         link.linkGroup = sameSourceLink.linkGroup;
-        this.linkGroupMap[link.linkGroup!].push(link);
-      } else if (sameTargetLink) {
-        link.linkGroup = sameTargetLink.linkGroup;
         this.linkGroupMap[link.linkGroup!].push(link);
       } else {
         link.linkGroup = uuidv4();
         this.linkGroupMap[link.linkGroup] = [link];
       }
-      let next = sourceBarLinkMap[link.target.id] || [];
+      // #endregion
+      let next = this.sourceBarLinkMap[link.target.id] || [];
       while (next.length > 0) {
-        const tempNext:GanttLinkView[] = [];
+        const tempNext:BizArray<GanttLinkView> = new BizArray<GanttLinkView>();
         next.forEach(nextItem => {
-          const sameTargetLink = targetBarLinkMap[nextItem.target.id].find(item => item.linkGroup);
+          const sameTargetLink = this.targetBarLinkMap[nextItem.target.id].find(item => item.linkGroup);
           if (sameTargetLink) {
             if (!nextItem.linkGroup) {
               nextItem.linkGroup = sameTargetLink.linkGroup!;
@@ -138,7 +124,7 @@ export class GanttLinks extends BizArray<GanttLinkView> {
           } else if (!nextItem.linkGroup) {
             nextItem.linkGroup = link.linkGroup;
             this.linkGroupMap[link.linkGroup!].push(nextItem);
-            const ls = sourceBarLinkMap[nextItem.target.id] || [];
+            const ls = this.sourceBarLinkMap[nextItem.target.id] || [];
             ls.forEach(item => tempNext.push(item));
           } else {
             const tempLinkGroup = link.linkGroup!;
@@ -157,17 +143,8 @@ export class GanttLinks extends BizArray<GanttLinkView> {
   // 寻找开始链接
   calculateStartLinks = () => {
     const startLinks: GanttLinkView[] = []; 
-    
-    const targetBarLinkMap:Record<BarId, GanttLinkView[]> = {};
     this.forEach(item => {
-      if (!Array.isArray(targetBarLinkMap[item.target.id])) {
-        targetBarLinkMap[item.target.id] = [];
-      }
-      targetBarLinkMap[item.target.id].push(item);
-    });
-
-    this.forEach(item => {
-      if (!Array.isArray(targetBarLinkMap[item.source.id])) {
+      if (!(this.targetBarLinkMap[item.source.id] && this.targetBarLinkMap[item.source.id].length > 0)) {
         startLinks.push(item);
       }
     });

@@ -1,7 +1,11 @@
-import moment from 'moment';
-import BaseTimeList from './base-time-list';
+import BaseTimeList from './base-time-list.ts';
+import { strToDate } from '../to-date';
+import WorkTime from '../work-times/work-time';
+import { dateAdd } from '../date-add.ts';
 
 export default class AscTimeList extends BaseTimeList {
+  startDate: Date;
+
   constructor({
     duration,
     step,
@@ -15,46 +19,64 @@ export default class AscTimeList extends BaseTimeList {
       workTimes,
       unit
     });
-    this.startDate = moment(startDate, 'YYYY-MM-DD HH:mm:ss');
+    this.startDate = strToDate(startDate);
   }
 
-  calculateTimeRange({ workTime, date, residueUnitCount }) {
-    const time = date.unix() * 1000;
-    let start = null;
+  calculateTimeRange({ workTime, date, residueUnitCount }:{workTime: WorkTime, date: Date, residueUnitCount: number}) : {
+    start: Date,
+    end: Date,
+    unitCount: number,
+    isEnd: boolean
+  } | null {
+    const time = date.getTime();
+    let start: Date;
     if (workTime.isBeforeStart(time)) {
-      start = workTime.startMoment.clone();
+      start = workTime.startDate;
     } else if (workTime.isAfterAndEqualStart(time) && workTime.isBeforeAndEqualEnd(time)) {
-      start = date.clone();
+      start = date;
     } else {
       return null;
     }
-    const unitCount = workTime.getUnitCountByDate(start.clone(), this.unit);
+    const unitCount = workTime.getUnitCountByDate(start, this.unit);
     if (residueUnitCount >= unitCount) {
       return {
-        start: start.clone(),
-        end: workTime.endMoment,
+        start: start,
+        end: workTime.endDate,
         unitCount: unitCount,
         isEnd: false
       };
     } else {
-      const end = moment(start).add(residueUnitCount, this.unit);
+      const end = dateAdd(start, residueUnitCount, this.unit);
+      
       return {
-        start: start.clone(),
-        end: end,
+        start: start,
+        end: end!,
         unitCount: residueUnitCount,
         isEnd: true
       };
     }
   }
 
-  calculate({ greed = false } = {}) {
-    let date = this.startDate.clone();
+  calculate({ greed = false } = {}): {
+    timeList: {
+      start: Date,
+      end: Date,
+      unitCount: number,
+      isEnd: boolean
+    }[]
+  } {
+    let date: Date = this.startDate;
 
     const allUnitCount = this.duration * this.step;
     let tempUnitCount = 0;
-    const timeList = [];
+    const timeList:{
+      start: Date,
+      end: Date,
+      unitCount: number,
+      isEnd: boolean
+    }[] = [];
 
-    let matchedWorkTimes = this.workTimes.workTimes;
+    const matchedWorkTimes = this.workTimes.workTimes;
     let isMatchWorkTimeEnd = false;
     
     matchedWorkTimes.forEach(workTime => {
@@ -68,7 +90,7 @@ export default class AscTimeList extends BaseTimeList {
       if (tr === null) {
         return;
       }
-      date = workTime.endMoment.clone();
+      date = workTime.endDate;
       tempUnitCount += tr.unitCount;
       isMatchWorkTimeEnd = tr.isEnd;
       
@@ -82,9 +104,11 @@ export default class AscTimeList extends BaseTimeList {
     });
     
     if (timeList.length === 0) {
+      const end = dateAdd(this.startDate, this.duration * this.step, this.unit);
+
       timeList.push({
-        start: this.startDate.clone(),
-        end: this.startDate.clone().add(this.duration * this.step, this.unit),
+        start: this.startDate,
+        end: end!, 
         unitCount: this.duration * this.step,
         isEnd: true
       });

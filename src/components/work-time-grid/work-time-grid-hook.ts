@@ -1,12 +1,8 @@
 import { onBeforeUnmount, onMounted, Ref, ref } from 'vue';
 import { useStore } from '../store';
-import moment from 'moment';
-import { cloneDeep } from 'lodash';
 import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { Events } from '@/types/events';
-import { GroupId } from '@/types/gantt-group';
 import { WorkTimeId } from '@/types/gantt-work-time';
-import { BizArray } from '@/models/biz-array';
 import { GanttWorkTimeView } from '@/models/gantt-work-time-view';
 
 export const useWorkTimeGridHook = () => {

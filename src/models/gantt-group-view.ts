@@ -56,7 +56,7 @@ export class GanttGroupView extends GanttGroup {
     return this._height;
   }
 
-  calculateBarsHeight() {
+  calculateBarsHeight(emit = true) {
     let barRows = 1;
     let height = 0;
     if (this.isShow) {
@@ -69,11 +69,11 @@ export class GanttGroupView extends GanttGroup {
     }
     if (height !== this.barsHeight) {
       this.barsHeight = height;
-      this.bus.emit(GanttBusEvents.GROUP_BARS_HEIGHT_CHANGE, { groupId: this.id });
+      emit && this.bus.emit(GanttBusEvents.GROUP_BARS_HEIGHT_CHANGE, { groupId: this.id });
     }
   }
 
-  calculateAttachedBarsHeight() {
+  calculateAttachedBarsHeight(emit = true) {
     let height = 0;
     if (this.isShow) {
       if (this.config.showAttachedBars) {
@@ -85,16 +85,16 @@ export class GanttGroupView extends GanttGroup {
 
     if (height !== this.attachedBarsHeight) {
       this.attachedBarsHeight = height;
-      this.bus.emit(GanttBusEvents.GROUP_ATTACHED_BARS_HEIGHT_CHANGE, { groupId: this.id });
+      emit && this.bus.emit(GanttBusEvents.GROUP_ATTACHED_BARS_HEIGHT_CHANGE, { groupId: this.id });
     }
   }
 
-  calculateHeight() {
+  calculateHeight(emit = true) {
     const height = this.barsHeight + this.attachedBarsHeight;
 
     if (height !== this._height) {
       this._height = height;
-      this.bus.emit(GanttBusEvents.GROUP_HEIGHT_CHANGE, { groupId: this.id });
+      emit && this.bus.emit(GanttBusEvents.GROUP_HEIGHT_CHANGE, { groupId: this.id });
     }
   }
 
@@ -104,6 +104,23 @@ export class GanttGroupView extends GanttGroup {
     this.calculateHeight();
   }
 
+  initHeight() {
+    this.calculateBarsHeight(false);
+    this.calculateAttachedBarsHeight(false);
+    this.calculateHeight(false);
+  }
+
+  toUiJSON() {
+    return {
+      id: this.id,
+      barOverlap: this.barOverlap,
+      isExpand: this.isExpand,
+      parentId: this.parent?.id,
+      height: this.height,
+      deep: this.deep,
+      hasChildren: this.children.length > 0
+    };
+  }
   toJSON():GanttJsonDataGroup {
     return {
       id: this.id,

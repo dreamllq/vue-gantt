@@ -2,6 +2,12 @@ import { Gantt } from '@/models/gantt';
 import { computed, ref } from 'vue';
 import { useBus } from './bus';
 import { Events } from '@/types/events';
+import { Id } from '@/types/id';
+import { dateDiff } from '@/utils/date-diff';
+import { strToDate } from '@/utils/to-date';
+import { Unit } from '@/types/unit';
+import { dateAdd } from '@/utils/date-add';
+import { dateTimeFormat } from '@/utils/date-time-format';
 
 export const useScroll = (ganttEntity:Gantt, store:{
     bus: ReturnType<typeof useBus>;
@@ -9,6 +15,8 @@ export const useScroll = (ganttEntity:Gantt, store:{
   const scrollReady = ref(false);
   const _scrollLeft = ref(0);
   const _scrollTop = ref(0);
+  
+  const scrollPos: {groupId?:Id, datetime?:string} = {};
 
   const scrollLeft = computed({
     get() {
@@ -56,11 +64,36 @@ export const useScroll = (ganttEntity:Gantt, store:{
     }
   };
 
+  const saveCurrentPos = () => {
+    const groupIndex = ganttEntity.groups.getGroupIndexByTop(scrollTop.value);
+    const groupId = ganttEntity.groups.expandedGroups[groupIndex].id;
+
+    const seconds = Math.floor(scrollLeft.value / ganttEntity.config.secondWidth);
+    
+    const datetime = dateTimeFormat(dateAdd(strToDate(ganttEntity.config.start), seconds, Unit.SECOND));
+
+    scrollPos.groupId = groupId;
+    scrollPos.datetime = datetime;
+    
+  };
+
+  const revertPos = () => {
+    if (scrollPos.groupId) {
+      scrollTop.value = ganttEntity.groups.getGroupTopByIndex(ganttEntity.groups.getGroupIndex(ganttEntity.groups.getById(scrollPos.groupId)!));
+    }
+
+    if (scrollPos.datetime) {
+      scrollLeft.value = dateDiff(strToDate(scrollPos.datetime), strToDate(ganttEntity.config.start), Unit.SECOND) * ganttEntity.config.secondWidth;
+    }
+  };
+
   return {
     scrollReady,
     scrollLeft,
     scrollTop,
     calculate,
-    onWheel
+    onWheel,
+    saveCurrentPos,
+    revertPos
   };
 };
