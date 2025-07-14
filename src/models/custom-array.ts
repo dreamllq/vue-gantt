@@ -142,6 +142,8 @@ export class CustomArray<T extends WithId> extends Array<T> {
       ];
       // 更新当前实例
       this.length = 0;
+      this._map.clear();
+
       // @ts-ignore
       this.push(...merged);
     }
@@ -152,10 +154,15 @@ export class CustomArray<T extends WithId> extends Array<T> {
   splice(start: number, deleteCount?: number): T[];
   splice(start: number, deleteCount: number, ...items: T[]): T[];
   splice(start: number, deleteCount: number, ...items: T[]) {
-    const deleteItems = this._splice(start, deleteCount, ...items);
     if (Array.isArray(items)) {
       items.forEach(item => {
         this.idUniqValid(item.id);
+      });
+    }
+    const deleteItems = this._splice(start, deleteCount, ...items);
+
+    if (Array.isArray(items)) {
+      items.forEach(item => {
         this._map.set(item.id, item);
       });
     }

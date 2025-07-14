@@ -1,4 +1,3 @@
-import { GanttBar } from '@/models/gantt-bar';
 import { GanttBars } from '@/models/gantt-bars';
 import { GanttBus } from '@/models/gantt-bus';
 import { GanttConfig } from '@/models/gantt-config';
@@ -6,7 +5,6 @@ import { GanttGroup } from '@/models/gantt-group';
 
 import { GanttGroups } from '@/models/gantt-groups';
 import { GanttLayoutConfig } from '@/models/gantt-layout-config';
-import { GanttWorkTime } from '@/models/gantt-work-time';
 import { GanttWorkTimes } from '@/models/gantt-work-times';
 
 describe('gantt-bar', () => {
@@ -108,7 +106,6 @@ describe('gantt-bar', () => {
   });
 
   test('有休息日-开始时间在工作时间', () => {
-
     const groups = new GanttGroups({
       bus,
       config,

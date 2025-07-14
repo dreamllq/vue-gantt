@@ -81,28 +81,6 @@ export class GanttBars extends BizArray<GanttBarView> {
   }
   initX() {
     this.groups.expandedGroups.forEach(group => {
-      // console.time('resetTimeRange');
-      // group.bars.forEach(bar => {
-      //   bar.resetTimeRange();
-      // });
-      // console.timeEnd('resetTimeRange');
-      // console.time('calculatePosX');
-      // group.bars.forEach(bar => {
-      //   bar.calculatePosX();
-      // });
-      // console.timeEnd('calculatePosX');
-      // console.time('clearOverlap');
-      // group.bars.forEach(bar => {
-      //   bar.clearOverlap();
-      // });
-      // console.timeEnd('clearOverlap');
-      // console.time('calculateOverlapBarIds');
-      // group.bars.forEach(bar => {
-      //   bar.calculateOverlapBarIds();
-      // });
-      // console.timeEnd('calculateOverlapBarIds');
-
-
       group.bars.forEach(bar => {
         bar.resetTimeRange();
         bar.calculatePosX();

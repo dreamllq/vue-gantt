@@ -2,7 +2,6 @@ import { BarId, GanttBarUpdateParams, GanttBarViewClassConstructor } from '@/typ
 import { GanttBar } from './gantt-bar';
 import { GanttGroups } from './gantt-groups';
 import { GanttBars } from './gantt-bars';
-import { isRectanglesOverlap } from '@/utils/is-rectangles-overlap';
 import { GanttBus } from './gantt-bus';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { GanttGroup } from './gantt-group';
@@ -11,7 +10,6 @@ import { GanttBarUpdateOperationData } from '@/types/gantt-operation-history';
 import { GanttBarUpdateOperation } from './gantt-operation';
 import { GanttJsonDataBar } from '@/types/gantt';
 import { SchedulingMode } from '@/types/gantt-config';
-import { getSecondsBetween } from '@/utils/get-seconds-between';
 
 export class GanttBarView extends GanttBar {
   static Events = { SELECTED_CHANGE: 'SELECTED_CHANGE' };

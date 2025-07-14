@@ -16,6 +16,11 @@ import { Events } from '@/types/events';
 
 const { ganttEntity, scroll, bus } = useStore()!;
 const { scrollTop } = scroll;
+const scrollYRef = ref<HTMLElement>();
+
+onMounted(() => {
+  scrollYRef.value!.scrollTop = scrollTop.value;
+});
 
 const style = ref({
   top: `${ganttEntity.layoutConfig.HEADER_HEIGHT}px`,
@@ -28,10 +33,9 @@ const barStyle = ref({
   width: 'var(--scroll-width)'
 });
 
-const scrollYRef = ref();
 
 watch(scrollTop, (val) => {
-  scrollYRef.value.scrollTop = val;
+  scrollYRef.value!.scrollTop = val;
 });
 
 let tempY: number;
