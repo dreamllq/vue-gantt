@@ -42,6 +42,7 @@ export class GanttAttachedBars extends BizArray<GanttAttachedBarView> {
     });
 
     this.bus.on(GanttBusEvents.GROUPS_CHANGE, (data) => {
+      if (!this.config.showAttachedBars) return; 
       this.updateShow();
       const effectAttachedBarIds = this.updateGroupExpandChangeEffectBar([...data.addGroupIds, ...data.deleteGroupIds]);
       

@@ -43,8 +43,8 @@ export class GanttAttachedBarView extends GanttAttachedBar {
     const height = this.layoutConfig.ATTACHED_BAR_HEIGHT;
     const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
     const barCenterTop = this.layoutConfig.ATTACHED_ROW_HEIGHT / 2;
-    const _sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
-    const sy = _sy + (this.rowIndex * this.layoutConfig.ATTACHED_ROW_HEIGHT) + this.groups.getById(this.group.id)!.barsHeight;
+    const _sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2) + this.groups.getById(this.group.id)!.barsHeight;
+    const sy = _sy + (this.rowIndex * this.layoutConfig.ATTACHED_ROW_HEIGHT);
     const ey = sy + height;
    
     this.sx = sx;
@@ -62,8 +62,8 @@ export class GanttAttachedBarView extends GanttAttachedBar {
     const barCenterTop = this.layoutConfig.ATTACHED_ROW_HEIGHT / 2;
     const groupIndex = this.groups.getGroupIndex(this.groups.getById(this.group.id)!);
     const height = this.layoutConfig.ATTACHED_BAR_HEIGHT;
-    const _sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2);
-    const sy = _sy + (this.rowIndex * this.layoutConfig.ATTACHED_ROW_HEIGHT) + this.groups.getById(this.group.id)!.barsHeight;
+    const _sy = this.groups.getGroupTopByIndex(groupIndex) + barCenterTop - (height / 2) + this.groups.getById(this.group.id)!.barsHeight;
+    const sy = _sy + (this.rowIndex * this.layoutConfig.ATTACHED_ROW_HEIGHT);
     const ey = sy + height;
    
     this._sy = _sy;

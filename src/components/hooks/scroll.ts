@@ -78,8 +78,6 @@ export const useScroll = (ganttEntity:Gantt, store:{
   };
 
   const revertPos = () => {
-    console.log('revertPos', scrollPos);
-    
     if (scrollPos.groupId) {
       scrollTop.value = ganttEntity.groups.getGroupTopByIndex(ganttEntity.groups.getGroupIndex(ganttEntity.groups.getById(scrollPos.groupId)!));
     }
@@ -87,8 +85,6 @@ export const useScroll = (ganttEntity:Gantt, store:{
     if (scrollPos.datetime) {
       scrollLeft.value = dateDiff(strToDate(scrollPos.datetime), strToDate(ganttEntity.config.start), Unit.SECOND) * ganttEntity.config.secondWidth;
     }
-    console.log(scrollTop.value, scrollLeft.value);
-    
   };
 
   return {

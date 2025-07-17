@@ -24,7 +24,7 @@ export type GanttBarClassConstructor = {
   group: GanttGroup,
   start: DateTimeString | null,
   end: DateTimeString | null,
-  duration: number | null,
+  duration: number,
   schedulingMode?: SchedulingMode | null
   bars: GanttBars;
   groups: GanttGroups;
@@ -35,7 +35,7 @@ export type GanttBarAddParams = {
   groupId: GroupId,
   start: DateTimeString | null,
   end: DateTimeString | null,
-  duration: number | null,
+  duration: number,
   schedulingMode?: SchedulingMode | null,
   selectable?:boolean,
   draggable?:boolean,
@@ -47,7 +47,7 @@ export type GanttBarUpdateParams = {
   groupId?: GroupId,
   start?: DateTimeString | null,
   end?: DateTimeString | null,
-  duration?: number | null,
+  duration?: number,
   schedulingMode?: SchedulingMode | null,
   selectable?:boolean,
   draggable?:boolean,

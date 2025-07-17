@@ -66,7 +66,7 @@ export type GanttJsonDataBar = {
   groupId:GroupId,
   start: DateTimeString | null,
   end: DateTimeString | null,
-  duration: number | null
+  duration: number
   schedulingMode?: keyof typeof SchedulingMode,
   selectable?:boolean,
   draggable?:boolean,

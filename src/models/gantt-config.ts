@@ -19,6 +19,7 @@ export class GanttConfig extends EventEmitter {
     SHOW_ATTACHED_BARS_CHANGE: 'SHOW_ATTACHED_BARS_CHANGE'
   };
 
+  // #region 属性
   private _startDate: DateString;
   private _endDate: DateString;
   private _daySplitTime: SplitTimeString;
@@ -41,6 +42,7 @@ export class GanttConfig extends EventEmitter {
   end: string;
   startTimeMills: number;
   endTimeMills: number;
+  // #endregion
 
   constructor(data:GanttConfigClassConstructor) {
     super();
@@ -89,7 +91,6 @@ export class GanttConfig extends EventEmitter {
     this._dataScaleUnit = val;
     this.emit(GanttConfig.Events.DATA_SCALE_UNIT_CHANGE, val);
   }
-  
 
   get draggable() {
     return this._draggable;

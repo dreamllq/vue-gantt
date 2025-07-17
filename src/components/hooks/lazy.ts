@@ -42,7 +42,7 @@ export const useLazy = (ganttEntity: Gantt, store:{
     lazyReady.value = true;
     store.bus.emit(Events.VISIBLE_AREA_CHANGE);
   };
-  const calculateVisibleAreaDebounce = debounce(calculateVisibleArea, max([ganttEntity.config.lazyDebounceTime, 10])!);
+  const calculateVisibleAreaDebounce = debounce(calculateVisibleArea, max([ganttEntity.config.lazyDebounceTime, 30])!);
 
   watch(() => [
     scrollLeft.value,

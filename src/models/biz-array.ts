@@ -3,6 +3,10 @@ import { CustomArray } from './custom-array';
 import { WithId } from '@/types/biz-array';
 export class BizArray<T extends WithId> extends CustomArray<T> {
   isExist(id:Id) {
+    return this.has(id);
+  }
+
+  has(id:Id) {
     return this._map.has(id);
   }
 

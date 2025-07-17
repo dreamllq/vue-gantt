@@ -13,7 +13,7 @@ import { SchedulingMode } from '@/types/gantt-config';
 
 export class GanttBarView extends GanttBar {
   static Events = { SELECTED_CHANGE: 'SELECTED_CHANGE' };
-
+  // #region 绘制属性
   sx = 0;
   ex = 0;
   width = 0;
@@ -37,6 +37,7 @@ export class GanttBarView extends GanttBar {
 
   private _selectable?: boolean;
   private _draggable?:boolean;
+  // #endregion
   constructor(data:GanttBarViewClassConstructor) {
     super(data);
     this.groups = data.groups;
@@ -48,6 +49,7 @@ export class GanttBarView extends GanttBar {
     this.color = data.color;
   }
 
+  // #region 计算属性
   set group(val: GanttGroup) {
     const oldGroupId = this.group.id;
     const newGroupId = val.id;
@@ -117,6 +119,7 @@ export class GanttBarView extends GanttBar {
   set draggable(val:boolean | undefined) {
     this._draggable = val;
   }
+  // #endregion
 
   update(data:GanttBarUpdateParams) {
     const operationOldData:GanttBarUpdateOperationData = {
@@ -130,6 +133,30 @@ export class GanttBarView extends GanttBar {
       selectable: this.selectable
     };
         
+    this.updateInfo(data);
+
+    const operationNewData:GanttBarUpdateOperationData = {
+      barId: this.id,
+      groupId: this.group.id,
+      start: this.start,
+      end: this.end,
+      rowIndex: this.rowIndex,
+      draggable: this.draggable,
+      schedulingMode: this.schedulingMode,
+      selectable: this.selectable
+    };
+    
+    const operation = new GanttBarUpdateOperation({
+      bus: this.bus,
+      bars: this.bars,
+      groups: this.groups,
+      newData: operationNewData,
+      oldData: operationOldData
+    });
+    this.bus.emit(GanttBusEvents.HISTORY_PUSH, operation);
+  }
+
+  updateInfo(data:GanttBarUpdateParams) {
     if (data.schedulingMode) {
       this.schedulingMode = data.schedulingMode;
     }
@@ -170,26 +197,6 @@ export class GanttBarView extends GanttBar {
       this.bars.calculateGroupOverlap({ groupId: oldGroup.id });
     }
     this.bus.emit(GanttBusEvents.BAR_CHANGE, [this.id]);
-
-    const operationNewData:GanttBarUpdateOperationData = {
-      barId: this.id,
-      groupId: this.group.id,
-      start: this.start,
-      end: this.end,
-      rowIndex: this.rowIndex,
-      draggable: this.draggable,
-      schedulingMode: this.schedulingMode,
-      selectable: this.selectable
-    };
-    
-    const operation = new GanttBarUpdateOperation({
-      bus: this.bus,
-      bars: this.bars,
-      groups: this.groups,
-      newData: operationNewData,
-      oldData: operationOldData
-    });
-    this.bus.emit(GanttBusEvents.HISTORY_PUSH, operation);
   }
 
   calculate() {
@@ -251,9 +258,10 @@ export class GanttBarView extends GanttBar {
   }
   calculateOverlapBarIds() {
     if (this.isClone) return;
-    const group = this.groups.getById(this.group.id)!;
 
-    const bars = uniqBy(this.dayList.reduce<GanttBar[]>((acc, day) => [...acc, ...this.group.dayBarMap[day]], []), bar => bar.id).map(bar => this.bars.getById(bar.id)!);
+    const bars = uniqBy(this.dayList
+      .reduce<GanttBar[]>((acc, day) => [...acc, ...(this.group.dayBarMap[day] || [])], []), bar => bar.id)
+      .map(bar => this.bars.getById(bar.id)!);
     const overlapBars = bars.filter(bar => this.isOverlapBar(bar));
       
     overlapBars.forEach(bar => {

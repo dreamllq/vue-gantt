@@ -32,8 +32,7 @@ describe('gantt-links 合并', () => {
     config,
     layoutConfig,
     id: 'g1',
-    parent: null,
-    workTimes: []
+    parent: null
   });
 
   const link = new GanttLinks({
@@ -56,7 +55,7 @@ describe('gantt-links 合并', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -66,7 +65,7 @@ describe('gantt-links 合并', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -83,7 +82,7 @@ describe('gantt-links 合并', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -93,7 +92,7 @@ describe('gantt-links 合并', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -110,7 +109,7 @@ describe('gantt-links 合并', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -120,7 +119,7 @@ describe('gantt-links 合并', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -137,7 +136,7 @@ describe('gantt-links 合并', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -147,7 +146,7 @@ describe('gantt-links 合并', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   test('calculateStartLinks', () => {
@@ -194,8 +193,7 @@ describe('gantt-links 合并2', () => {
     config,
     layoutConfig,
     id: 'g1',
-    parent: null,
-    workTimes: []
+    parent: null
   });
 
   const link = new GanttLinks({
@@ -218,7 +216,7 @@ describe('gantt-links 合并2', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -228,7 +226,7 @@ describe('gantt-links 合并2', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -245,7 +243,7 @@ describe('gantt-links 合并2', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -255,7 +253,7 @@ describe('gantt-links 合并2', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -272,7 +270,7 @@ describe('gantt-links 合并2', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -282,7 +280,7 @@ describe('gantt-links 合并2', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -299,7 +297,7 @@ describe('gantt-links 合并2', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -309,7 +307,7 @@ describe('gantt-links 合并2', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -326,7 +324,7 @@ describe('gantt-links 合并2', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -336,7 +334,7 @@ describe('gantt-links 合并2', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   test('calculateStartLinks', () => {
@@ -384,8 +382,7 @@ describe('gantt-links 分叉', () => {
     config,
     layoutConfig,
     id: 'g1',
-    parent: null,
-    workTimes: []
+    parent: null
   });
 
   const link = new GanttLinks({
@@ -408,7 +405,7 @@ describe('gantt-links 分叉', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -418,7 +415,7 @@ describe('gantt-links 分叉', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -435,7 +432,7 @@ describe('gantt-links 分叉', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -445,7 +442,7 @@ describe('gantt-links 分叉', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -462,7 +459,7 @@ describe('gantt-links 分叉', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -472,7 +469,7 @@ describe('gantt-links 分叉', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -489,7 +486,7 @@ describe('gantt-links 分叉', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -499,7 +496,7 @@ describe('gantt-links 分叉', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   test('calculateStartLinks', () => {
@@ -546,8 +543,7 @@ describe('gantt-links 分叉2', () => {
     config,
     layoutConfig,
     id: 'g1',
-    parent: null,
-    workTimes: []
+    parent: null
   });
 
   const link = new GanttLinks({
@@ -570,7 +566,7 @@ describe('gantt-links 分叉2', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -580,7 +576,7 @@ describe('gantt-links 分叉2', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -597,7 +593,7 @@ describe('gantt-links 分叉2', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -607,7 +603,7 @@ describe('gantt-links 分叉2', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -624,7 +620,7 @@ describe('gantt-links 分叉2', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -634,7 +630,7 @@ describe('gantt-links 分叉2', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -651,7 +647,7 @@ describe('gantt-links 分叉2', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -661,7 +657,7 @@ describe('gantt-links 分叉2', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   test('calculateStartLinks', () => {
@@ -711,8 +707,7 @@ describe('gantt-links 多条单链', () => {
     config,
     layoutConfig,
     id: 'g1',
-    parent: null,
-    workTimes: []
+    parent: null
   });
 
   const link = new GanttLinks({
@@ -735,7 +730,7 @@ describe('gantt-links 多条单链', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -745,7 +740,7 @@ describe('gantt-links 多条单链', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -762,7 +757,7 @@ describe('gantt-links 多条单链', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -772,7 +767,7 @@ describe('gantt-links 多条单链', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -789,7 +784,7 @@ describe('gantt-links 多条单链', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -799,7 +794,7 @@ describe('gantt-links 多条单链', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -816,7 +811,7 @@ describe('gantt-links 多条单链', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -826,7 +821,7 @@ describe('gantt-links 多条单链', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   test('calculateStartLinks', () => {
@@ -878,8 +873,7 @@ describe('gantt-links 菱形', () => {
     config,
     layoutConfig,
     id: 'g1',
-    parent: null,
-    workTimes: []
+    parent: null
   });
 
   const link = new GanttLinks({
@@ -902,7 +896,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -912,7 +906,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -929,7 +923,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -939,7 +933,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -956,7 +950,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -966,7 +960,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -983,7 +977,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -993,7 +987,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   test('calculateStartLinks', () => {
@@ -1041,8 +1035,7 @@ describe('gantt-links 菱形', () => {
     config,
     layoutConfig,
     id: 'g1',
-    parent: null,
-    workTimes: []
+    parent: null
   });
 
   const link = new GanttLinks({
@@ -1065,7 +1058,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -1075,7 +1068,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -1092,7 +1085,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -1102,7 +1095,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -1119,7 +1112,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -1129,7 +1122,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -1146,7 +1139,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -1156,7 +1149,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -1173,7 +1166,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -1183,7 +1176,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   link.add({
@@ -1200,7 +1193,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    }),
+    } as any),
     target: new GanttBar({
       config,
       layoutConfig,
@@ -1210,7 +1203,7 @@ describe('gantt-links 菱形', () => {
       end: null,
       group: group,
       bars
-    })
+    } as any)
   });
 
   test('calculateStartLinks', () => {

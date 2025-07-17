@@ -14,7 +14,7 @@ export class GanttBar extends GanttBase {
   id: BarId;
   start: DateTimeString | null = null;
   end: DateTimeString | null = null;
-  duration: number | null = null;
+  duration: number;
   private _group: GanttGroup;
   protected _schedulingMode?:SchedulingMode;
   private _hasCalculated = false;
@@ -41,7 +41,7 @@ export class GanttBar extends GanttBase {
   set group(group: GanttGroup) {
     if (group.id === this._group.id) return;
     this.dayList.forEach(day => {
-      this.group.dayBarMap[day].removeById(this.id);
+      this.group.dayBarMap[day]!.removeById(this.id);
     });
     this._group = group;
     this.dayList.forEach(day => {
@@ -49,7 +49,7 @@ export class GanttBar extends GanttBase {
         this.group.dayBarMap[day] = new BizArray<GanttBar>();
       }
 
-      this.group.dayBarMap[day].push(this);
+      this.group.dayBarMap[day]!.push(this);
     });
   }
 
@@ -63,6 +63,11 @@ export class GanttBar extends GanttBase {
   }
 
   resetTimeRange() {
+    this.calculateTimeRange();
+    this.calculateDayList();
+  }
+
+  calculateTimeRange() {
     const data = {
       start: this.start,
       end: this.end
@@ -87,60 +92,10 @@ export class GanttBar extends GanttBase {
     if (data.start && data.end) {
       this.start = data.start;
       this.end = data.end;
-
     } else if (data.start !== null && this.duration !== null && data.end === null) {
-      // 开始时间存在，计算结束时间 正排
-      const timeRangeEntity = new TimeRange({
-        startDate: data.start,
-        duration: this.duration,
-        step: 1,
-        unit: this.config.durationUnit,
-        workTimes: this.group.workTimes
-      });
-      const timeRange = timeRangeEntity.calculateTimeRange();
-
-      if (!(timeRange.end.getTime() > strToDate(this.config.end).getTime())) {
-        this.start = dateTimeFormat(timeRange.start);
-        this.end = dateTimeFormat(timeRange.end);
-      } else {
-        const timeRangeEntity = new TimeRange({
-          endDate: this.config.end,
-          duration: this.duration,
-          step: 1,
-          unit: this.config.durationUnit,
-          workTimes: this.group.workTimes
-        });
-        const timeRange = timeRangeEntity.calculateTimeRange();
-        this.start = dateTimeFormat(timeRange.start);
-        this.end = this.config.end;
-      }
+      this.calculateTimeRangeForward({ start: data.start });
     } else if (data.end !== null && this.duration !== null && data.start === null) {
-      // 结束时间存在，计算开始时间 倒排
-      const timeRangeEntity = new TimeRange({
-        endDate: data.end,
-        duration: this.duration,
-        step: 1,
-        unit: this.config.durationUnit,
-        workTimes: this.group.workTimes
-      });
-      const timeRange = timeRangeEntity.calculateTimeRange();
-
-      
-      if (!(timeRange.start.getTime() < strToDate(this.config.start).getTime())) {
-        this.start = dateTimeFormat(timeRange.start);
-        this.end = dateTimeFormat(timeRange.end);
-      } else {
-        const timeRangeEntity = new TimeRange({
-          startDate: this.config.start,
-          duration: this.duration,
-          step: 1,
-          unit: this.config.durationUnit,
-          workTimes: this.group.workTimes
-        });
-        const timeRange = timeRangeEntity.calculateTimeRange();
-        this.start = this.config.start;
-        this.end = dateTimeFormat(timeRange.end);
-      }
+      this.calculateTimeRangeBackward({ end: data.end });
     } else {
       //  (data.end === null || data.start === null)
       console.error(`bar ${this.id} 时间异常：{start: ${this.start}, end: ${this.end}}`);
@@ -149,14 +104,69 @@ export class GanttBar extends GanttBase {
     }
     this.startTimeMills = strToDate(this.start!).getTime();
     this.endTimeMills = strToDate(this.end!).getTime();
+  }
 
-    this.calculateDayList();
+  calculateTimeRangeForward(data:{start: string}) {
+    // 开始时间存在，计算结束时间 正排
+    const timeRangeEntity = new TimeRange({
+      startDate: data.start,
+      duration: this.duration,
+      step: 1,
+      unit: this.config.durationUnit,
+      workTimes: this.group.workTimes
+    });
+    const timeRange = timeRangeEntity.calculateTimeRange();
+
+    if (!(timeRange.end.getTime() > strToDate(this.config.end).getTime())) {
+      this.start = dateTimeFormat(timeRange.start);
+      this.end = dateTimeFormat(timeRange.end);
+    } else {
+      const timeRangeEntity = new TimeRange({
+        endDate: this.config.end,
+        duration: this.duration,
+        step: 1,
+        unit: this.config.durationUnit,
+        workTimes: this.group.workTimes
+      });
+      const timeRange = timeRangeEntity.calculateTimeRange();
+      this.start = dateTimeFormat(timeRange.start);
+      this.end = this.config.end;
+    }
+  }
+
+  calculateTimeRangeBackward(data: {end: string}) {
+    // 结束时间存在，计算开始时间 倒排
+    const timeRangeEntity = new TimeRange({
+      endDate: data.end,
+      duration: this.duration,
+      step: 1,
+      unit: this.config.durationUnit,
+      workTimes: this.group.workTimes
+    });
+    const timeRange = timeRangeEntity.calculateTimeRange();
+
+      
+    if (!(timeRange.start.getTime() < strToDate(this.config.start).getTime())) {
+      this.start = dateTimeFormat(timeRange.start);
+      this.end = dateTimeFormat(timeRange.end);
+    } else {
+      const timeRangeEntity = new TimeRange({
+        startDate: this.config.start,
+        duration: this.duration,
+        step: 1,
+        unit: this.config.durationUnit,
+        workTimes: this.group.workTimes
+      });
+      const timeRange = timeRangeEntity.calculateTimeRange();
+      this.start = this.config.start;
+      this.end = dateTimeFormat(timeRange.end);
+    }
   }
 
   calculateDayList():void {
     if (this.isClone) return;
     this.dayList.forEach(day => {
-      this.group.dayBarMap[day].removeById(this.id);
+      this.group.dayBarMap[day]!.removeById(this.id);
     });
     this.dayList = getDatesBetween(this.start!, this.end!); 
     this.dayList.forEach(day => {
@@ -164,7 +174,7 @@ export class GanttBar extends GanttBase {
         this.group.dayBarMap[day] = new BizArray<GanttBar>();
       }
 
-      this.group.dayBarMap[day].push(this);
+      this.group.dayBarMap[day]!.push(this);
     });
   }
 }

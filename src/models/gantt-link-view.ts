@@ -8,7 +8,7 @@ import { calculateStartToStartLink } from '@/utils/link/start-to-start-link';
 import { cloneDeep, max, min } from 'lodash';
 import { GanttJsonDataLink } from '@/types/gantt';
 
-const calculateFunction = {
+export const calculateFunction = {
   [GanttLinkType.FINISH_TO_FINISH]: calculateFinishToFinishLink,
   [GanttLinkType.FINISH_TO_START]: calculateFinishToStartLink,
   [GanttLinkType.START_TO_FINISH]: calculateStartToFinishLink,
@@ -40,16 +40,20 @@ export class GanttLinkView extends GanttLink {
     return this.bars.getById(this.target.id);
   }
 
-  get sourceY() {
-    if (this.sourceBar) {
-      return this.sourceBar.sy + Math.floor(this.sourceBar.height / 2) - 0.5;
-    } 
+  get sourceY(): number | undefined {
+    const bar = this.sourceBar;
+    if (bar && 'height' in bar) {
+      return bar.sy + Math.floor(bar.height / 2) - 0.5;
+    }
+    return undefined;
   }
 
-  get targetY() {
-    if (this.targetBar) {
-      return this.targetBar.sy + Math.floor(this.targetBar.height / 2) - 0.5;
-    } 
+  get targetY(): number | undefined {
+    const bar = this.targetBar;
+    if (bar && 'height' in bar) {
+      return bar.sy + Math.floor(bar.height / 2) - 0.5;
+    }
+    return undefined;
   }
 
   get sourceStartX() {
