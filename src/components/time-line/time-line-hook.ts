@@ -54,6 +54,7 @@ export const useTimeLineHook = () => {
   };
   const calculate = () => {
     const dl = computeDayList(strToDate(ganttEntity.config.start), ganttEntity.config.dataUnitCount, ganttEntity.config.dataScaleUnit);
+    
     const a = dl.map(item => ({
       ...item,
       formatString: formatDate(item.date),

@@ -1,70 +1,4 @@
 <template>
-  <div>
-    <el-button @click='onHistoryBack'>
-      back
-    </el-button>
-    <el-button @click='onHistoryNext'>
-      next
-    </el-button>
-    <el-button @click='changeHeight'>
-      changeHeight
-    </el-button>
-  </div>
-  <el-button @click='changeDraggable'>
-    changeDraggable
-  </el-button>
-  <el-button @click='changeSelectable'>
-    changeSelectable
-  </el-button>
-  <el-button @click='setDataScaleUnit'>
-    setDataScaleUnit
-  </el-button>
-  <el-button @click='setSizeRatioPercent'>
-    setSizeRatioPercent
-  </el-button>
-  <el-button @click='removeBarById'>
-    removeBarById
-  </el-button>
-  <el-button @click='addBar'>
-    addBar
-  </el-button>
-  <el-button @click='updateBar'>
-    updateBar
-  </el-button>
-  <el-button @click='removeLinkById'>
-    removeLinkById
-  </el-button>
-  <el-button @click='addLink'>
-    addLink
-  </el-button>
-  <el-button @click='setShowAttachedBars'>
-    setShowAttachedBars
-  </el-button>
-  <el-button @click='setBarSelected'>
-    setBarSelected
-  </el-button>
-  <el-button @click='setBarSelectable'>
-    setBarSelectable
-  </el-button>
-  <el-button @click='setBarContextMenuEnable'>
-    setBarContextMenuEnable
-  </el-button>
-  <el-button @click='setBarDraggable'>
-    setBarDraggable
-  </el-button>
-  <el-button @click='scrollToGroup'>
-    scrollToGroup
-  </el-button>
-  <el-button @click='scrollToDatetime'>
-    scrollToDatetime
-  </el-button>
-  <el-button @click='getSelectedBarIds'>
-    getSelectedBarIds
-  </el-button>
-  <el-button @click='getJSON'>
-    getJSON
-  </el-button>
-  
   <div :style='{height: `${height}px`}'>
     <gantt-view
       ref='ganttRef' 
@@ -82,16 +16,14 @@
       <template #bar='{bar}'>
         {{ bar.id }} \ {{ bar.selected }} \ {{ bar.rowIndex }}
       </template>
-      <template #attachedBar='{bar}'>
-        {{ bar.id }} \ {{ bar.rowIndex }}
-      </template>
     </gantt-view>
   </div>
 </template>
 
 <script setup lang="ts">
 import { GanttView, GanttJsonData, GanttViewInstance } from '@/index.ts';
-import { data } from './data.ts';
+// import { data } from './a.ts';
+import data from './a.json';
 import { ref } from 'vue';
 
 const ganttData = ref<GanttJsonData>(data);
@@ -100,11 +32,7 @@ const height = ref(400);
 
 const hook = {
   beforeDragStart: (data) => true,
-  beforeDragEnd: (data) => new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, 1000);
-  })
+  beforeDragEnd: (data) => true
 };
 
 

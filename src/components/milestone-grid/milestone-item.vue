@@ -59,7 +59,7 @@ const style = computed(() => ({
 </script>
 
 <style scoped lang="scss">
-  .milestone-item{
+  .milestone-item {
     position: absolute;
     box-sizing: border-box;
     user-select: none;
@@ -67,9 +67,9 @@ const style = computed(() => ({
     transform: rotate(45deg);
     border: 1px solid #FFFFFF;
 
-    &.shadow{
+    &.shadow {
       border: 1px dotted var(--el-color-primary);
-      opacity: 0.7;
+      opacity: .7;
     }
   }
 </style>

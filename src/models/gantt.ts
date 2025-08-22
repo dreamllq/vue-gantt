@@ -47,6 +47,7 @@ export class Gantt extends EventEmitter {
     this.groups = new GanttGroups({
       layoutConfig: this.layoutConfig,
       config: this.config,
+      container: this.container,
       bus: this.bus
     });
 

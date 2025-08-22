@@ -32,7 +32,7 @@ export const useLazy = (ganttEntity: Gantt, store:{
     visibleAreaStartX.value = max([0, scrollLeft.value - mainWidth.value]) || 0;
     visibleAreaEndX.value = min([scrollLeft.value + (mainWidth.value * 2), ganttEntity.config.totalSeconds * ganttEntity.config.secondWidth]) || 0;
     visibleAreaStartY.value = max([0, scrollTop.value - mainHeight.value]) || 0;
-    visibleAreaEndY.value = min([scrollTop.value + (mainHeight.value * 2), ganttEntity.groups.getGroupHeight]) || 0;
+    visibleAreaEndY.value = min([scrollTop.value + (mainHeight.value * 2), ganttEntity.groups.getGroupHeight()]) || 0;
 
     
     visibleAreaStartDate.value = dateAdd(strToDate(ganttEntity.config.start), Math.floor(visibleAreaStartX.value / ganttEntity.config.secondWidth), Unit.SECOND);
@@ -62,6 +62,7 @@ export const useLazy = (ganttEntity: Gantt, store:{
     visibleAreaStartDate,
     visibleAreaEndDate,
     visibleAreaStartGroupIndex,
-    visibleAreaEndGroupIndex
+    visibleAreaEndGroupIndex,
+    calculateVisibleArea
   };
 };

@@ -9,6 +9,9 @@ import { GanttJsonDataConfig } from '@/types/gantt';
 import { strToDate } from '@/utils/to-date';
 import { dateFormat } from '@/utils/date-format';
 import { dateDiff } from '@/utils/date-diff';
+import { dateStartOf } from '@/utils/date-start-of';
+import { format } from 'date-fns';
+import { dateEndOf } from '@/utils/date-end-of';
 
 export class GanttConfig extends EventEmitter {
   static Events = {
@@ -38,16 +41,16 @@ export class GanttConfig extends EventEmitter {
   showCurrentTimeLine: boolean;
   _showAttachedBars: boolean;
   dragTimeOffset: number;
-  start: string;
-  end: string;
-  startTimeMills: number;
-  endTimeMills: number;
+  start = '';
+  end = '';
+  startTimeMills = 0;
+  endTimeMills = 0;
   // #endregion
 
   constructor(data:GanttConfigClassConstructor) {
     super();
-    this._startDate = data.startDate;
-    this._endDate = data.endDate;
+    this._startDate = data.startDate || dateFormat(new Date());
+    this._endDate = data.endDate || dateFormat(new Date());
     this._daySplitTime = data.daySplitTime || '00:00';
     this.durationUnit = data.durationUnit || Unit.SECOND;
     this._dataScaleUnit = data.dataScaleUnit || Unit.DAY;
@@ -64,10 +67,26 @@ export class GanttConfig extends EventEmitter {
     this.showCurrentTimeLine = !!data.showCurrentTimeLine; 
     this._showAttachedBars = !!data.showAttachedBars;
     this.dragTimeOffset = data.dragTimeOffset || 5 * 60;
-
     
-    this.start = `${dateFormat(strToDate(this._startDate))} ${this.daySplitTime.hour.toString().padStart(2, '0')}:${this.daySplitTime.minute.toString().padStart(2, '0')}:00`;
-    this.end = `${dateFormat(strToDate(this._endDate))} ${this.daySplitTime.hour.toString().padStart(2, '0')}:${this.daySplitTime.minute.toString().padStart(2, '0')}:00`;
+    // this.start = `${dateFormat(strToDate(this._startDate))} ${this.daySplitTime.hour.toString().padStart(2, '0')}:${this.daySplitTime.minute.toString().padStart(2, '0')}:00`;
+    // this.end = `${dateFormat(strToDate(this._endDate))} ${this.daySplitTime.hour.toString().padStart(2, '0')}:${this.daySplitTime.minute.toString().padStart(2, '0')}:00`;
+
+    this.calculateTimeRange();
+    
+  }
+
+  calculateTimeRange() {
+    const start = dateStartOf(strToDate(this._startDate), this._dataScaleUnit);
+    start.setHours(this.daySplitTime.hour);
+    start.setMinutes(this.daySplitTime.minute);
+    this.start = format(start, 'yyyy-MM-dd HH:mm:ss');
+
+    const end = dateStartOf(dateEndOf(strToDate(this._endDate), this._dataScaleUnit), Unit.DAY);
+    end.setHours(this.daySplitTime.hour);
+    end.setMinutes(this.daySplitTime.minute);
+    this.end = format(end, 'yyyy-MM-dd HH:mm:ss');
+    
+
     this.startTimeMills = strToDate(this.start).getTime();
     this.endTimeMills = strToDate(this.end).getTime();
   }
@@ -89,6 +108,7 @@ export class GanttConfig extends EventEmitter {
   set dataScaleUnit(val: Unit) {
     if (this._dataScaleUnit === val) return;
     this._dataScaleUnit = val;
+    this.calculateTimeRange();
     this.emit(GanttConfig.Events.DATA_SCALE_UNIT_CHANGE, val);
   }
 
@@ -151,7 +171,7 @@ export class GanttConfig extends EventEmitter {
   }
 
   get dataUnitCount() {
-    return dateDiff(strToDate(this.end), strToDate(this.start), this.dataScaleUnit);
+    return dateDiff(strToDate(this.end), strToDate(this.start), this.dataScaleUnit) + 1;
   }
 
   toJSON():GanttJsonDataConfig {

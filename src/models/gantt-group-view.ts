@@ -49,7 +49,7 @@ export class GanttGroupView extends GanttGroup {
       newValue: val,
       oldValue
     });
-    this.bus.emit(GanttBusEvents.GROUP_CHANGE, [this.id]);
+    // this.bus.emit(GanttBusEvents.GROUP_CHANGE, [this.id]);
   }
 
   get height() {

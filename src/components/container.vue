@@ -47,7 +47,7 @@ useResizeObserver(containerRef, (entries) => {
 </script>
 
 <style scoped lang="scss">
-.gantt-container{
+.gantt-container {
   position: relative;
   width: 100%;
   height: 100%;

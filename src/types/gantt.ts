@@ -16,8 +16,8 @@ import { WorkTimeId } from './gantt-work-time';
 export type GanttClassConstructor = { config: GanttConfig, layoutConfig: GanttLayoutConfig, hook?: GanttHook}
 
 export type GanttHook = {
-  beforeDragStart?: (data:{barId: BarId}) => boolean,
-  beforeDragEnd?: (data:{barId: BarId}) => boolean,
+  beforeDragStart?: (data:{barId: BarId, groupId: GroupId, start: string, end: string }) => boolean | Promise<boolean>,
+  beforeDragEnd?: (newData:{ barId: BarId, groupId: GroupId, start: string, end: string }, oldData: { barId: BarId, groupId: GroupId, start: string, end: string }) => boolean | Promise<boolean>,
 }
 
 export type GanttJsonDataConfig = {

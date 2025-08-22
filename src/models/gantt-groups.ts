@@ -8,17 +8,20 @@ import { GanttGroupsClassConstructor } from '@/types/gantt-groups';
 import { GanttBusEvents } from '@/types/gantt-bus';
 import { difference } from 'lodash';
 import { GanttJsonDataGroup } from '@/types/gantt';
+import { GanttContainer } from './gantt-container';
 
 export class GanttGroups extends BizArray<GanttGroupView> {
   expandedGroups: GanttGroupView[] = [];
   config: GanttConfig;
   layoutConfig: GanttLayoutConfig;
   bus: GanttBus;
+  container: GanttContainer;
   constructor(data : GanttGroupsClassConstructor) {
     super();
     this.config = data.config;
     this.layoutConfig = data.layoutConfig;
     this.bus = data.bus;
+    this.container = data.container;
 
     this.bus.on(GanttBusEvents.GROUP_HEIGHT_CHANGE, (data) => {
       this.calculateEffectGroupTop(data.groupId);

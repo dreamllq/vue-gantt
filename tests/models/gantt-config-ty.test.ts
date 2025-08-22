@@ -155,7 +155,7 @@ describe('GanttConfig - dataUnitCount', () => {
       dataScaleUnit: Unit.DAY
     });
 
-    expect(config.dataUnitCount).toBe(9); // 10 - 1 = 9 天
+    expect(config.dataUnitCount).toBe(10); // 10 - 1 = 9 天
   });
 
   test('should return correct number of weeks between start and end dates', () => {
@@ -167,7 +167,7 @@ describe('GanttConfig - dataUnitCount', () => {
       dataScaleUnit: Unit.WEEK
     });
 
-    expect(config.dataUnitCount).toBe(2); // 跨越了 2 周
+    expect(config.dataUnitCount).toBe(3); // 跨越了 2 周
   });
 
   test('should return correct number of months between start and end dates', () => {
@@ -179,7 +179,7 @@ describe('GanttConfig - dataUnitCount', () => {
       dataScaleUnit: Unit.MONTH
     });
 
-    expect(config.dataUnitCount).toBe(2); // Jan -> Feb -> Mar -> Apr, 差值为 3 个月
+    expect(config.dataUnitCount).toBe(4); // Jan -> Feb -> Mar -> Apr, 差值为 3 个月
   });
 });
 

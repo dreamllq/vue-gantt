@@ -35,10 +35,15 @@ export const useSingleDraggingHook = () => {
   });
   const { bus, ganttEntity, scroll, barHtmlClass } = useStore()!;
   const { scrollLeft, scrollTop } = scroll;
-  const onDragStart = (e:MouseEvent, bar: GanttBarView) => {
+  const onDragStart = async (e:MouseEvent, bar: GanttBarView) => {
     // hook.beforeDragStart
     if (ganttEntity.hook?.beforeDragStart) {
-      const flag = ganttEntity.hook.beforeDragStart({ barId: bar.id });
+      const flag = await ganttEntity.hook.beforeDragStart({
+        barId: bar.id,
+        groupId: bar.group.id,
+        start: bar.start!,
+        end: bar.end! 
+      });
       if (flag !== true) {
         return;
       }
@@ -99,20 +104,8 @@ export const useSingleDraggingHook = () => {
       schedulingMode: barClone.value.schedulingMode
     };
   };
-  const onDragEnd = (e:MouseEvent, bar:GanttBarView) => {
+  const onDragEnd = async (e:MouseEvent, bar:GanttBarView) => {
     if (draggingBar.value === undefined) return;
-    // hook.beforeDragEnd
-    if (ganttEntity.hook?.beforeDragEnd) {
-      const flag = ganttEntity.hook.beforeDragEnd({ barId: bar.id });
-      if (flag !== true) {
-        bar.dragging = false;
-        bus.emit(Events.BAR_DRAGGING_CHANGE, [bar.id], false);
-        draggingBar.value = undefined;
-        barClone.value = undefined;
-        shadowDraggingBar.value = undefined;
-        return;
-      }
-    }
 
     const dropX = draggingBar.value.sx;
     const dropY = draggingBar.value.sy + (ganttEntity.layoutConfig.BAR_HEIGHT / 2);
@@ -142,6 +135,32 @@ export const useSingleDraggingHook = () => {
     const group = ganttEntity.groups.expandedGroups[index];
     const top = ganttEntity.groups.getGroupTopByIndex(index);
     const dropRowIndex = max([Math.floor(min([(dropY - top), group.barsHeight - 1])! / ganttEntity.layoutConfig.ROW_HEIGHT), 0])!;
+
+
+    // hook.beforeDragEnd
+    if (ganttEntity.hook?.beforeDragEnd) {
+      const flag = await ganttEntity.hook.beforeDragEnd({
+        barId: bar.id,
+        end: endTime,
+        start: startTime,
+        groupId: group.id
+      }, { 
+        barId: bar.id,
+        groupId: bar.group.id,
+        start: bar.start!,
+        end: bar.end!
+      });
+
+      if (flag !== true) {
+        bar.dragging = false;
+        bus.emit(Events.BAR_DRAGGING_CHANGE, [bar.id], false);
+        draggingBar.value = undefined;
+        barClone.value = undefined;
+        shadowDraggingBar.value = undefined;
+        bus.emit(Events.BAR_CHANGE, [bar.id]);
+        return;
+      }
+    }
         
     bar.dragging = false;
     // bar.sx = barClone.value!.sx;

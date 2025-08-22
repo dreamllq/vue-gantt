@@ -20,7 +20,7 @@ export const useScroll = (ganttEntity:Gantt, store:{
 
   const scrollLeft = computed({
     get() {
-      return _scrollLeft.value;
+      return _scrollLeft.value < 0 ? 0 : _scrollLeft.value;
     },
     set(val) {
       if (val < 0) {
@@ -35,7 +35,7 @@ export const useScroll = (ganttEntity:Gantt, store:{
 
   const scrollTop = computed({
     get() {
-      return _scrollTop.value;
+      return _scrollTop.value < 0 ? 0 : _scrollTop.value;
     },
     set(val) {
       if (val < 0) {

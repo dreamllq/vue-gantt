@@ -38,6 +38,12 @@ describe('date-subtract', () => {
     const date5 = moment('2024-06-09 00:01:02', 'YYYY-MM-DD HH:mm:ss').toDate();
     const date6 = moment('2024-06-10 01:02:03', 'YYYY-MM-DD HH:mm:ss').toDate();
     expect(dateDiff(date5, date6, Unit.DAY)).toBe(moment(date6).diff(moment(date5), 'day'));
+
+    {
+      const date5 = moment('2024-06-09 00:01:02', 'YYYY-MM-DD HH:mm:ss').toDate();
+      const date6 = moment('2024-06-10 01:02:03', 'YYYY-MM-DD HH:mm:ss').toDate();
+      expect(dateDiff(date5, date6, Unit.DAY)).toBe(1);
+    }
   });
 
   test('week', () => {
@@ -48,6 +54,18 @@ describe('date-subtract', () => {
     const date5 = moment('2024-06-09 00:01:02', 'YYYY-MM-DD HH:mm:ss').toDate();
     const date6 = moment('2024-06-16 01:02:03', 'YYYY-MM-DD HH:mm:ss').toDate();
     expect(dateDiff(date5, date6, Unit.WEEK)).toBe(moment(date6).diff(moment(date5), 'week'));
+
+    { 
+      const date5 = moment('2025-08-04 00:01:02', 'YYYY-MM-DD HH:mm:ss').toDate();
+      const date6 = moment('2025-08-11 01:02:03', 'YYYY-MM-DD HH:mm:ss').toDate();
+      expect(dateDiff(date5, date6, Unit.WEEK)).toBe(1);
+    }
+
+    { 
+      const date5 = moment('2025-08-04 00:01:02', 'YYYY-MM-DD HH:mm:ss').toDate();
+      const date6 = moment('2025-08-06 01:02:03', 'YYYY-MM-DD HH:mm:ss').toDate();
+      expect(dateDiff(date5, date6, Unit.WEEK)).toBe(0);
+    }
   });
 
   test('month', () => {
@@ -58,5 +76,17 @@ describe('date-subtract', () => {
     const date5 = moment('2024-06-09 00:01:02', 'YYYY-MM-DD HH:mm:ss').toDate();
     const date6 = moment('2024-07-08 01:02:03', 'YYYY-MM-DD HH:mm:ss').toDate();
     expect(dateDiff(date5, date6, Unit.MONTH)).toBe(moment(date6).diff(moment(date5), 'month'));
+
+    { 
+      const date5 = moment('2024-06-01 00:01:02', 'YYYY-MM-DD HH:mm:ss').toDate();
+      const date6 = moment('2024-07-31 01:02:03', 'YYYY-MM-DD HH:mm:ss').toDate();
+      expect(dateDiff(date5, date6, Unit.MONTH)).toBe(1); 
+    }
+
+    { 
+      const date5 = moment('2024-06-01 00:01:02', 'YYYY-MM-DD HH:mm:ss').toDate();
+      const date6 = moment('2024-06-30 01:02:03', 'YYYY-MM-DD HH:mm:ss').toDate();
+      expect(dateDiff(date5, date6, Unit.MONTH)).toBe(0); 
+    }
   });
 });
